@@ -1,4 +1,4 @@
-package jp.onetake.binzumejigoku.contents.def;
+package jp.onetake.binzumejigoku.contents.common;
 
 public enum ContentsType {
 	Unknown,

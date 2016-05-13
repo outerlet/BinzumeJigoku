@@ -1,39 +1,60 @@
 package jp.onetake.binzumejigoku.contents.parser;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import jp.onetake.binzumejigoku.contents.def.ContentsType;
+import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
+import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.util.Utility;
 
-public class TextSource extends Source {
-	public TextSource(XmlPullParser parser) {
-		super(parser);
+public class TextSource extends SectionChildSource {
+	private StringBuilder mTextBuffer;
+
+	/**
+	 * コンストラクタ
+	 * @param context      コンテキスト
+	 * @param parser       XMLの解析を担当するパーサー
+	 * @param database     コンテンツの各要素を保存するためのDBオブジェクト
+	 * @param sectionIndex このオブジェクトが属するセクションのインデックス値
+	 * @param sequence     通し番号
+	 */
+	public TextSource(Context context, XmlPullParser parser, SQLiteDatabase database, int sectionIndex, int sequence) {
+		super(context, parser, database, sectionIndex, sequence);
+
+		mTextBuffer = new StringBuilder();
 	}
 
 	@Override
 	public void parse() throws IOException, XmlPullParserException {
 		super.parse();
 
-		boolean isRuby = false;
-
 		while (true) {
 			int eventType = getXmlParser().getEventType();
 
 			if (eventType == XmlPullParser.TEXT) {
-				String text = Utility.format(getXmlParser().getText());
-				android.util.Log.i(getContentsType().toString().toUpperCase(), "text = " + text + ", Ruby? = " + isRuby);
+				mTextBuffer.append(Utility.format(getXmlParser().getText()));
 			} else if (getXmlParser().getName().equalsIgnoreCase("ruby")
 					&& (eventType == XmlPullParser.START_TAG || eventType == XmlPullParser.END_TAG)) {
-				isRuby = (eventType == XmlPullParser.START_TAG);
+				mTextBuffer.append(ContentsHandler.getInstance().getRubyClosure());
 			}
 
-			if (next()) {
+			if (!hasNext()) {
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void save(ContentValues values) {
+		values.put("CONTENTS_TEXT", mTextBuffer.toString());
+
+		super.save(values);
 	}
 
 	@Override

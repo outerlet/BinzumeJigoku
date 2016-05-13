@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="db_name">db_binzume_jigoku</string>
+	<integer name="db_version">1</integer>
+	<string name="db_contents_table_name">TBL_CONTENTS</string>
+	<string name="db_create_contents_table_sql">
+		create table TBL_CONTENTS (
+				ID integer primary key,
+				SECTION integer not null,
+				SEQUENCE integer not null,
+				TYPE text not null,
+				VALUE0 text,
+				VALUE1 text,
+				VALUE2 text,
+				VALUE3 text,
+				VALUE4 text,
+				VALUE5 text,
+				VALUE6 text,
+				VALUE7 text,
+				VALUE8 text,
+				VALUE9 text,
+				CONTENTS_TEXT text,
+				unique(SECTION, SEQUENCE))
+	</string>
+	<string name="db_drop_contents_table_sql">
+		drop table TBL_CONTENTS
+	</string>
+</resources>

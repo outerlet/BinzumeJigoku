@@ -7,10 +7,17 @@
 	android:orientation="vertical">
 
 	<Button
-		android:id="@+id/button_check"
+		android:id="@+id/button_parse_contents"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="Parse Contents"
+		/>
+
+	<Button
+		android:id="@+id/button_query_database"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Query Database"
 		/>
 
 </LinearLayout>

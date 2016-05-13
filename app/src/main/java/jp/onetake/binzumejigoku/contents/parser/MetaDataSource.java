@@ -1,12 +1,34 @@
 package jp.onetake.binzumejigoku.contents.parser;
 
-import org.xmlpull.v1.XmlPullParser;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
-import jp.onetake.binzumejigoku.contents.def.ContentsType;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
+import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
+import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
 public class MetaDataSource extends Source {
-	public MetaDataSource(XmlPullParser parser) {
-		super(parser);
+	/**
+	 * コンストラクタ
+	 * @param context  コンテキスト
+	 * @param parser   XMLの解析を担当するパーサー
+	 * @param database コンテンツの各要素を保存するためのDBオブジェクト
+	 */
+	public MetaDataSource(Context context, XmlPullParser parser, SQLiteDatabase database) {
+		super(context, parser, database);
+	}
+
+	@Override
+	public void parse() throws IOException, XmlPullParserException {
+		super.parse();
+
+		ContentsHandler handler = ContentsHandler.getInstance();
+		handler.setRubyDelimiter(getAttribute("ruby_delimiter"));
+		handler.setRubyClosure(getAttribute("ruby_closure"));
 	}
 
 	@Override

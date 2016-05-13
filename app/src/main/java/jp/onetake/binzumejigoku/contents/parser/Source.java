@@ -1,5 +1,8 @@
 package jp.onetake.binzumejigoku.contents.parser;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -7,21 +10,27 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.onetake.binzumejigoku.contents.def.ContentsType;
+import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
 /**
  * ストーリーが記録されているXMLをパースする際、各要素に対応したオブジェクトを生成するがそれらに共通するロジックを定義した基底クラス
  */
 public abstract class Source {
 	private Map<String, String> mAttributeMap;
+	private Context mContext;
 	private XmlPullParser mXmlParser;
+	private SQLiteDatabase mDatabase;
 
 	/**
 	 * コンストラクタ
+	 * @param context	コンテキスト
 	 * @param parser	XMLの解析を担当するパーサー
+	 * @param database	コンテンツの各要素を保存するためのDBオブジェクト
 	 */
-	public Source(XmlPullParser parser) {
+	public Source(Context context, XmlPullParser parser, SQLiteDatabase database) {
+		mContext = context;
 		mXmlParser = parser;
+		mDatabase = database;
 	}
 
 	/**
@@ -43,14 +52,6 @@ public abstract class Source {
 			for (int i = 0 ; i < mXmlParser.getAttributeCount() ; i++) {
 				mAttributeMap.put(mXmlParser.getAttributeName(i), mXmlParser.getAttributeValue(i));
 			}
-
-			StringBuilder strbld = new StringBuilder();
-			int idx = 0;
-			for (String key : mAttributeMap.keySet()) {
-				strbld.append(key + " = " + mAttributeMap.get(key) + ((idx++ < mAttributeMap.size() - 1) ? ", " : ""));
-			}
-
-			android.util.Log.i(getContentsType().toString().toUpperCase(), strbld.toString());
 		}
 	}
 
@@ -63,6 +64,10 @@ public abstract class Source {
 		return mAttributeMap.get(name);
 	}
 
+	protected Context getContext() {
+		return mContext;
+	}
+
 	/**
 	 * XMLの解析に使っているパーサを返却する
 	 * @return	XMLパーサ
@@ -72,14 +77,22 @@ public abstract class Source {
 	}
 
 	/**
+	 * コンテンツを保存するためのデータベースを取得する
+	 * @return	データベース
+	 */
+	protected SQLiteDatabase getDatabase() {
+		return mDatabase;
+	}
+
+	/**
 	 * XmlPullParserのnextメソッドを呼び出して読み込み位置を先に進める
 	 * クラスに対応した要素の閉じタグに到達した場合はfalseを返す
-	 * @return	要素の閉じタグに到達した場合はfalse、それ以外はtrue
+	 * @return	次の要素に進めるならtrue、要素の閉じタグに到達した場合はfalse
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	protected boolean next() throws IOException, XmlPullParserException {
-		return (mXmlParser.next() == XmlPullParser.END_TAG && ContentsType.getValue(mXmlParser.getName()) == getContentsType());
+	protected boolean hasNext() throws IOException, XmlPullParserException {
+		return (mXmlParser.next() != XmlPullParser.END_TAG || ContentsType.getValue(mXmlParser.getName()) != getContentsType());
 	}
 
 	/**
