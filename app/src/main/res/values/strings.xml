@@ -1,3 +1,14 @@
 <resources>
-	<string name="app_name">BInzumeJigoku</string>
+	<string name="app_name">瓶詰地獄</string>
+
+	<!-- 汎用性のあるフレーズ -->
+	<string name="phrase_ok">OK</string>
+	<string name="phrase_cancel">キャンセル</string>
+
+	<!-- ボタンのラベル -->
+	<string name="label_start_section0">前置きを開始する</string>
+	<string name="label_start_section1">第1章を開始する</string>
+	<string name="label_start_section2">第2章を開始する</string>
+	<string name="label_start_section3">第3章を開始する</string>
+
 </resources>

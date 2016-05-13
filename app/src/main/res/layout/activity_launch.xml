@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
+	android:layout_height="match_parent">
 
-	<Button
-		android:id="@+id/button_parse_contents"
-		android:layout_width="match_parent"
+	<ImageView
+		android:id="@+id/imageview_launch_title"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Parse Contents"
+		android:layout_centerInParent="true"
+		android:src="@drawable/launch_title"
+		android:scaleType="center"
+		android:adjustViewBounds="true"
+		android:alpha="0.0"
 		/>
 
-	<Button
-		android:id="@+id/button_query_database"
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Query Database"
-		/>
+		android:layout_below="@id/imageview_launch_title"
+		android:layout_alignParentBottom="true">
 
-</LinearLayout>
+		<ProgressBar
+			android:id="@+id/progressbar_loading_contents"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:visibility="invisible"
+			/>
+
+	</RelativeLayout>
+
+</RelativeLayout>
