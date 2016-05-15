@@ -13,12 +13,14 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 import jp.onetake.binzumejigoku.R;
-import jp.onetake.binzumejigoku.contents.parser.ContentsParser;
+import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
+import jp.onetake.binzumejigoku.contents.parser.ContentsXmlParser;
 
-public class LaunchActivity extends BasicActivity implements Animator.AnimatorListener, ContentsParser.ParserListener {
+public class LaunchActivity extends BasicActivity implements Animator.AnimatorListener, ContentsXmlParser.ParserListener {
 	private ImageView mLaunchImage;
 	private ProgressBar mProgressBar;
 
+	private ContentsXmlParser mXmlParser;
 	private boolean mIsForwarding = false;
 
 	@Override
@@ -26,8 +28,12 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launch);
 
+		// コンテンツ操作用オブジェクトを初期化
+		ContentsHandler.getInstance().initialize(getApplicationContext());
+
 		mLaunchImage = (ImageView)findViewById(R.id.imageview_launch_title);
 		mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading_contents);
+		mXmlParser = new ContentsXmlParser(this);
 
 		startAnimation(true);
 	}
@@ -53,15 +59,18 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 	@Override
 	public void onAnimationEnd(Animator animation) {
 		if (mIsForwarding) {
-			mProgressBar.setVisibility(View.VISIBLE);
+			if (!mXmlParser.hasParsed()) {
+				mProgressBar.setVisibility(View.VISIBLE);
 
-			try {
-				ContentsParser parser = new ContentsParser(this);
-				parser.setListener(this);
-				parser.parse("contents_binzume_jigoku.xml");
-			} catch (IOException | XmlPullParserException ex) {
-				ex.printStackTrace();
-				mProgressBar.setVisibility(View.INVISIBLE);
+				try {
+					mXmlParser.setListener(this);
+					mXmlParser.parse(getString(R.string.filename_contents));
+				} catch (IOException | XmlPullParserException ex) {
+					ex.printStackTrace();
+					mProgressBar.setVisibility(View.INVISIBLE);
+				}
+			} else {
+				startAnimation(false);
 			}
 		} else {
 			startActivity(new Intent(this, MainActivity.class));

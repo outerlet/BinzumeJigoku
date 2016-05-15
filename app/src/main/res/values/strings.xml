@@ -1,5 +1,14 @@
 <resources>
+
+	<!-- アプリ名 -->
 	<string name="app_name">瓶詰地獄</string>
+
+	<!-- コンテンツファイル名 -->
+	<string name="filename_contents">contents_binzume_jigoku.xml</string>
+
+	<!-- プリファレンスキー -->
+	<string name="prefkey_preferences">PREFKEY_PREFERENCES</string>
+	<string name="prefkey_is_contents_parsed">PREFKEY_IS_CONTENTS_PARSED</string>
 
 	<!-- 汎用性のあるフレーズ -->
 	<string name="phrase_ok">OK</string>

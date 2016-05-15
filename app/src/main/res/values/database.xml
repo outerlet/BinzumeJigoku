@@ -22,6 +22,17 @@
 				CONTENTS_TEXT text,
 				unique(SECTION, SEQUENCE))
 	</string>
+	<string name="db_query_contents_table_sql">
+		select SECTION, SEQUENCE, TYPE, VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, CONTENTS_TEXT
+		from TBL_CONTENTS
+		where SECTION = ?
+		order by SECTION, SEQUENCE
+	</string>
+	<string name="db_query_contents_table_sql_debug">
+		select SECTION, SEQUENCE, TYPE, VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, CONTENTS_TEXT
+		from TBL_CONTENTS
+		order by SECTION, SEQUENCE
+	</string>
 	<string name="db_drop_contents_table_sql">
 		drop table TBL_CONTENTS
 	</string>

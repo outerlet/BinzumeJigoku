@@ -1,4 +1,4 @@
-package jp.onetake.binzumejigoku.contents.parser;
+package jp.onetake.binzumejigoku.contents.element;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,24 +13,18 @@ import java.util.Map;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
 /**
- * ストーリーが記録されているXMLをパースする際、各要素に対応したオブジェクトを生成するがそれらに共通するロジックを定義した基底クラス
+ * ストーリーが記録されているXMLの各要素に対応する基底クラス
  */
-public abstract class Source {
+public abstract class Element {
 	private Map<String, String> mAttributeMap;
 	private Context mContext;
-	private XmlPullParser mXmlParser;
-	private SQLiteDatabase mDatabase;
 
 	/**
 	 * コンストラクタ
 	 * @param context	コンテキスト
-	 * @param parser	XMLの解析を担当するパーサー
-	 * @param database	コンテンツの各要素を保存するためのDBオブジェクト
 	 */
-	public Source(Context context, XmlPullParser parser, SQLiteDatabase database) {
+	public Element(Context context) {
 		mContext = context;
-		mXmlParser = parser;
-		mDatabase = database;
 	}
 
 	/**
@@ -40,17 +34,17 @@ public abstract class Source {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	public void parse() throws IOException, XmlPullParserException {
-		if (mXmlParser.getEventType() != XmlPullParser.START_TAG || ContentsType.getValue(mXmlParser.getName()) != getContentsType()) {
+	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
+		if (parser.getEventType() != XmlPullParser.START_TAG || ContentsType.getValue(parser.getName()) != getContentsType()) {
 			throw new XmlPullParserException("Cannot parse contents XML : NOT START_TAG or Invalid contents type");
 		}
 
 		// 属性値の取得
-		if (mXmlParser.getAttributeCount() > 0) {
+		if (parser.getAttributeCount() > 0) {
 			mAttributeMap = new HashMap<>();
 
-			for (int i = 0 ; i < mXmlParser.getAttributeCount() ; i++) {
-				mAttributeMap.put(mXmlParser.getAttributeName(i), mXmlParser.getAttributeValue(i));
+			for (int i = 0 ; i < parser.getAttributeCount() ; i++) {
+				mAttributeMap.put(parser.getAttributeName(i), parser.getAttributeValue(i));
 			}
 		}
 	}
@@ -64,26 +58,6 @@ public abstract class Source {
 		return mAttributeMap.get(name);
 	}
 
-	protected Context getContext() {
-		return mContext;
-	}
-
-	/**
-	 * XMLの解析に使っているパーサを返却する
-	 * @return	XMLパーサ
-	 */
-	protected XmlPullParser getXmlParser() {
-		return mXmlParser;
-	}
-
-	/**
-	 * コンテンツを保存するためのデータベースを取得する
-	 * @return	データベース
-	 */
-	protected SQLiteDatabase getDatabase() {
-		return mDatabase;
-	}
-
 	/**
 	 * XmlPullParserのnextメソッドを呼び出して読み込み位置を先に進める
 	 * クラスに対応した要素の閉じタグに到達した場合はfalseを返す
@@ -91,8 +65,16 @@ public abstract class Source {
 	 * @throws IOException
 	 * @throws XmlPullParserException
 	 */
-	protected boolean hasNext() throws IOException, XmlPullParserException {
-		return (mXmlParser.next() != XmlPullParser.END_TAG || ContentsType.getValue(mXmlParser.getName()) != getContentsType());
+	protected boolean hasNext(XmlPullParser parser) throws IOException, XmlPullParserException {
+		return (parser.next() != XmlPullParser.END_TAG || ContentsType.getValue(parser.getName()) != getContentsType());
+	}
+
+	/**
+	 * コンテキストオブジェクトを取得する
+	 * @return	コンテキストオブジェクト
+	 */
+	protected Context getContext() {
+		return mContext;
 	}
 
 	/**

@@ -1,74 +1,63 @@
 package jp.onetake.binzumejigoku.contents.parser;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.util.Xml;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import jp.onetake.binzumejigoku.contents.data.ContentsDbOpenHelper;
-import jp.onetake.binzumejigoku.contents.common.ContentsType;
-
+/**
+ * コンテンツのパースに関する処理を担当する各クラスの基底となるクラス
+ */
 public class ContentsParser {
 	private Context mContext = null;
 	private ParserListener mListener = null;
 
+	/**
+	 * コンストラクタ
+	 * @param context
+	 */
 	public ContentsParser(Context context) {
 		mContext = context;
 	}
 
+	/**
+	 * パースが終了したイベントをハンドリングするためのリスナをセットする
+	 * @param listener	パースに関するイベントをハンドルするリスナ
+	 */
 	public void setListener(ParserListener listener) {
 		mListener = listener;
 	}
 
-	public void parse(String fileName) throws IOException, XmlPullParserException {
-		InputStreamReader reader = new InputStreamReader(mContext.getAssets().open(fileName));
-
-		// XML解析のためのパーサを取得
-		XmlPullParser parser = Xml.newPullParser();
-		parser.setInput(reader);
-
-		// XMLを解析した結果をDBに書き込むためのヘルパ
-		// DB更新処理に失敗した場合に備えてトランザクションを張っておく
-		ContentsDbOpenHelper helper = new ContentsDbOpenHelper(mContext);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		db.beginTransaction();
-
-		try {
-			while (parser.next() != XmlPullParser.END_DOCUMENT) {
-				if (parser.getEventType() == XmlPullParser.START_TAG) {
-					switch (ContentsType.getValue(parser.getName())) {
-						case MetaData:
-							(new MetaDataSource(mContext, parser, db)).parse();
-							break;
-						case Section:
-							(new SectionSource(mContext, parser, db)).parse();
-							break;
-						default:
-							break;
-					}
-				}
-			}
-
-			// トランザクション正常終了
-			db.setTransactionSuccessful();
-		} catch (IOException | XmlPullParserException | SQLiteException ex) {
-			ex.printStackTrace();
-		} finally {
-			db.endTransaction();
-		}
-
-		if (mListener != null) {
-			mListener.onParseFinished();
-		}
+	/**
+	 * パースが終了したイベントをハンドリングするためのリスナを取得
+	 * @return	パースに関するイベントをハンドルするリスナ
+	 */
+	protected ParserListener getListener() {
+		return mListener;
 	}
 
+	/**
+	 * コンテキストオブジェクトの取得
+	 * @return	コンテキストオブジェクト
+	 */
+	protected Context getContext() {
+		return mContext;
+	}
+
+	/**
+	 * stringリソースIDで定義済みの文字列を取得する
+	 * (Context.getStringのショートカット)
+	 * @param resId	stringリソースID
+	 * @return	string.xml等に定義済みの文字列
+	 */
+	protected String getString(int resId) {
+		return mContext.getString(resId);
+	}
+
+	/**
+	 * XMLのパースに関するイベントをハンドルするリスナクラス
+	 */
 	public interface ParserListener {
+		/**
+		 * パースが完了した時に呼び出される
+		 */
 		void onParseFinished();
 	}
 }
