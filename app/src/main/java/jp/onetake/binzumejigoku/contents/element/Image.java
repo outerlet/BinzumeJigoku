@@ -51,6 +51,11 @@ public class Image extends SectionElement {
 	}
 
 	@Override
+	public void execute() {
+		android.util.Log.i("QUERY", toString());
+	}
+
+	@Override
 	public String toString() {
 		return super.toString() + " : src = " + mSrc + ", duration = " + mDuration + ", effect = " + mEffect + ", chain = " + mChain;
 	}

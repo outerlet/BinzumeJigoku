@@ -21,6 +21,11 @@ public class MainActivity extends BasicActivity implements View.OnClickListener 
 	}
 
 	@Override
+	protected boolean shouldActionBarShown() {
+		return true;
+	}
+
+	@Override
 	public void onClick(View view) {
 		int sectionIndex = -1;
 

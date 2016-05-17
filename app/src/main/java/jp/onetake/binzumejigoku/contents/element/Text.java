@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
+import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 import jp.onetake.binzumejigoku.util.Utility;
@@ -44,7 +44,7 @@ public class Text extends SectionElement {
 				buffer.append(Utility.format(parser.getText()));
 			} else if (parser.getName().equalsIgnoreCase("ruby")
 					&& (eventType == XmlPullParser.START_TAG || eventType == XmlPullParser.END_TAG)) {
-				buffer.append(ContentsHandler.getInstance().getRubyClosure());
+				buffer.append(ContentsInterface.getInstance().getRubyClosure());
 			}
 
 			if (!hasNext(parser)) {
@@ -69,6 +69,11 @@ public class Text extends SectionElement {
 	@Override
 	protected ContentsType getContentsType() {
 		return ContentsType.Text;
+	}
+
+	@Override
+	public void execute() {
+		android.util.Log.i("QUERY", toString());
 	}
 
 	@Override

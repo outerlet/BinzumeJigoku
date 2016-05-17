@@ -25,4 +25,9 @@ public class ClearText extends SectionElement {
 	protected ContentsType getContentsType() {
 		return ContentsType.ClearText;
 	}
+
+	@Override
+	public void execute() {
+		android.util.Log.i("QUERY", toString());
+	}
 }

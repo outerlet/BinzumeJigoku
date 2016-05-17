@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="default_timer_period">500</integer>
+    <dimen name="default_text_size">24sp</dimen>
+    <dimen name="default_ruby_size">8sp</dimen>
+</resources>

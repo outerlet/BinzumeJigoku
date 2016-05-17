@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
 public class Section extends Element {

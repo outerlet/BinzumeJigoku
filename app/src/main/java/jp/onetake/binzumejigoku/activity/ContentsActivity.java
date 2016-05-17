@@ -2,13 +2,15 @@ package jp.onetake.binzumejigoku.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.MotionEvent;
 
 import java.util.List;
 
 import jp.onetake.binzumejigoku.R;
+import jp.onetake.binzumejigoku.contents.common.ContentsHolder;
 import jp.onetake.binzumejigoku.contents.element.SectionElement;
 import jp.onetake.binzumejigoku.contents.parser.ContentsDbParser;
-import jp.onetake.binzumejigoku.fragment.dialog.SectionFragment;
+import jp.onetake.binzumejigoku.fragment.SectionFragment;
 
 public class ContentsActivity extends BasicActivity {
 	public static String KEY_SECTION_INDEX	= "ContentsActivity.KEY_SECTION_INDEX";
@@ -16,6 +18,7 @@ public class ContentsActivity extends BasicActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_contents);
 
 		int sectionIndex = getIntent().getIntExtra(KEY_SECTION_INDEX, -1);
@@ -23,15 +26,28 @@ public class ContentsActivity extends BasicActivity {
 			throw new UnsupportedOperationException(this.getClass().getName() + " : Invalid section index.");
 		}
 
-		ContentsDbParser parser = new ContentsDbParser(this);
-		List<SectionElement> list = parser.parse(sectionIndex);
-		for (SectionElement e : list) {
-			android.util.Log.i("QUERY", e.toString());
+		ContentsHolder holder = (new ContentsDbParser(this)).parse(sectionIndex);
+		while (holder.hasNext()) {
+			holder.next().execute();
 		}
 
 		SectionFragment fragment = SectionFragment.newInstance(sectionIndex);
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 		trans.replace(R.id.layout_fragment_container, fragment);
 		trans.commit();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				android.util.Log.i("ContentsActivity", "Action : DOWN");
+				break;
+			case MotionEvent.ACTION_UP:
+				android.util.Log.i("ContentsActivity", "Action : UP");
+				break;
+		}
+
+		return true;
 	}
 }

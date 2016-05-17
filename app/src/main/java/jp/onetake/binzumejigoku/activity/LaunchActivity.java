@@ -13,9 +13,12 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 import jp.onetake.binzumejigoku.R;
-import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
+import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.parser.ContentsXmlParser;
 
+/**
+ * 起動ポイントとなるインスタンス
+ */
 public class LaunchActivity extends BasicActivity implements Animator.AnimatorListener, ContentsXmlParser.ParserListener {
 	private ImageView mLaunchImage;
 	private ProgressBar mProgressBar;
@@ -26,10 +29,11 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_launch);
 
 		// コンテンツ操作用オブジェクトを初期化
-		ContentsHandler.getInstance().initialize(getApplicationContext());
+		ContentsInterface.getInstance().initialize(getApplicationContext());
 
 		mLaunchImage = (ImageView)findViewById(R.id.imageview_launch_title);
 		mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading_contents);
@@ -59,7 +63,7 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 	@Override
 	public void onAnimationEnd(Animator animation) {
 		if (mIsForwarding) {
-			if (!mXmlParser.hasParsed()) {
+			if (!ContentsInterface.getInstance().isXmlParsed()) {
 				mProgressBar.setVisibility(View.VISIBLE);
 
 				try {

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.onetake.binzumejigoku.R;
-import jp.onetake.binzumejigoku.contents.common.ContentsHandler;
+import jp.onetake.binzumejigoku.contents.common.ContentsHolder;
+import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 import jp.onetake.binzumejigoku.contents.element.ClearText;
@@ -18,6 +19,9 @@ import jp.onetake.binzumejigoku.contents.element.SectionElement;
 import jp.onetake.binzumejigoku.contents.element.Text;
 import jp.onetake.binzumejigoku.contents.element.Title;
 
+/**
+ * コンテンツ(=ストーリー)の内容をDBから読み出して解析・保持するためのパーサクラス
+ */
 public class ContentsDbParser extends ContentsParser {
 	/**
 	 * コンストラクタ
@@ -31,11 +35,11 @@ public class ContentsDbParser extends ContentsParser {
 	 * sectionIndexに指定したセクションインデックスに該当するセクション要素をDBから読み出して適切な要素オブジェクトを生成する
 	 * @param sectionIndex	セクションに割り当てられたインデックス値
 	 */
-	public List<SectionElement> parse(int sectionIndex) {
-		List<SectionElement> list = new ArrayList<>();
+	public ContentsHolder parse(int sectionIndex) {
+		ContentsHolder holder = new ContentsHolder();
 
-		try (SQLiteDatabase db = ContentsHandler.getInstance().getReadableDatabase();
-			Cursor cursor = db.rawQuery(getString(R.string.db_query_contents_table_sql), new String[] { Integer.toString(sectionIndex) })) {
+		try (SQLiteDatabase db = ContentsInterface.getInstance().getReadableDatabase();
+			 Cursor cursor = db.rawQuery(getString(R.string.db_query_contents_table_sql), new String[] { Integer.toString(sectionIndex) })) {
 			cursor.moveToFirst();
 
 			for (int i = 0 ; i < cursor.getCount() ; i++) {
@@ -63,7 +67,7 @@ public class ContentsDbParser extends ContentsParser {
 
 				elm.load(cursor);
 
-				list.add(elm);
+				holder.add(elm);
 
 				cursor.moveToNext();
 			}
@@ -72,6 +76,6 @@ public class ContentsDbParser extends ContentsParser {
 			return null;
 		}
 
-		return list;
+		return holder;
 	}
 }

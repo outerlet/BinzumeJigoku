@@ -3,7 +3,7 @@ package jp.onetake.binzumejigoku.contents.parser;
 import android.content.Context;
 
 /**
- * コンテンツのパースに関する処理を担当する各クラスの基底となるクラス
+ * コンテンツのパースに関する処理を担当する各クラスの基底クラス
  */
 public class ContentsParser {
 	private Context mContext = null;

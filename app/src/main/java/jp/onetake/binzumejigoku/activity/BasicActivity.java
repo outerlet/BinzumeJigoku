@@ -17,10 +17,21 @@ public class BasicActivity extends AppCompatActivity {
 		// 縦画面固定。AndroidManifestでも設定できるが個々に設定するとXMLが冗長になるのでここで
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		// フルスクリーン表示
+		// フルスクリーン表示設定
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		// ActionBarを非表示
-		getSupportActionBar().hide();
+		// アクションバーを隠す
+		if (!shouldActionBarShown()) {
+			getSupportActionBar().hide();
+		}
+	}
+
+	/**
+	 * アクションバーを表示するかどうか<br />
+	 * 基本は隠れる(falseが返る)ので、アクションバーを出したい画面(アクティビティ)はこのメソッドをオーバーライドしてtrueを返す
+	 * @return	アクションバーを出したいならfalse
+	 */
+	protected boolean shouldActionBarShown() {
+		return false;
 	}
 }
