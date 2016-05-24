@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!-- TimerView -->
 	<declare-styleable name="TimerView">
 		<attr name="period" format="integer" />
+	</declare-styleable>
+
+	<!-- StreamTextView -->
+	<declare-styleable name="StreamTextView">
+		<attr name="textSize" format="dimension" />
+		<attr name="textColor" format="color" />
+		<attr name="rubySize" format="dimension" />
+		<attr name="rubyColor" format="color" />
 	</declare-styleable>
 </resources>

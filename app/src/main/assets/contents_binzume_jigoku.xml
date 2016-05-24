@@ -1,5 +1,5 @@
 <document>
-	<meta-data ruby_closure="^" ruby_delimiter="|" />
+	<meta-data ruby_closure="#" ruby_delimiter="|" />
 	<section index="0">
 		<image src="bottle_letter" duration="0.5" effect="fade" chain="wait" />
 		<text>

@@ -75,9 +75,4 @@ public abstract class SectionElement extends Element {
 	public String toString() {
 		return getContentsType().toString();
 	}
-
-	/**
-	 * 物語の進行において自身に割り当てられた内容を実行する
-	 */
-	public abstract void execute();
 }

@@ -16,10 +16,9 @@ import jp.onetake.binzumejigoku.R;
 
 public abstract class TimerView extends View {
 	public enum TimerStatus {
-		NotStarted,
+		Stopped,
 		Execute,
 		WaitForStop,
-		Stopped,
 	}
 
 	public interface TimerListener {
@@ -44,7 +43,7 @@ public abstract class TimerView extends View {
 
 		mHandler = new Handler();
 		mCounter = 0;
-		mTimerStatus = TimerStatus.NotStarted;
+		mTimerStatus = TimerStatus.Stopped;
 
 		if (attrs != null) {
 			Resources res = context.getResources();
@@ -58,7 +57,7 @@ public abstract class TimerView extends View {
 	}
 
 	public void start() {
-		if (mTimerStatus == TimerStatus.NotStarted) {
+		if (mTimerStatus == TimerStatus.Stopped) {
 			if (mListener != null) {
 				mListener.onStarted();
 			}
@@ -67,23 +66,20 @@ public abstract class TimerView extends View {
 			mCounter = 0;
 
 			mTimer = new Timer(true);
-			mTimer.schedule(mTimerTask, mPeriod, mPeriod);
+			mTimer.schedule(new TimerViewTask(), mPeriod, mPeriod);
 		}
 	}
 
-	public void setEventListener(TimerListener listener) {
+	public void setListener(TimerListener listener) {
 		mListener = listener;
+	}
+
+	public TimerListener getListener() {
+		return mListener;
 	}
 
 	public TimerStatus getStatus() {
 		return mTimerStatus;
-	}
-
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		if (!executeMeasure(widthMeasureSpec, heightMeasureSpec)) {
-			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		}
 	}
 
 	@Override
@@ -95,7 +91,7 @@ public abstract class TimerView extends View {
 		}
 	}
 
-	private TimerTask mTimerTask = new TimerTask() {
+	private class TimerViewTask extends TimerTask {
 		@Override
 		public void run() {
 			mHandler.post(new Runnable() {
@@ -120,6 +116,12 @@ public abstract class TimerView extends View {
 		}
 	};
 
-	protected abstract boolean executeMeasure(int widthMeasureSpec, int heightMeasureSpec);
-	protected abstract boolean executeDraw(Canvas canvas, int count);
+	/**
+	 * onDrawで実行したい処理を定義する<br />
+	 * このメソッドからfalseが返されるとタイマーが停止され次回のinvalidateは行われなくなる
+	 * @param canvas
+	 * @param calledCount
+	 * @return	次回のタイマー処理も実行する場合はtrue
+	 */
+	protected abstract boolean executeDraw(Canvas canvas, int calledCount);
 }

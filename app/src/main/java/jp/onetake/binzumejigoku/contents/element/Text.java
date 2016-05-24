@@ -66,14 +66,13 @@ public class Text extends SectionElement {
 		mText = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
 	}
 
-	@Override
-	protected ContentsType getContentsType() {
-		return ContentsType.Text;
+	public String getText() {
+		return mText;
 	}
 
 	@Override
-	public void execute() {
-		android.util.Log.i("QUERY", toString());
+	protected ContentsType getContentsType() {
+		return ContentsType.Text;
 	}
 
 	@Override

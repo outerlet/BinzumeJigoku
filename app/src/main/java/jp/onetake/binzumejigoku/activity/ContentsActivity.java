@@ -26,11 +26,6 @@ public class ContentsActivity extends BasicActivity {
 			throw new UnsupportedOperationException(this.getClass().getName() + " : Invalid section index.");
 		}
 
-		ContentsHolder holder = (new ContentsDbParser(this)).parse(sectionIndex);
-		while (holder.hasNext()) {
-			holder.next().execute();
-		}
-
 		SectionFragment fragment = SectionFragment.newInstance(sectionIndex);
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 		trans.replace(R.id.layout_fragment_container, fragment);

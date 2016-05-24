@@ -57,14 +57,13 @@ public class Title extends SectionElement {
 		mTitle = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
 	}
 
-	@Override
-	protected ContentsType getContentsType() {
-		return ContentsType.Title;
+	public String getTitle() {
+		return mTitle;
 	}
 
 	@Override
-	public void execute() {
-		android.util.Log.i("QUERY", toString());
+	protected ContentsType getContentsType() {
+		return ContentsType.Title;
 	}
 
 	@Override
