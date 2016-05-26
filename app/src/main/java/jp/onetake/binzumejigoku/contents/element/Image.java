@@ -46,7 +46,7 @@ public class Image extends SectionElement {
 	}
 
 	@Override
-	protected ContentsType getContentsType() {
+	public ContentsType getContentsType() {
 		return ContentsType.Image;
 	}
 

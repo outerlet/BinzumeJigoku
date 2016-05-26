@@ -29,7 +29,7 @@ public class MetaData extends Element {
 	}
 
 	@Override
-	protected ContentsType getContentsType() {
+	public ContentsType getContentsType() {
 		return ContentsType.MetaData;
 	}
 }

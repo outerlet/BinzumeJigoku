@@ -71,7 +71,7 @@ public class Text extends SectionElement {
 	}
 
 	@Override
-	protected ContentsType getContentsType() {
+	public ContentsType getContentsType() {
 		return ContentsType.Text;
 	}
 

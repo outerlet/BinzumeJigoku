@@ -15,11 +15,27 @@ import java.util.List;
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.element.Text;
+import jp.onetake.binzumejigoku.util.Utility;
 
 /**
- * ルビつきのテキストを一定時間ごとにストリーム表示するView
+ * ルビつきのテキストを一定時間ごとにストリーム表示するView<br />
+ * XMLに指定できる属性値についてはそれぞれ以下の通り
+ * <dl>
+ *     <dt>textSize</dt>
+ *     <dd>本文のテキストサイズをdimensionで指定</dd>
+ *     <dt>textColor</dt>
+ *     <dd>本文のテキスト色を指定</dd>
+ *     <dt>rubySize</dt>
+ *     <dd>ルビのテキストサイズをdimensionで指定</dd>
+ *     <dt>rubyColor</dt>
+ *     <dd>ルビのテキスト色を指定</dd>
+ *     <dt>lineSpace</dt>
+ *     <dd>行間のサイズをdimensionで指定</dd>
+ *     <dt>sentenceSpace</dt>
+ *     <dd>1つの文章の間のサイズをdimensionで指定</dd>
+ * </dl>
  */
-public class StreamTextView extends TimerView {
+public class RubyTextView extends TimerView {
 	/**
 	 * 1文字の内容と描画位置(X, Y)を保持するクラス<br />
 	 * StreamTextViewでしか使わないのでインナークラス
@@ -60,7 +76,7 @@ public class StreamTextView extends TimerView {
 
 		/**
 		 * テキストの文字数を取得する
-		 * @return
+		 * @return	テキストの文字数
 		 */
 		public int getTextCount() {
 			return mTextList.size();
@@ -110,7 +126,7 @@ public class StreamTextView extends TimerView {
 
 			float textHeight = textMetrics.bottom - textMetrics.top;
 			float rubyHeight = rubyMetrics.bottom - rubyMetrics.top;
-			float lineHeight = textHeight + rubyHeight;
+			float lineHeight = textHeight + rubyHeight + mLineSpace;
 			float posX = 0.0f;
 			float posY = Math.abs(rubyMetrics.top);
 			int lines = 1;
@@ -202,30 +218,39 @@ public class StreamTextView extends TimerView {
 	private Paint mTextPaint;
 	private Paint mRubyPaint;
 	private List<DrawDetail> mDetailList;
+	private float mLineSpace;
+	private float mSentenceSpace;
+	private float mTotalHeight;
 
-	public StreamTextView(Context context) {
+	public RubyTextView(Context context) {
 		this(context, null);
 	}
 
-	public StreamTextView(Context context, AttributeSet attrs) {
+	public RubyTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		mTextPaint = new Paint();
 		mRubyPaint = new Paint();
 		mDetailList = new ArrayList<>();
+		mLineSpace = 0.0f;
+		mSentenceSpace = 0.0f;
+		mTotalHeight = 0.0f;
 
 		Resources res = context.getResources();
 
 		if (attrs != null) {
-			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.StreamTextView);
+			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RubyTextView);
 
 			mTextPaint.setTextSize(array.getDimensionPixelSize(
-					R.styleable.StreamTextView_textSize, res.getDimensionPixelSize(R.dimen.default_text_size)));
-			mTextPaint.setColor(array.getColor(R.styleable.StreamTextView_textColor, Color.BLACK));
+					R.styleable.RubyTextView_textSize, res.getDimensionPixelSize(R.dimen.default_text_size)));
+			mTextPaint.setColor(array.getColor(R.styleable.RubyTextView_textColor, Color.BLACK));
 
 			mRubyPaint.setTextSize(array.getDimensionPixelSize(
-					R.styleable.StreamTextView_rubySize, res.getDimensionPixelSize(R.dimen.default_ruby_size)));
-			mRubyPaint.setColor(array.getColor(R.styleable.StreamTextView_rubyColor, Color.BLACK));
+					R.styleable.RubyTextView_rubySize, res.getDimensionPixelSize(R.dimen.default_ruby_size)));
+			mRubyPaint.setColor(array.getColor(R.styleable.RubyTextView_rubyColor, Color.BLACK));
+
+			mLineSpace = (float)array.getDimensionPixelSize(R.styleable.RubyTextView_lineSpace, 0);
+			mSentenceSpace = (float)array.getDimensionPixelSize(R.styleable.RubyTextView_sentenceSpace, 0);
 
 			array.recycle();
 		} else {
@@ -240,9 +265,20 @@ public class StreamTextView extends TimerView {
 	@Override
 	protected boolean executeDraw(Canvas canvas, int calledCount) {
 		if (mDetailList.size() > 0) {
-			DrawDetail latest = mDetailList.get(mDetailList.size() - 1);
-			if (!latest.isFinalized()) {
-				latest.finalize(canvas.getWidth());
+			DrawDetail latestDetail = mDetailList.get(mDetailList.size() - 1);
+
+			if (!latestDetail.isFinalized()) {
+				latestDetail.finalize(canvas.getWidth());
+
+				mTotalHeight += latestDetail.getHeight();
+
+				if (mTotalHeight + (mSentenceSpace * (mDetailList.size() - 1)) > canvas.getHeight()) {
+					while (mDetailList.size() != 1) {
+						mDetailList.remove(0);
+					}
+
+					mTotalHeight = latestDetail.getHeight();
+				}
 			}
 
 			float baseY = 0.0f;
@@ -264,10 +300,10 @@ public class StreamTextView extends TimerView {
 					}
 				}
 
-				baseY += detail.getHeight();
+				baseY += (detail.getHeight() + mSentenceSpace);
 			}
 
-			return (latest.getTextCount() > calledCount);
+			return (latestDetail.getTextCount() > calledCount);
 		}
 
 		return true;
@@ -275,5 +311,10 @@ public class StreamTextView extends TimerView {
 
 	public void setText(Text text) {
 		mDetailList.add(new DrawDetail(text));
+	}
+
+	public void clear() {
+		mDetailList.clear();
+		mTotalHeight = 0.0f;
 	}
 }

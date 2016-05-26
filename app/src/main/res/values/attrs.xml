@@ -5,11 +5,20 @@
 		<attr name="period" format="integer" />
 	</declare-styleable>
 
-	<!-- StreamTextView -->
-	<declare-styleable name="StreamTextView">
+	<!-- RubyTextView -->
+	<declare-styleable name="RubyTextView">
 		<attr name="textSize" format="dimension" />
 		<attr name="textColor" format="color" />
 		<attr name="rubySize" format="dimension" />
 		<attr name="rubyColor" format="color" />
+		<attr name="lineSpace" format="dimension" />
+		<attr name="sentenceSpace" format="dimension" />
+	</declare-styleable>
+
+	<!-- TitleTextView -->
+	<declare-styleable name="TitleTextView">
+		<attr name="duration" format="integer" />
+		<attr name="titleSize" format="dimension" />
+		<attr name="titleColor" format="color" />
 	</declare-styleable>
 </resources>

@@ -4,12 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 
-import java.util.List;
-
 import jp.onetake.binzumejigoku.R;
-import jp.onetake.binzumejigoku.contents.common.ContentsHolder;
-import jp.onetake.binzumejigoku.contents.element.SectionElement;
-import jp.onetake.binzumejigoku.contents.parser.ContentsDbParser;
 import jp.onetake.binzumejigoku.fragment.SectionFragment;
 
 public class ContentsActivity extends BasicActivity {

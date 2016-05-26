@@ -22,16 +22,19 @@ public abstract class TimerView extends View {
 	}
 
 	public interface TimerListener {
-		void onStarted();
-		void onPeriod();
-		void onStopped();
+		void onStarted(TimerView view);
+		void onPeriod(TimerView view);
+		void onStopped(TimerView view);
 	}
+
+	private static int DEFAULT_PERIOD = 500;
 
 	private Handler mHandler;
 	private Timer mTimer;
 	private TimerStatus mTimerStatus;
 	private TimerListener mListener;
 	private int mCounter;
+	private long mStartMillis;
 	private long mPeriod;
 
 	public TimerView(Context context) {
@@ -46,47 +49,50 @@ public abstract class TimerView extends View {
 		mTimerStatus = TimerStatus.Stopped;
 
 		if (attrs != null) {
-			Resources res = context.getResources();
 			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TimerView);
 
-			mPeriod = (long) array.getInt(
-					R.styleable.TimerView_period, res.getInteger(R.integer.default_timer_period));
+			mPeriod = (long) array.getInt(R.styleable.TimerView_period, DEFAULT_PERIOD);
 
 			array.recycle();
 		}
 	}
 
-	public void start() {
+	public boolean start() {
 		if (mTimerStatus == TimerStatus.Stopped) {
 			if (mListener != null) {
-				mListener.onStarted();
+				mListener.onStarted(this);
 			}
 
 			mTimerStatus = TimerStatus.Execute;
 			mCounter = 0;
+			mStartMillis = System.currentTimeMillis();
 
 			mTimer = new Timer(true);
 			mTimer.schedule(new TimerViewTask(), mPeriod, mPeriod);
+
+			return true;
 		}
+
+		return false;
 	}
 
 	public void setListener(TimerListener listener) {
 		mListener = listener;
 	}
 
-	public TimerListener getListener() {
-		return mListener;
-	}
-
 	public TimerStatus getStatus() {
 		return mTimerStatus;
+	}
+
+	protected long getElapsedMillis() {
+		return System.currentTimeMillis() - mStartMillis;
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		if (!executeDraw(canvas, ++mCounter)) {
+		if (mTimerStatus == TimerStatus.Execute && !executeDraw(canvas, ++mCounter)) {
 			mTimerStatus = TimerStatus.WaitForStop;
 		}
 	}
@@ -101,14 +107,14 @@ public abstract class TimerView extends View {
 						invalidate();
 
 						if (mListener != null) {
-							mListener.onPeriod();
+							mListener.onPeriod(TimerView.this);
 						}
 					} else if (mTimerStatus == TimerStatus.WaitForStop) {
 						mTimer.cancel();
 						mTimerStatus = TimerStatus.Stopped;
 
 						if (mListener != null) {
-							mListener.onStopped();
+							mListener.onStopped(TimerView.this);
 						}
 					}
 				}

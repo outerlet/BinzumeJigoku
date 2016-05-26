@@ -62,7 +62,7 @@ public class Title extends SectionElement {
 	}
 
 	@Override
-	protected ContentsType getContentsType() {
+	public ContentsType getContentsType() {
 		return ContentsType.Title;
 	}
 

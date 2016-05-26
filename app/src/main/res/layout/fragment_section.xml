@@ -6,12 +6,26 @@
 	android:layout_height="match_parent"
 	tools:context=".fragment.SectionFragment">
 
-	<jp.onetake.binzumejigoku.view.StreamTextView
-		android:id="@+id/textview_stream"
+	<jp.onetake.binzumejigoku.view.RubyTextView
+		android:id="@+id/rubyview_contents"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		custom:textSize="16sp"
+		android:layout_margin="8dp"
+		custom:textSize="18sp"
 		custom:rubySize="8sp"
+		custom:period="50"
+		custom:lineSpace="0dp"
+		custom:sentenceSpace="12dp"
+		/>
+
+	<jp.onetake.binzumejigoku.view.TitleTextView
+		android:id="@+id/titleview_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="invisible"
+		custom:duration="1000"
+		custom:titleSize="24sp"
+		custom:titleColor="@android:color/black"
 		custom:period="50"
 		/>
 

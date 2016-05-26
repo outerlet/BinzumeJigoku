@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
-import jp.onetake.binzumejigoku.contents.parser.ContentsXmlParser;
+import jp.onetake.binzumejigoku.contents.xml.ContentsXmlParser;
 
 /**
  * 起動ポイントとなるインスタンス

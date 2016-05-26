@@ -81,5 +81,5 @@ public abstract class Element {
 	 * このクラスが処理すべき要素に対応するContentsTypeを返却する
 	 * @return	このクラスが処理すべき要素に対応するContentsType
 	 */
-	protected abstract ContentsType getContentsType();
+	public abstract ContentsType getContentsType();
 }

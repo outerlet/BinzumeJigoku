@@ -22,7 +22,7 @@ public class ClearText extends SectionElement {
 	}
 
 	@Override
-	protected ContentsType getContentsType() {
+	public ContentsType getContentsType() {
 		return ContentsType.ClearText;
 	}
 }

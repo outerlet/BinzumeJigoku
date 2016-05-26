@@ -1,4 +1,4 @@
-package jp.onetake.binzumejigoku.contents.parser;
+package jp.onetake.binzumejigoku.contents.xml;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,13 +19,16 @@ import jp.onetake.binzumejigoku.contents.element.Section;
 /**
  * コンテンツ(=ストーリー)が定義されているXMLを解析しDBに登録するパーサクラス
  */
-public class ContentsXmlParser extends ContentsParser {
+public class ContentsXmlParser {
+	private Context mContext;
+	private ParserListener mListener = null;
+
 	/**
 	 * コンストラクタ
 	 * @param context
 	 */
 	public ContentsXmlParser(Context context) {
-		super(context);
+		mContext = context;
 	}
 
 	/**
@@ -35,7 +38,7 @@ public class ContentsXmlParser extends ContentsParser {
 	 * @throws XmlPullParserException
 	 */
 	public void parse(String fileName) throws IOException, XmlPullParserException {
-		InputStreamReader reader = new InputStreamReader(getContext().getAssets().open(fileName));
+		InputStreamReader reader = new InputStreamReader(mContext.getAssets().open(fileName));
 
 		// XML解析のためのパーサを取得
 		XmlPullParser parser = Xml.newPullParser();
@@ -51,10 +54,10 @@ public class ContentsXmlParser extends ContentsParser {
 				if (parser.getEventType() == XmlPullParser.START_TAG) {
 					switch (ContentsType.getValue(parser.getName())) {
 						case MetaData:
-							(new MetaData(getContext())).parse(parser);
+							(new MetaData(mContext)).parse(parser);
 							break;
 						case Section:
-							Section section = new Section(getContext());
+							Section section = new Section(mContext);
 							section.parse(parser);
 							section.save(db);
 							break;
@@ -75,8 +78,26 @@ public class ContentsXmlParser extends ContentsParser {
 			db.close();
 		}
 
-		if (getListener() != null) {
-			getListener().onParseFinished();
+		if (mListener != null) {
+			mListener.onParseFinished();
 		}
+	}
+
+	/**
+	 * パースが終了したイベントをハンドリングするためのリスナをセットする
+	 * @param listener	パースに関するイベントをハンドルするリスナ
+	 */
+	public void setListener(ParserListener listener) {
+		mListener = listener;
+	}
+
+	/**
+	 * XMLのパースに関するイベントをハンドルするリスナクラス
+	 */
+	public interface ParserListener {
+		/**
+		 * パースが完了した時に呼び出される
+		 */
+		void onParseFinished();
 	}
 }
