@@ -1,7 +1,7 @@
 <document>
 	<meta-data ruby_closure="#" ruby_delimiter="|" />
 	<section index="0">
-		<image src="bottle_letter" duration="0.5" effect="fade" chain="wait" />
+		<image src="section00" duration="0.5" effect="fade" chain="wait" />
 		<text>
 		　拝呈　時下益々御清栄、<ruby>奉奉慶賀候|けいがたてまつりそうろう</ruby>。
 		</text>
@@ -20,11 +20,11 @@
 		　海洋研究所　御中
 		</text>
 		<clear-text chain="immediate" />
-		<image duration="0.5" effect="fade" />
+		<image duration="0.5" effect="fade" chain="wait" />
 	</section>
 	<section index="1">
-		<image src="higanbana" duration="0.5" effect="fade" chain="wait" />
-		<title>◇第一の瓶の内容</title>
+		<title chain="wait">◇第一の瓶の内容</title>
+		<image src="section01" duration="0.5" effect="fade" chain="wait" />
 		<text>
 		　ああ………この離れ島に、救いの船がとうとう来ました。
 		</text>
@@ -72,11 +72,11 @@
 		［＃ここで字下げ終わり］
 		</text>
 		<clear-text />
-		<image duration="0.5" effect="fade" />
+		<image duration="0.5" effect="fade" chain="wait" />
 	</section>
 	<section index="2">
-		<image src="beach" duration="0.5" effect="fade" chain="wait" />
-		<title>◇第二の瓶の内容</title>
+		<title chain="wait">◇第二の瓶の内容</title>
+		<image src="section02" duration="0.5" effect="fade" chain="wait" />
 		<text>
 		　ああ。<ruby>隠微|かくれ</ruby>たるに<ruby>鑒|み</ruby>たまう神様よ。
 		</text>
@@ -236,10 +236,10 @@
 		［＃地から２字上げ］――太郎記す………
 		</text>
 		<clear-text />
-		<image duration="0.5" effect="fade" />
+		<image duration="0.5" effect="fade" chain="wait" />
 	</section>
 	<section index="3">
-		<title>◇第三の瓶の内容</title>
+		<title chain="wait">◇第三の瓶の内容</title>
 		<text>
 		　オ父サマ。オ母サマ。ボクタチ兄ダイハ、ナカヨク、タッシャニ、コノシマニ、クラシテイマス。ハヤク、タスケニ、キテクダサイ。
 		</text>
@@ -247,6 +247,6 @@
 		［＃地付き］市川　太郎
 		［＃地付き］イチカワ　アヤコ
 		</text>
-		<clear-text />
+		<clear-text chain="immediate" />
 	</section>
 </document>

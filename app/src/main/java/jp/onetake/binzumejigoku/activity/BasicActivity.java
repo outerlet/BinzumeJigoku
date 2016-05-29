@@ -1,5 +1,6 @@
 package jp.onetake.binzumejigoku.activity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,13 @@ public class BasicActivity extends AppCompatActivity {
 		if (!shouldActionBarShown()) {
 			getSupportActionBar().hide();
 		}
+	}
+
+	protected void finishApplication() {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(MainActivity.INTENT_KEY_FINISH_APP, true);
+		startActivity(intent);
 	}
 
 	/**

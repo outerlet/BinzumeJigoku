@@ -63,6 +63,8 @@ public class Text extends SectionElement {
 
 	@Override
 	public void load(Cursor cursor) {
+		super.load(cursor);
+
 		mText = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
 	}
 

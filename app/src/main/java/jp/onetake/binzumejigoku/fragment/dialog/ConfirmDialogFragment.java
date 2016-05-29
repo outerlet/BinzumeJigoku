@@ -12,37 +12,48 @@ import jp.onetake.binzumejigoku.R;
  * 2つのボタンがある確認用のダイアログを表示するためのDialogFragment
  */
 public class ConfirmDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
-	private static final String KEY_DIALOG_TITLE			= "ConfirmDialogFragment.KEY_DIALOG_TITLE";
-	private static final String KEY_DIALOG_MESSAGE			= "ConfirmDialogFragment.KEY_DIALOG_MESSAGE";
-	private static final String KEY_DIALOG_POSITIVE_LABEL	= "ConfirmDialogFragment.KEY_DIALOG_POSITIVE_LABEL";
-	private static final String KEY_DIALOG_NEGATIVE_LABEL	= "ConfirmDialogFragment.KEY_DIALOG_NEGATIVE_LABEL";
+	/**
+	 * ConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
+	 */
+	public interface OnConfirmListener {
+		/**
+		 * ダイアログのボタンが押下された時に呼び出されるリスナメソッド
+		 * @param dialog	ダイアログ表示に使ったConfirmDialogFragmentのインスタンス
+		 * @param which		押されたボタンを示すint値
+		 */
+		void onConfirm(DialogFragment dialog, int which);
+	}
+
+	private static final String KEY_TITLE			= "ConfirmDialogFragment.KEY_TITLE";
+	private static final String KEY_MESSAGE			= "ConfirmDialogFragment.KEY_MESSAGE";
+	private static final String KEY_POSITIVE_LABEL	= "ConfirmDialogFragment.KEY_POSITIVE_LABEL";
+	private static final String KEY_NEGATIVE_LABEL	= "ConfirmDialogFragment.KEY_NEGATIVE_LABEL";
 
 	/**
 	 * このFragmentのインスタンスを生成する<br />
-	 * ボタンのラベルは「OK」と「キャンセル」になる
-	 * @param title		ダイアログのタイトル文字列
-	 * @param message	ダイアログのメッセージ
+	 * PositiveラベルとNegativeラベルはそれぞれ「OK」と「キャンセル」
+	 * @param title		ダイアログのタイトルリソースID
+	 * @param message	ダイアログのメッセージリソースID
 	 * @return	このFragmentのインスタンス
 	 */
-	public static ConfirmDialogFragment newInstance(String title, String message) {
-		return newInstance(title, message, null, null);
+	public static ConfirmDialogFragment newInstance(int title, int message) {
+		return newInstance(title, message, -1, -1);
 	}
 
 	/**
-	 * このFragmentのインスタンスを生成する<br />
-	 * 第3引数、第4引数に与えた文字列がそれぞれPositiveボタンとNegativeボタンのラベルとなる
-	 * @param title			ダイアログのタイトル文字列
-	 * @param message		ダイアログのメッセージ
-	 * @param positiveLabel	ダイアログのPositiveボタン用ラベル文字列
-	 * @param negativeLabel	ダイアログのNegativeボタン用ラベル文字列
-	 * @return				このFragmentのインスタンス
+	 * このFragmentのインスタンスを生成する
+	 * @param title		ダイアログのタイトルリソースID
+	 * @param message	ダイアログのメッセージリソースID
+	 * @param positive	ダイアログのPositiveボタンラベルのリソースID
+	 * @param negative	ダイアログのNegativeボタンラベルのリソースID
+	 * @return	このFragmentのインスタンス
 	 */
-	public static ConfirmDialogFragment newInstance(String title, String message, String positiveLabel, String negativeLabel) {
+	public static ConfirmDialogFragment newInstance(int title, int message, int positive, int negative) {
 		Bundle params = new Bundle();
-		params.putString(KEY_DIALOG_TITLE, title);
-		params.putString(KEY_DIALOG_MESSAGE, message);
-		params.putString(KEY_DIALOG_POSITIVE_LABEL, positiveLabel);
-		params.putString(KEY_DIALOG_NEGATIVE_LABEL, negativeLabel);
+		params.putInt(KEY_TITLE, title);
+		params.putInt(KEY_MESSAGE, message);
+		params.putInt(KEY_POSITIVE_LABEL, positive);
+		params.putInt(KEY_NEGATIVE_LABEL, negative);
 
 		ConfirmDialogFragment dialog = new ConfirmDialogFragment();
 		dialog.setArguments(params);
@@ -54,23 +65,15 @@ public class ConfirmDialogFragment extends DialogFragment implements DialogInter
 		Bundle params = getArguments();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-				.setTitle(params.getString(KEY_DIALOG_TITLE))
-				.setMessage(params.getString(KEY_DIALOG_MESSAGE))
+				.setTitle(params.getInt(KEY_TITLE))
+				.setMessage(params.getInt(KEY_MESSAGE))
 				.setCancelable(false);
 
-		String posLabel = params.getString(KEY_DIALOG_POSITIVE_LABEL, null);
-		if (posLabel != null) {
-			builder.setPositiveButton(posLabel, this);
-		} else {
-			builder.setPositiveButton(R.string.phrase_ok, this);
-		}
+		int positive = params.getInt(KEY_POSITIVE_LABEL, -1);
+		builder.setPositiveButton((positive != -1) ? positive : R.string.phrase_ok, this);
 
-		String negLabel = params.getString(KEY_DIALOG_NEGATIVE_LABEL, null);
-		if (negLabel != null) {
-			builder.setNegativeButton(negLabel, this);
-		} else {
-			builder.setNegativeButton(R.string.phrase_cancel, this);
-		}
+		int negative = params.getInt(KEY_NEGATIVE_LABEL, -1);
+		builder.setNegativeButton((negative != -1) ? negative : R.string.phrase_cancel, this);
 
 		return builder.create();
 	}
@@ -78,19 +81,7 @@ public class ConfirmDialogFragment extends DialogFragment implements DialogInter
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		if (getActivity() instanceof OnConfirmListener) {
-			((OnConfirmListener)getActivity()).onConfirm(this, which == DialogInterface.BUTTON_POSITIVE);
+			((OnConfirmListener)getActivity()).onConfirm(this, which);
 		}
-	}
-
-	/**
-	 * ConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
-	 */
-	public interface OnConfirmListener {
-		/**
-		 * ダイアログのボタンが押下された時に呼び出されるリスナメソッド
-		 * @param dialog		ダイアログ表示に使ったConfirmDialogFragmentのインスタンス
-		 * @param isPositive	Positiveボタンを押されたかどうか。trueならPositive、falseならNegative
-		 */
-		void onConfirm(ConfirmDialogFragment dialog, boolean isPositive);
 	}
 }

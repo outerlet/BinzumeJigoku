@@ -42,6 +42,12 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		startAnimation(true);
 	}
 
+	@Override
+	public void onBackPressed() {
+		// このActivityでバックキーは無効
+		return;
+	}
+
 	private void startAnimation(boolean isForwarding) {
 		float start = isForwarding ? 0.0f : 1.0f;
 		float end = isForwarding ? 1.0f : 0.0f;
@@ -77,6 +83,8 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 				startAnimation(false);
 			}
 		} else {
+			// 自身を破棄するために FLAG_ACTIVITY_NEW_TASK + FLAG_ACTIVITY_CLEAR_TASK を使うと
+			// Activityの遷移がまるわかりになるのでベタなやり方でメインメニューに遷移
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
 		}

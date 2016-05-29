@@ -54,6 +54,8 @@ public class Title extends SectionElement {
 
 	@Override
 	public void load(Cursor cursor) {
+		super.load(cursor);
+
 		mTitle = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
 	}
 

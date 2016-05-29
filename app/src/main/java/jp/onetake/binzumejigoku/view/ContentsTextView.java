@@ -15,7 +15,6 @@ import java.util.List;
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.element.Text;
-import jp.onetake.binzumejigoku.util.Utility;
 
 /**
  * ルビつきのテキストを一定時間ごとにストリーム表示するView<br />
@@ -35,7 +34,7 @@ import jp.onetake.binzumejigoku.util.Utility;
  *     <dd>1つの文章の間のサイズをdimensionで指定</dd>
  * </dl>
  */
-public class RubyTextView extends TimerView {
+public class ContentsTextView extends TimerView {
 	/**
 	 * 1文字の内容と描画位置(X, Y)を保持するクラス<br />
 	 * StreamTextViewでしか使わないのでインナークラス
@@ -222,11 +221,11 @@ public class RubyTextView extends TimerView {
 	private float mSentenceSpace;
 	private float mTotalHeight;
 
-	public RubyTextView(Context context) {
+	public ContentsTextView(Context context) {
 		this(context, null);
 	}
 
-	public RubyTextView(Context context, AttributeSet attrs) {
+	public ContentsTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		mTextPaint = new Paint();
@@ -239,18 +238,18 @@ public class RubyTextView extends TimerView {
 		Resources res = context.getResources();
 
 		if (attrs != null) {
-			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RubyTextView);
+			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ContentsTextView);
 
 			mTextPaint.setTextSize(array.getDimensionPixelSize(
-					R.styleable.RubyTextView_textSize, res.getDimensionPixelSize(R.dimen.default_text_size)));
-			mTextPaint.setColor(array.getColor(R.styleable.RubyTextView_textColor, Color.BLACK));
+					R.styleable.ContentsTextView_textSize, res.getDimensionPixelSize(R.dimen.default_text_size)));
+			mTextPaint.setColor(array.getColor(R.styleable.ContentsTextView_textColor, Color.BLACK));
 
 			mRubyPaint.setTextSize(array.getDimensionPixelSize(
-					R.styleable.RubyTextView_rubySize, res.getDimensionPixelSize(R.dimen.default_ruby_size)));
-			mRubyPaint.setColor(array.getColor(R.styleable.RubyTextView_rubyColor, Color.BLACK));
+					R.styleable.ContentsTextView_rubySize, res.getDimensionPixelSize(R.dimen.default_ruby_size)));
+			mRubyPaint.setColor(array.getColor(R.styleable.ContentsTextView_rubyColor, Color.BLACK));
 
-			mLineSpace = (float)array.getDimensionPixelSize(R.styleable.RubyTextView_lineSpace, 0);
-			mSentenceSpace = (float)array.getDimensionPixelSize(R.styleable.RubyTextView_sentenceSpace, 0);
+			mLineSpace = (float)array.getDimensionPixelSize(R.styleable.ContentsTextView_lineSpace, 0);
+			mSentenceSpace = (float)array.getDimensionPixelSize(R.styleable.ContentsTextView_sentenceSpace, 0);
 
 			array.recycle();
 		} else {
@@ -316,5 +315,7 @@ public class RubyTextView extends TimerView {
 	public void clear() {
 		mDetailList.clear();
 		mTotalHeight = 0.0f;
+
+		invalidate();
 	}
 }

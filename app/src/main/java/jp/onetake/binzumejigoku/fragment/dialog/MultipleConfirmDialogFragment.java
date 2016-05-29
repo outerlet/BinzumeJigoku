@@ -10,11 +10,11 @@ import android.support.v4.app.DialogFragment;
  * 3つのボタンがある確認用のダイアログを表示するためのDialogFragment
  */
 public class MultipleConfirmDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
-	private static final String KEY_DIALOG_TITLE			= "MultipleConfirmDialogFragment.KEY_DIALOG_TITLE";
-	private static final String KEY_DIALOG_MESSAGE			= "MultipleConfirmDialogFragment.KEY_DIALOG_MESSAGE";
-	private static final String KEY_DIALOG_POSITIVE_LABEL	= "MultipleConfirmDialogFragment.KEY_DIALOG_POSITIVE_LABEL";
-	private static final String KEY_DIALOG_NEGATIVE_LABEL	= "MultipleConfirmDialogFragment.KEY_DIALOG_NEGATIVE_LABEL";
-	private static final String KEY_DIALOG_NEUTRAL_LABEL	= "MultipleConfirmDialogFragment.KEY_DIALOG_NEUTRAL_LABEL";
+	private static final String KEY_TITLE			= "MultipleConfirmDialogFragment.KEY_TITLE";
+	private static final String KEY_MESSAGE			= "MultipleConfirmDialogFragment.KEY_MESSAGE";
+	private static final String KEY_POSITIVE_LABEL	= "MultipleConfirmDialogFragment.KEY_POSITIVE_LABEL";
+	private static final String KEY_NEGATIVE_LABEL	= "MultipleConfirmDialogFragment.KEY_NEGATIVE_LABEL";
+	private static final String KEY_NEUTRAL_LABEL	= "MultipleConfirmDialogFragment.KEY_NEUTRAL_LABEL";
 
 	/**
 	 * このDialogFragmentを生成する<br />
@@ -26,13 +26,13 @@ public class MultipleConfirmDialogFragment extends DialogFragment implements Dia
 	 * @param negativeLabel	Negativeボタンのラベル文字列
 	 * @return	パラメータに指定した内容に基づくこのクラスのインスタンス
 	 */
-	public static MultipleConfirmDialogFragment newInstance(String title, String message, String positiveLabel, String negativeLabel, String neutralLabel) {
+	public static MultipleConfirmDialogFragment newInstance(int title, int message, int positiveLabel, int negativeLabel, int neutralLabel) {
 		Bundle params = new Bundle();
-		params.putString(KEY_DIALOG_TITLE, title);
-		params.putString(KEY_DIALOG_MESSAGE, message);
-		params.putString(KEY_DIALOG_POSITIVE_LABEL, positiveLabel);
-		params.putString(KEY_DIALOG_NEGATIVE_LABEL, negativeLabel);
-		params.putString(KEY_DIALOG_NEUTRAL_LABEL, neutralLabel);
+		params.putInt(KEY_TITLE, title);
+		params.putInt(KEY_MESSAGE, message);
+		params.putInt(KEY_POSITIVE_LABEL, positiveLabel);
+		params.putInt(KEY_NEGATIVE_LABEL, negativeLabel);
+		params.putInt(KEY_NEUTRAL_LABEL, neutralLabel);
 
 		MultipleConfirmDialogFragment dialog = new MultipleConfirmDialogFragment();
 		dialog.setArguments(params);
@@ -44,31 +44,19 @@ public class MultipleConfirmDialogFragment extends DialogFragment implements Dia
 		Bundle params = getArguments();
 
 		return new AlertDialog.Builder(getContext())
-				.setTitle(params.getString(KEY_DIALOG_TITLE))
-				.setMessage(params.getString(KEY_DIALOG_MESSAGE))
-				.setPositiveButton(params.getString(KEY_DIALOG_POSITIVE_LABEL, null), this)
-				.setNegativeButton(params.getString(KEY_DIALOG_NEGATIVE_LABEL, null), this)
-				.setNeutralButton(params.getString(KEY_DIALOG_NEUTRAL_LABEL, null), this)
+				.setTitle(params.getInt(KEY_TITLE))
+				.setMessage(params.getInt(KEY_MESSAGE))
+				.setPositiveButton(params.getInt(KEY_POSITIVE_LABEL, -1), this)
+				.setNegativeButton(params.getInt(KEY_NEGATIVE_LABEL, -1), this)
+				.setNeutralButton(params.getInt(KEY_NEUTRAL_LABEL, -1), this)
 				.setCancelable(false)
 				.create();
 	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		if (getActivity() instanceof OnConfirmListener) {
-			((OnConfirmListener)getActivity()).onConfirm(this, which);
+		if (getActivity() instanceof ConfirmDialogFragment.OnConfirmListener) {
+			((ConfirmDialogFragment.OnConfirmListener)getActivity()).onConfirm(this, which);
 		}
-	}
-
-	/**
-	   MultipleConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
-	 */
-	public interface OnConfirmListener {
-		/**
-		 * ダイアログのボタンが押下された時に呼び出されるリスナメソッド
-		 * @param dialog	ダイアログ表示に使ったMultipleConfirmDialogFragmentのインスタンス
-		 * @param which		どのボタンが押されたかを示すDialogInterfaceの定数
-		 */
-		void onConfirm(MultipleConfirmDialogFragment dialog, int which);
 	}
 }

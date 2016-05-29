@@ -16,8 +16,8 @@ import jp.onetake.binzumejigoku.contents.common.ContentsType;
  * ストーリーが記録されているXMLの各要素に対応する基底クラス
  */
 public abstract class Element {
-	private Map<String, String> mAttributeMap;
 	private Context mContext;
+	private Map<String, String> mAttributeMap;
 
 	/**
 	 * コンストラクタ
@@ -25,6 +25,7 @@ public abstract class Element {
 	 */
 	public Element(Context context) {
 		mContext = context;
+		mAttributeMap = new HashMap<>();
 	}
 
 	/**
@@ -39,10 +40,8 @@ public abstract class Element {
 			throw new XmlPullParserException("Cannot parse contents XML : NOT START_TAG or Invalid contents type");
 		}
 
-		// 属性値の取得
+		// 属性値があれば取得
 		if (parser.getAttributeCount() > 0) {
-			mAttributeMap = new HashMap<>();
-
 			for (int i = 0 ; i < parser.getAttributeCount() ; i++) {
 				mAttributeMap.put(parser.getAttributeName(i), parser.getAttributeValue(i));
 			}

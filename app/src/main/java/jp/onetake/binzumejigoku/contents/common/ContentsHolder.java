@@ -40,6 +40,10 @@ public class ContentsHolder {
 		return mElementList.get(++mCurrentIndex);
 	}
 
+	public SectionElement current() {
+		return mElementList.get(mCurrentIndex);
+	}
+
 	/**
 	 * sectionIndexに指定したセクションインデックスに該当するセクション要素をDBから読み出して適切な要素オブジェクトを生成する
 	 * @param sectionIndex	セクションに割り当てられたインデックス値

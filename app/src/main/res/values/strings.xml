@@ -12,14 +12,26 @@
 	<string name="prefkey_ruby_delimiter">PREFKEY_RUBY_DELIMITER</string>
 	<string name="prefkey_ruby_closure">PREFKEY_RUBY_CLOSURE</string>
 
-	<!-- 汎用性のあるフレーズ -->
+	<!-- フレーズ -->
 	<string name="phrase_ok">OK</string>
 	<string name="phrase_cancel">キャンセル</string>
+	<string name="phrase_confirm">確認</string>
+	<string name="phrase_error">エラー</string>
+	<string name="phrase_finish">終了</string>
+	<string name="phrase_finish_application">アプリを終了する</string>
+	<string name="phrase_back">戻る</string>
+	<string name="phrase_next_section">次の章へ</string>
 
 	<!-- ボタンのラベル -->
 	<string name="label_start_section0">前置きを開始する</string>
 	<string name="label_start_section1">第1章を開始する</string>
 	<string name="label_start_section2">第2章を開始する</string>
 	<string name="label_start_section3">第3章を開始する</string>
+
+	<!-- Message -->
+	<string name="message_confirm_finish">終了しますか？</string>
+	<string name="message_confirm_back">物語を中断して前の画面に戻りますか？</string>
+	<string name="message_section_finished">章が終了しました。</string>
+	<string name="message_force_application">アプリを終了します。</string>
 
 </resources>

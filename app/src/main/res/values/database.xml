@@ -9,6 +9,9 @@
 				SECTION integer not null,
 				SEQUENCE integer not null,
 				TYPE text not null,
+				COMMON0 text,
+				COMMON1 text,
+				COMMON2 text,
 				VALUE0 text,
 				VALUE1 text,
 				VALUE2 text,
@@ -23,14 +26,46 @@
 				unique(SECTION, SEQUENCE))
 	</string>
 	<string name="db_query_contents_table_sql">
-		select SECTION, SEQUENCE, TYPE, VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, CONTENTS_TEXT
-		from TBL_CONTENTS
-		where SECTION = ?
+		select	SECTION,
+				SEQUENCE,
+				TYPE,
+				COMMON0,
+				COMMON1,
+				COMMON2,
+				VALUE0,
+				VALUE1,
+				VALUE2,
+				VALUE3,
+				VALUE4,
+				VALUE5,
+				VALUE6,
+				VALUE7,
+				VALUE8,
+				VALUE9,
+				CONTENTS_TEXT
+		from	TBL_CONTENTS
+		where	SECTION = ?
 		order by SECTION, SEQUENCE
 	</string>
 	<string name="db_query_contents_table_sql_debug">
-		select SECTION, SEQUENCE, TYPE, VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, VALUE9, CONTENTS_TEXT
-		from TBL_CONTENTS
+		select	SECTION,
+				SEQUENCE,
+				TYPE,
+				COMMON0,
+				COMMON1,
+				COMMON2,
+				VALUE0,
+				VALUE1,
+				VALUE2,
+				VALUE3,
+				VALUE4,
+				VALUE5,
+				VALUE6,
+				VALUE7,
+				VALUE8,
+				VALUE9,
+				CONTENTS_TEXT
+		from	TBL_CONTENTS
 		order by SECTION, SEQUENCE
 	</string>
 	<string name="db_drop_contents_table_sql">

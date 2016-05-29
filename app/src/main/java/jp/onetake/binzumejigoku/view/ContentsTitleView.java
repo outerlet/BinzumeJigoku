@@ -23,7 +23,7 @@ import jp.onetake.binzumejigoku.contents.element.Title;
  *     <dd>タイトルのテキスト色を指定</dd>
  * </dl>
  */
-public class TitleTextView extends TimerView {
+public class ContentsTitleView extends TimerView {
 	/**
 	 * タイトルの1文字を表現するためのクラス<br />
 	 * 自身の表示にかける時間や表示までの遅延時間、描画に使用するPaintオブジェクトなどを保持する
@@ -61,23 +61,23 @@ public class TitleTextView extends TimerView {
 	private float mTextSize;
 	private Letter[] mTitleLetters;
 
-	public TitleTextView(Context context) {
+	public ContentsTitleView(Context context) {
 		this(context, null);
 	}
 
-	public TitleTextView(Context context, AttributeSet attrs) {
+	public ContentsTitleView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		if (attrs != null) {
-			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TitleTextView);
+			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ContentsTitleView);
 
-			mDuration = array.getInt(R.styleable.TitleTextView_duration, DEFAULT_DURATION);
+			mDuration = array.getInt(R.styleable.ContentsTitleView_duration, DEFAULT_DURATION);
 
 			mTextSize = array.getDimensionPixelSize(
-					R.styleable.TitleTextView_titleSize,
+					R.styleable.ContentsTitleView_titleSize,
 					context.getResources().getDimensionPixelSize(R.dimen.default_title_text_size));
 
-			mTextColor = array.getColor(R.styleable.TitleTextView_titleColor, DEFAULT_COLOR);
+			mTextColor = array.getColor(R.styleable.ContentsTitleView_titleColor, DEFAULT_COLOR);
 
 			array.recycle();
 		}

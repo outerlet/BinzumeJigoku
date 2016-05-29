@@ -2,8 +2,11 @@ package jp.onetake.binzumejigoku.contents.element;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
@@ -12,9 +15,25 @@ import jp.onetake.binzumejigoku.contents.db.ContentsTable;
  * image要素を制御する要素クラス
  */
 public class Image extends SectionElement {
+	public enum EffectType {
+		Unknown,
+		Fade,
+		Cut;
+
+		public static EffectType getValue(String effectText) {
+			for (EffectType e : EffectType.values()) {
+				if (effectText.equalsIgnoreCase(e.toString())) {
+					return e;
+				}
+			}
+
+			return Unknown;
+		}
+	}
+
 	private String mSrc;
-	private float mDuration;
-	private String mEffect;
+	private long mDuration;
+	private EffectType mEffectType;
 	private String mChain;
 
 	/**
@@ -32,17 +51,36 @@ public class Image extends SectionElement {
 		values.put(ContentsTable.VALUE0.getColumnName(), getAttribute("src"));
 		values.put(ContentsTable.VALUE1.getColumnName(), getAttribute("duration"));
 		values.put(ContentsTable.VALUE2.getColumnName(), getAttribute("effect"));
-		values.put(ContentsTable.VALUE3.getColumnName(), getAttribute("chain"));
 
 		super.save(db, values);
 	}
 
 	@Override
 	public void load(Cursor cursor) {
+		super.load(cursor);
+
 		mSrc = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE0));
-		mDuration = Float.parseFloat(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE1)));
-		mEffect = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE2));
-		mChain = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE3));
+		mDuration = (long)(Float.parseFloat(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE1))) * 1000);
+		mEffectType = EffectType.getValue(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE2)));
+	}
+
+	public long getDuration() {
+		return mDuration;
+	}
+
+	public EffectType getEffectType() {
+		return mEffectType;
+	}
+
+	public Bitmap getBitmap() {
+		if (mSrc != null) {
+			Resources res = getContext().getResources();
+
+			return BitmapFactory.decodeResource(
+					res, res.getIdentifier(mSrc, "drawable", getContext().getPackageName()));
+		}
+
+		return null;
 	}
 
 	@Override
@@ -52,6 +90,6 @@ public class Image extends SectionElement {
 
 	@Override
 	public String toString() {
-		return super.toString() + " : src = " + mSrc + ", duration = " + mDuration + ", effect = " + mEffect + ", chain = " + mChain;
+		return super.toString() + " : src = " + mSrc + ", duration = " + mDuration + ", effect = " + mEffectType + ", chain = " + mChain;
 	}
 }

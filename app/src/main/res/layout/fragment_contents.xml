@@ -4,10 +4,20 @@
 	xmlns:custom="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".fragment.SectionFragment">
+	tools:context=".fragment.ContentsFragment">
 
-	<jp.onetake.binzumejigoku.view.RubyTextView
-		android:id="@+id/rubyview_contents"
+	<jp.onetake.binzumejigoku.view.ContentsImageView
+		android:id="@+id/imageview_contents"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:alpha="0"
+		android:scaleType="centerCrop"
+		android:adjustViewBounds="true"
+		android:visibility="invisible"
+		/>
+
+	<jp.onetake.binzumejigoku.view.ContentsTextView
+		android:id="@+id/textview_contents"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_margin="8dp"
@@ -18,7 +28,7 @@
 		custom:sentenceSpace="12dp"
 		/>
 
-	<jp.onetake.binzumejigoku.view.TitleTextView
+	<jp.onetake.binzumejigoku.view.ContentsTitleView
 		android:id="@+id/titleview_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -27,12 +37,6 @@
 		custom:titleSize="24sp"
 		custom:titleColor="@android:color/black"
 		custom:period="50"
-		/>
-
-	<View
-		android:id="@+id/view_accept_touch"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
 		/>
 
 </FrameLayout>
