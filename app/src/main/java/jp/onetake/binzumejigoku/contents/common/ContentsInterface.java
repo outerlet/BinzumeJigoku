@@ -11,6 +11,12 @@ import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
  * コンテンツにアクセスするために横断的に必要となるデータの管理や処理を担当する
  */
 public class ContentsInterface {
+	private final String KEY_SHARED_PREFS			= "ContentsInterface.KEY_SHARED_PREFS";
+	private final String PREFKEY_RUBY_DELIMITER		= "ContentsInterface.PREFKEY_RUBY_DELIMITER";
+	private final String PREFKEY_RUBY_CLOSURE		= "ContentsInterface.PREFKEY_RUBY_CLOSURE";
+	private final String PREFKEY_IS_XML_PARSED		= "ContentsInterface.PREFKEY_IS_XML_PARSED";
+	private final String PREFKEY_MAX_SECTION_INDEX	= "ContentsInterface.PREFKEY_MAX_SECTION_INDEX";
+
 	// Singletonなインスタンス
 	private static ContentsInterface mInstance;
 
@@ -18,6 +24,7 @@ public class ContentsInterface {
 	private ContentsDbOpenHelper mDbHelper;
 	private String mRubyDelimiter;
 	private String mRubyClosure;
+	private int mMaxSectionIndex = -1;
 
 	/**
 	 * このクラスの唯一のインスタンスを返却する
@@ -44,7 +51,7 @@ public class ContentsInterface {
 	 * @return	SharedPreferences
 	 */
 	public SharedPreferences getPreferences() {
-		return mContext.getSharedPreferences(mContext.getString(R.string.prefkey_preferences), Context.MODE_PRIVATE);
+		return mContext.getSharedPreferences(KEY_SHARED_PREFS, Context.MODE_PRIVATE);
 	}
 
 	/**
@@ -72,8 +79,20 @@ public class ContentsInterface {
 		mRubyDelimiter = delimiter;
 
 		getPreferences().edit()
-				.putString(mContext.getString(R.string.prefkey_ruby_delimiter), delimiter)
+				.putString(PREFKEY_RUBY_DELIMITER, delimiter)
 				.apply();
+	}
+
+	/**
+	 * text要素において、表示テキストとそれにふるルビを区別するための区切り文字を取得する
+	 * @return	表示テキストとそれにふるルビを区別するための区切り文字
+	 */
+	public String getRubyDelimiter() {
+		if (mRubyDelimiter == null) {
+			mRubyDelimiter = getPreferences().getString(PREFKEY_RUBY_DELIMITER, null);
+		}
+
+		return mRubyDelimiter;
 	}
 
 	/**
@@ -85,20 +104,8 @@ public class ContentsInterface {
 		mRubyClosure = closure;
 
 		getPreferences().edit()
-				.putString(mContext.getString(R.string.prefkey_ruby_closure), closure)
+				.putString(PREFKEY_RUBY_CLOSURE, closure)
 				.apply();
-	}
-
-	/**
-	 * text要素において、表示テキストとそれにふるルビを区別するための区切り文字を取得する
-	 * @return	表示テキストとそれにふるルビを区別するための区切り文字
-	 */
-	public String getRubyDelimiter() {
-		if (mRubyDelimiter == null) {
-			mRubyDelimiter = getPreferences()
-					.getString(mContext.getString(R.string.prefkey_ruby_delimiter), null);
-		}
-		return mRubyDelimiter;
 	}
 
 	/**
@@ -107,9 +114,9 @@ public class ContentsInterface {
 	 */
 	public String getRubyClosure() {
 		if (mRubyClosure == null) {
-			mRubyClosure = getPreferences()
-					.getString(mContext.getString(R.string.prefkey_ruby_closure), null);
+			mRubyClosure = getPreferences().getString(PREFKEY_RUBY_CLOSURE, null);
 		}
+
 		return mRubyClosure;
 	}
 
@@ -118,7 +125,7 @@ public class ContentsInterface {
 	 */
 	public void markAsXmlParsed() {
 		getPreferences().edit()
-				.putBoolean(mContext.getString(R.string.prefkey_is_xml_parsed), true)
+				.putBoolean(PREFKEY_IS_XML_PARSED, true)
 				.apply();
 	}
 
@@ -128,6 +135,22 @@ public class ContentsInterface {
 	 * @return	XMLのパース処理が完了している場合true、未完了ならfalse
 	 */
 	public boolean isXmlParsed() {
-		return getPreferences().getBoolean(mContext.getString(R.string.prefkey_is_xml_parsed), false);
+		return getPreferences().getBoolean(PREFKEY_IS_XML_PARSED, false);
+	}
+
+	public void setMaxSectionIndex(int sectionIndex) {
+		mMaxSectionIndex = sectionIndex;
+
+		getPreferences().edit()
+				.putInt(PREFKEY_MAX_SECTION_INDEX, mMaxSectionIndex)
+				.apply();
+	}
+
+	public int getMaxSectionIndex() {
+		if (mMaxSectionIndex == -1) {
+			getPreferences().getInt(PREFKEY_MAX_SECTION_INDEX, 0);
+		}
+
+		return mMaxSectionIndex;
 	}
 }

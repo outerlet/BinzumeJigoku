@@ -8,21 +8,24 @@ import android.view.MotionEvent;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsHolder;
+import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.element.Image;
 import jp.onetake.binzumejigoku.contents.element.SectionElement;
 import jp.onetake.binzumejigoku.contents.element.Text;
 import jp.onetake.binzumejigoku.contents.element.Title;
 import jp.onetake.binzumejigoku.fragment.ContentsFragment;
+import jp.onetake.binzumejigoku.fragment.dialog.AlertDialogFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.MultipleConfirmDialogFragment;
 
 public class ContentsActivity extends BasicActivity
-		implements ContentsFragment.SectionListener, ConfirmDialogFragment.OnConfirmListener {
+		implements ContentsFragment.SectionListener, AlertDialogFragment.OnAlertListener, ConfirmDialogFragment.OnConfirmListener {
 	public static String KEY_SECTION_INDEX		= "ContentsActivity.KEY_SECTION_INDEX";
 
-	private final String TAG_SECTION_FRAGMENT	= "ContentsActivity.TAG_SECTION_FRAGMENT";
-	private final String TAG_DIALOG_SECTION		= "ContentsActivity.TAG_DIALOG_SECTION";
-	private final String TAG_DIALOG_BACKKEY		= "ContentsActivity.TAG_DIALOG_BACKKEY";
+	private final String TAG_SECTION_FRAGMENT		= "ContentsActivity.TAG_SECTION_FRAGMENT";
+	private final String TAG_DIALOG_SECTION			= "ContentsActivity.TAG_DIALOG_SECTION";
+	private final String TAG_DIALOG_LAST_SECTION	= "ContentsActivity.TAG_DIALOG_LAST_SECTION";
+	private final String TAG_DIALOG_BACKKEY			= "ContentsActivity.TAG_DIALOG_BACKKEY";
 
 	private ContentsHolder mHolder;
 	private int mSectionIndex;
@@ -67,28 +70,33 @@ public class ContentsActivity extends BasicActivity
 
 	private void advance() {
 		if (mHolder.hasNext()) {
-			while (true) {
-				SectionElement elm = mHolder.next();
+			SectionElement elm = mHolder.next();
 
-				mIsOngoing = (elm instanceof Title || elm instanceof Text || elm instanceof Image);
+			mIsOngoing = (elm instanceof Title || elm instanceof Text || elm instanceof Image);
 
-				ContentsFragment fragment = (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
-				fragment.advance(elm);
+			ContentsFragment fragment = (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
+			fragment.advance(elm);
 
-				// "chain"属性が"immediate"以外ならとっとと抜ける
-				if (elm.getChainType() != SectionElement.ChainType.Immediate) {
-					break;
-				}
+			// "chain"属性が"immediate"なら更に進める
+			if (elm.getChainType() == SectionElement.ChainType.Immediate) {
+				advance();
 			}
 		} else {
 			mIsOngoing = false;
 
-			MultipleConfirmDialogFragment.newInstance(
-					R.string.phrase_confirm,
-					R.string.message_section_finished,
-					R.string.phrase_next_section,
-					R.string.phrase_back,
-					R.string.phrase_finish_application).show(getSupportFragmentManager(), TAG_DIALOG_SECTION);
+			if (mSectionIndex >= ContentsInterface.getInstance().getMaxSectionIndex()) {
+				AlertDialogFragment.newInstance(
+						R.string.phrase_confirm,
+						R.string.message_last_section_finished,
+						R.string.phrase_back).show(getSupportFragmentManager(), TAG_DIALOG_LAST_SECTION);
+			} else {
+				MultipleConfirmDialogFragment.newInstance(
+						R.string.phrase_confirm,
+						R.string.message_section_finished,
+						R.string.phrase_next_section,
+						R.string.phrase_back,
+						R.string.phrase_finish_application).show(getSupportFragmentManager(), TAG_DIALOG_SECTION);
+			}
 		}
 	}
 
@@ -99,6 +107,13 @@ public class ContentsActivity extends BasicActivity
 			advance();
 		} else {
 			mIsOngoing = false;
+		}
+	}
+
+	@Override
+	public void onAlert(AlertDialogFragment dialog) {
+		if (dialog.getTag().equals(TAG_DIALOG_LAST_SECTION)) {
+			finish();
 		}
 	}
 

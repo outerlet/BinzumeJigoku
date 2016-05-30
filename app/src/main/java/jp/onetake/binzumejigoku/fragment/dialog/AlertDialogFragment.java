@@ -12,8 +12,9 @@ import jp.onetake.binzumejigoku.R;
  * 「OK」と「キャンセル」のボタンがある、確認用のダイアログを表示するためのDialogFragment
  */
 public class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
-	private static final String KEY_DIALOG_TITLE	= "AlertDialogFragment.KEY_DIALOG_TITLE";
-	private static final String KEY_DIALOG_MESSAGE	= "AlertDialogFragment.KEY_DIALOG_MESSAGE";
+	private static final String KEY_TITLE			= "AlertDialogFragment.KEY_TITLE";
+	private static final String KEY_MESSAGE			= "AlertDialogFragment.KEY_MESSAGE";
+	private static final String KEY_BUTTON_LABEL	= "AlertDialogFragment.KEY_BUTTON_LABEL";
 
 	/**
 	 * このFragmentのインスタンスを生成する
@@ -21,10 +22,11 @@ public class AlertDialogFragment extends DialogFragment implements DialogInterfa
 	 * @param message	ダイアログのメッセージ
 	 * @return	このFragmentのインスタンス
 	 */
-	public static AlertDialogFragment newInstance(String title, String message) {
+	public static AlertDialogFragment newInstance(int title, int message, int buttonLabel) {
 		Bundle params = new Bundle();
-		params.putString(KEY_DIALOG_TITLE, title);
-		params.putString(KEY_DIALOG_MESSAGE, message);
+		params.putInt(KEY_TITLE, title);
+		params.putInt(KEY_MESSAGE, message);
+		params.putInt(KEY_BUTTON_LABEL, buttonLabel);
 
 		AlertDialogFragment dialog = new AlertDialogFragment();
 		dialog.setArguments(params);
@@ -35,10 +37,12 @@ public class AlertDialogFragment extends DialogFragment implements DialogInterfa
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		Bundle params = getArguments();
 
+		int buttonLabel = params.getInt(KEY_BUTTON_LABEL, -1);
+
 		return new AlertDialog.Builder(getContext())
-				.setTitle(params.getString(KEY_DIALOG_TITLE))
-				.setMessage(params.getString(KEY_DIALOG_MESSAGE))
-				.setPositiveButton(R.string.phrase_ok, this)
+				.setTitle(params.getInt(KEY_TITLE))
+				.setMessage(params.getInt(KEY_MESSAGE))
+				.setPositiveButton(buttonLabel, this)
 				.setCancelable(false)
 				.create();
 	}

@@ -6,12 +6,6 @@
 	<!-- コンテンツファイル名 -->
 	<string name="filename_contents">contents_binzume_jigoku.xml</string>
 
-	<!-- プリファレンスキー -->
-	<string name="prefkey_preferences">PREFKEY_PREFERENCES</string>
-	<string name="prefkey_is_xml_parsed">PREFKEY_IS_XML_PARSED</string>
-	<string name="prefkey_ruby_delimiter">PREFKEY_RUBY_DELIMITER</string>
-	<string name="prefkey_ruby_closure">PREFKEY_RUBY_CLOSURE</string>
-
 	<!-- フレーズ -->
 	<string name="phrase_ok">OK</string>
 	<string name="phrase_cancel">キャンセル</string>
@@ -32,6 +26,7 @@
 	<string name="message_confirm_finish">終了しますか？</string>
 	<string name="message_confirm_back">物語を中断して前の画面に戻りますか？</string>
 	<string name="message_section_finished">章が終了しました。</string>
+	<string name="message_last_section_finished">最後の章が終了しました。前の画面に戻ります。</string>
 	<string name="message_force_application">アプリを終了します。</string>
 
 </resources>

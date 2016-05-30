@@ -38,11 +38,11 @@ public class ContentsXmlParser {
 	 * @throws XmlPullParserException
 	 */
 	public void parse(String fileName) throws IOException, XmlPullParserException {
-		InputStreamReader reader = new InputStreamReader(mContext.getAssets().open(fileName));
-
 		// XML解析のためのパーサを取得
 		XmlPullParser parser = Xml.newPullParser();
-		parser.setInput(reader);
+		parser.setInput(new InputStreamReader(mContext.getAssets().open(fileName)));
+
+		int sectionIndex = 0;
 
 		// XMLを解析した結果をDBに書き込むためのヘルパ
 		// DB更新処理に失敗した場合に備えてトランザクションを張っておく
@@ -60,6 +60,12 @@ public class ContentsXmlParser {
 							Section section = new Section(mContext);
 							section.parse(parser);
 							section.save(db);
+
+							int index = section.getIndex();
+							if (index > sectionIndex) {
+								sectionIndex = index;
+							}
+
 							break;
 						default:
 							break;
@@ -68,7 +74,9 @@ public class ContentsXmlParser {
 			}
 
 			// パースが正常に完了した
-			ContentsInterface.getInstance().markAsXmlParsed();
+			ContentsInterface cif = ContentsInterface.getInstance();
+			cif.markAsXmlParsed();
+			cif.setMaxSectionIndex(sectionIndex);
 
 			db.setTransactionSuccessful();
 		} catch (IOException | XmlPullParserException | SQLiteException ex) {

@@ -15,6 +15,7 @@ import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
 public class Section extends Element {
 	private List<SectionElement> mElementList;
+	private int mIndex;
 
 	/**
 	 * コンストラクタ
@@ -24,11 +25,15 @@ public class Section extends Element {
 		super(context);
 	}
 
+	public int getIndex() {
+		return mIndex;
+	}
+
 	@Override
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
 		super.parse(parser);
 
-		int index = Integer.parseInt(getAttribute("index"));
+		mIndex = Integer.parseInt(getAttribute("index"));
 		int sequence = 0;
 		mElementList = new ArrayList<>();
 
@@ -38,16 +43,16 @@ public class Section extends Element {
 
 				switch (ContentsType.getValue(parser.getName())) {
 					case Title:
-						source = new Title(getContext(), index, sequence++);
+						source = new Title(getContext(), mIndex, sequence++);
 						break;
 					case Image:
-						source = new Image(getContext(), index, sequence++);
+						source = new Image(getContext(), mIndex, sequence++);
 						break;
 					case Text:
-						source = new Text(getContext(), index, sequence++);
+						source = new Text(getContext(), mIndex, sequence++);
 						break;
 					case ClearText:
-						source = new ClearText(getContext(), index, sequence++);
+						source = new ClearText(getContext(), mIndex, sequence++);
 						break;
 					default:
 						break;
