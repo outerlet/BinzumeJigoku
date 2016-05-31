@@ -126,17 +126,15 @@ public class ContentsTextView extends TimerView {
 			float textHeight = textMetrics.bottom - textMetrics.top;
 			float rubyHeight = rubyMetrics.bottom - rubyMetrics.top;
 			float lineHeight = textHeight + rubyHeight + mLineSpace;
-			float posX = 0.0f;
+			float posX = 0.0f + mText.getIndent() * mTextPaint.getTextSize();
 			float posY = Math.abs(rubyMetrics.top);
 			int lines = 1;
 
-			String closure = ContentsInterface.getInstance().getRubyClosure();
-			String[] blocks = mText.getText().split(closure);
+			ContentsInterface cif = ContentsInterface.getInstance();
+			String[] blocks = mText.getText().split(cif.getRubyClosure());
 			for (String str : blocks) {
-				String delimiter = ContentsInterface.getInstance().getRubyDelimiter();
-
 				// ルビ込み
-				int idx = str.indexOf(delimiter);
+				int idx = str.indexOf(cif.getRubyDelimiter());
 				if (idx != -1) {
 					String text = str.substring(0, idx);
 					String ruby = str.substring(idx + 1, str.length());
@@ -151,6 +149,7 @@ public class ContentsTextView extends TimerView {
 						++lines;
 					}
 
+					// テキスト描画長の方がルビのそれより長い
 					if (textWidth >= rubyWidth) {
 						float interval = textWidth / ruby.length();
 						float startX = posX + (interval - mRubyPaint.getTextSize()) / 2;
@@ -170,6 +169,7 @@ public class ContentsTextView extends TimerView {
 									posX + mTextPaint.getTextSize() * i,
 									posY + rubyMetrics.bottom + Math.abs(textMetrics.top)));
 						}
+					// ルビ描画長の方がテキストのそれより長い
 					} else {
 						// ルビの位置決め
 						Letter[] rubyLetters = new Letter[ruby.length()];
@@ -190,7 +190,7 @@ public class ContentsTextView extends TimerView {
 					}
 
 					posX += length;
-				// ルビなし
+				// ルビなし(1文まるごとルビがない場合もこちら)
 				} else {
 					for (int i = 0 ; i < str.length() ; i++) {
 						if (posX + mTextPaint.getTextSize() > width) {

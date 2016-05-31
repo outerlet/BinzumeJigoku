@@ -34,7 +34,6 @@ public class Image extends SectionElement {
 	private String mSrc;
 	private long mDuration;
 	private EffectType mEffectType;
-	private String mChain;
 
 	/**
 	 * コンストラクタ
@@ -90,6 +89,6 @@ public class Image extends SectionElement {
 
 	@Override
 	public String toString() {
-		return super.toString() + " : src = " + mSrc + ", duration = " + mDuration + ", effect = " + mEffectType + ", chain = " + mChain;
+		return super.toString() + " : src = " + mSrc + ", duration = " + mDuration + ", effect = " + mEffectType;
 	}
 }
