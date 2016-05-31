@@ -12,9 +12,9 @@
 	<string name="phrase_confirm">確認</string>
 	<string name="phrase_error">エラー</string>
 	<string name="phrase_finish">終了</string>
-	<string name="phrase_finish_application">アプリを終了する</string>
+	<string name="phrase_finish_application">アプリを終了</string>
 	<string name="phrase_back">戻る</string>
-	<string name="phrase_next_section">次の章へ</string>
+	<string name="phrase_next_section">次の章</string>
 
 	<!-- ボタンのラベル -->
 	<string name="label_start_section0">前置きを開始する</string>

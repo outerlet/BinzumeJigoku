@@ -56,7 +56,7 @@ public class MultipleConfirmDialogFragment extends DialogFragment implements Dia
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		if (getActivity() instanceof ConfirmDialogFragment.OnConfirmListener) {
-			((ConfirmDialogFragment.OnConfirmListener)getActivity()).onConfirm(this, which);
+			((ConfirmDialogFragment.OnConfirmListener)getActivity()).onConfirmed(this, which);
 		}
 	}
 }

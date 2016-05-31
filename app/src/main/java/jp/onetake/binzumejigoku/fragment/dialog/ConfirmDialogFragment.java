@@ -21,7 +21,7 @@ public class ConfirmDialogFragment extends DialogFragment implements DialogInter
 		 * @param dialog	ダイアログ表示に使ったConfirmDialogFragmentのインスタンス
 		 * @param which		押されたボタンを示すint値
 		 */
-		void onConfirm(DialogFragment dialog, int which);
+		void onConfirmed(DialogFragment dialog, int which);
 	}
 
 	private static final String KEY_TITLE			= "ConfirmDialogFragment.KEY_TITLE";
@@ -81,7 +81,7 @@ public class ConfirmDialogFragment extends DialogFragment implements DialogInter
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		if (getActivity() instanceof OnConfirmListener) {
-			((OnConfirmListener)getActivity()).onConfirm(this, which);
+			((OnConfirmListener)getActivity()).onConfirmed(this, which);
 		}
 	}
 }

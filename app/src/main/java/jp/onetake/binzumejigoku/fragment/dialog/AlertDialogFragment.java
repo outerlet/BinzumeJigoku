@@ -6,12 +6,21 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import jp.onetake.binzumejigoku.R;
-
 /**
  * 「OK」と「キャンセル」のボタンがある、確認用のダイアログを表示するためのDialogFragment
  */
 public class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
+	/**
+	 * ConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
+	 */
+	public interface OnAlertListener {
+		/**
+		 * ダイアログのボタンが押下された時に呼び出されるリスナメソッド
+		 * @param dialog		ダイアログ表示に使ったAlertDialogFragmentのインスタンス
+		 */
+		void onConfirmed(DialogFragment dialog);
+	}
+
 	private static final String KEY_TITLE			= "AlertDialogFragment.KEY_TITLE";
 	private static final String KEY_MESSAGE			= "AlertDialogFragment.KEY_MESSAGE";
 	private static final String KEY_BUTTON_LABEL	= "AlertDialogFragment.KEY_BUTTON_LABEL";
@@ -50,18 +59,7 @@ public class AlertDialogFragment extends DialogFragment implements DialogInterfa
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		if (getActivity() instanceof OnAlertListener) {
-			((OnAlertListener)getActivity()).onAlert(this);
+			((OnAlertListener)getActivity()).onConfirmed(this);
 		}
-	}
-
-	/**
-	 * ConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
-	 */
-	public interface OnAlertListener {
-		/**
-		 * ダイアログのボタンが押下された時に呼び出されるリスナメソッド
-		 * @param dialog		ダイアログ表示に使ったAlertDialogFragmentのインスタンス
-		 */
-		void onAlert(AlertDialogFragment dialog);
 	}
 }

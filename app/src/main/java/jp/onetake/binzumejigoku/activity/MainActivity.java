@@ -79,7 +79,7 @@ public class MainActivity extends BasicActivity
 	}
 
 	@Override
-	public void onConfirm(DialogFragment dialog, int which) {
+	public void onConfirmed(DialogFragment dialog, int which) {
 		if (which == DialogInterface.BUTTON_POSITIVE) {
 			finish();
 		}
