@@ -1,9 +1,12 @@
 package jp.onetake.binzumejigoku.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import jp.onetake.binzumejigoku.R;
@@ -14,7 +17,8 @@ import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.MultipleConfirmDialogFragment;
 
 public class ContentsActivity extends BasicActivity
-		implements ContentsFragment.ContentsListener, AlertDialogFragment.OnAlertListener, ConfirmDialogFragment.OnConfirmListener {
+		implements	ContentsFragment.ContentsListener, AlertDialogFragment.OnAlertListener,
+					ConfirmDialogFragment.OnConfirmListener, GestureDetector.OnGestureListener {
 	public static String KEY_SECTION_INDEX		= "ContentsActivity.KEY_SECTION_INDEX";
 
 	private final String TAG_SECTION_FRAGMENT		= "ContentsActivity.TAG_SECTION_FRAGMENT";
@@ -22,6 +26,7 @@ public class ContentsActivity extends BasicActivity
 	private final String TAG_DIALOG_LAST_SECTION	= "ContentsActivity.TAG_DIALOG_LAST_SECTION";
 	private final String TAG_DIALOG_BACKKEY			= "ContentsActivity.TAG_DIALOG_BACKKEY";
 
+	private GestureDetectorCompat mGestureDetector;
 	private int mSectionIndex;
 
 	@Override
@@ -34,6 +39,8 @@ public class ContentsActivity extends BasicActivity
 		if (mSectionIndex == -1) {
 			throw new UnsupportedOperationException(this.getClass().getName() + " : Invalid section index.");
 		}
+
+		mGestureDetector = new GestureDetectorCompat(this, this);
 
 		replaceFragment(mSectionIndex);
 	}
@@ -49,8 +56,7 @@ public class ContentsActivity extends BasicActivity
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		ContentsFragment fragment = (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
-		fragment.advance();
+		mGestureDetector.onTouchEvent(event);
 
 		return true;
 	}
@@ -111,5 +117,38 @@ public class ContentsActivity extends BasicActivity
 		transaction.replace(
 				R.id.layout_fragment_container, ContentsFragment.newInstance(sectionIndex), TAG_SECTION_FRAGMENT);
 		transaction.commit();
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// Do nothing.
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		ContentsFragment fragment = (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
+		fragment.advance();
+
+		return true;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		startActivity(new Intent(this, SaveActivity.class));
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		return false;
 	}
 }

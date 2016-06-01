@@ -21,6 +21,9 @@
 	<string name="label_start_section1">第1章を開始する</string>
 	<string name="label_start_section2">第2章を開始する</string>
 	<string name="label_start_section3">第3章を開始する</string>
+	<string name="label_save_slot1">一ツ目の記錄</string>
+	<string name="label_save_slot2">二ツ目の記錄</string>
+	<string name="label_save_slot3">三ツ目の記錄</string>
 
 	<!-- Message -->
 	<string name="message_confirm_finish">終了しますか？</string>

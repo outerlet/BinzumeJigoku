@@ -1,7 +1,6 @@
 package jp.onetake.binzumejigoku.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -13,17 +12,39 @@ import java.util.TimerTask;
 
 import jp.onetake.binzumejigoku.R;
 
-
+/**
+ * 一定時間ごとに描画処理を繰り返す、内部にタイマーを持つView
+ */
 public abstract class TimerView extends View {
+	/**
+	 * タイマーの実行状態
+	 */
 	public enum TimerStatus {
-		Stopped,
-		Execute,
-		WaitForStop,
+		Stopped,		// 停止
+		Execute,		// 実行中
+		WaitForStop,	// 停止待ち
 	}
 
+	/**
+	 * このViewに発生したイベントを受け取るリスナ
+	 */
 	public interface TimerListener {
+		/**
+		 * タイマーが開始された
+		 * @param view	TimerView
+		 */
 		void onStarted(TimerView view);
+
+		/**
+		 * タイマーに設定された単位時間が経過した
+		 * @param view	TimerView
+		 */
 		void onPeriod(TimerView view);
+
+		/**
+		 * タイマーが停止した
+		 * @param view	TimerView
+		 */
 		void onStopped(TimerView view);
 	}
 
@@ -37,10 +58,16 @@ public abstract class TimerView extends View {
 	private long mStartMillis;
 	private long mPeriod;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public TimerView(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public TimerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -57,6 +84,11 @@ public abstract class TimerView extends View {
 		}
 	}
 
+	/**
+	 * 描画を開始する<br />
+	 * 描画が行われたら、つまりタイマーが開始したら呼び出し元にtrueが返る
+	 * @return	描画が行われた(タイマーが開始した)かどうか
+	 */
 	public boolean start() {
 		if (mTimerStatus == TimerStatus.Stopped) {
 			if (mListener != null) {
@@ -76,27 +108,43 @@ public abstract class TimerView extends View {
 		return false;
 	}
 
+	/**
+	 * タイマーによるイベントを補足したい場合リスナオブジェクトをセットする
+	 * @param listener	タイマーによるイベントを補足するリスナオブジェクト
+	 */
 	public void setListener(TimerListener listener) {
 		mListener = listener;
 	}
 
-	public TimerStatus getStatus() {
-		return mTimerStatus;
-	}
-
+	/**
+	 * startメソッドが実行されてからの経過時間を返す
+	 * @return	startメソッドが実行されてからの経過時間
+	 */
 	protected long getElapsedMillis() {
 		return System.currentTimeMillis() - mStartMillis;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		if (mTimerStatus == TimerStatus.Execute && !executeDraw(canvas, ++mCounter)) {
-			mTimerStatus = TimerStatus.WaitForStop;
+		// タイマーが実行されているときであれば次回の描画処理を呼び出す
+		if (mTimerStatus == TimerStatus.Execute) {
+			if (!executeDraw(canvas, ++mCounter)) {
+				mTimerStatus = TimerStatus.WaitForStop;
+			}
+		// タイマーが止まっているときは前回までの描画処理を復元する
+		} else if (mTimerStatus == TimerStatus.Stopped) {
+			immediate(canvas);
 		}
 	}
 
+	/**
+	 * 指定した時間間隔で描画処理を行うタスク
+	 */
 	private class TimerViewTask extends TimerTask {
 		@Override
 		public void run() {
@@ -123,11 +171,19 @@ public abstract class TimerView extends View {
 	};
 
 	/**
-	 * onDrawで実行したい処理を定義する<br />
-	 * このメソッドからfalseが返されるとタイマーが停止され次回のinvalidateは行われなくなる
-	 * @param canvas
-	 * @param calledCount
+	 * calledCountで呼び出された回数に応じた描画処理を実行する<br />
+	 * このメソッドはonDrawで呼び出されるので、目的に応じた処理内容をサブクラスで定義する<br />
+	 * メソッドからfalseが返されるとタイマーが停止され、次回のinvalidateは実行されない
+	 * @param canvas		キャンバス
+	 * @param calledCount	このメソッドが呼び出された回数
 	 * @return	次回のタイマー処理も実行する場合はtrue
 	 */
 	protected abstract boolean executeDraw(Canvas canvas, int calledCount);
+
+	/**
+	 * 可能な描画処理を全て実行する<br />
+	 * つまり、タイマーが終了した時点と同じ状態に描画する
+	 * @param canvas	キャンバス
+	 */
+	protected abstract void immediate(Canvas canvas);
 }

@@ -25,7 +25,7 @@ import jp.onetake.binzumejigoku.contents.element.Title;
  */
 public class ContentsTitleView extends TimerView {
 	/**
-	 * タイトルの1文字を表現するためのクラス<br />
+	 * タイトルの1文字を描画するためのクラス<br />
 	 * 自身の表示にかける時間や表示までの遅延時間、描画に使用するPaintオブジェクトなどを保持する
 	 */
 	private class Letter {
@@ -34,6 +34,12 @@ public class ContentsTitleView extends TimerView {
 		public float delay;
 		private Paint mPaint;
 
+		/**
+		 * コンストラクタ
+		 * @param letter	描画する1文字
+		 * @param duration	この文字の描画にかける所要時間
+		 * @param delay		最初の文字が描画されてからこの文字が描画されるまでの遅延時間
+		 */
 		public Letter(String letter, float duration, float delay) {
 			this.letter = letter;
 			this.duration = duration;
@@ -44,6 +50,11 @@ public class ContentsTitleView extends TimerView {
 			mPaint.setColor(mTextColor);
 		}
 
+		/**
+		 * アルファ値を設定して、文字の描画に使用するPaintオブジェクトを返す
+		 * @param alpha	アルファ値(0-255)
+		 * @return	文字の描画に使用するPaintオブジェクト
+		 */
 		public Paint getPaintByAlpha(int alpha) {
 			mPaint.setAlpha(alpha);
 			return mPaint;
@@ -61,10 +72,16 @@ public class ContentsTitleView extends TimerView {
 	private float mTextSize;
 	private Letter[] mTitleLetters;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ContentsTitleView(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ContentsTitleView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -83,6 +100,9 @@ public class ContentsTitleView extends TimerView {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected boolean executeDraw(Canvas canvas, int calledCount) {
 		long elapsed = getElapsedMillis();
@@ -124,6 +144,23 @@ public class ContentsTitleView extends TimerView {
 		return (elapsed <= mDuration * 3);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void immediate(Canvas canvas) {
+		float startX = (canvas.getWidth() / 2.0f) - ((mTitleLetters.length * mTextSize) / 2.0f);
+
+		for (int i = 0 ; i < mTitleLetters.length ; i++) {
+			Letter letter = mTitleLetters[i];
+			canvas.drawText(letter.letter, startX + mTextSize * i, canvas.getHeight() / 2.0f, letter.getPaintByAlpha(ALPHA_OPAQUE));
+		}
+	}
+
+	/**
+	 * タイトルをセットする
+	 * @param title	タイトル文字列を保持するTextオブジェクト
+	 */
 	public void setTitle(Title title) {
 		String titleText = title.getTitle();
 		int textCount = titleText.length();

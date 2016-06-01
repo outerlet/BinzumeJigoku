@@ -10,9 +10,6 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import jp.onetake.binzumejigoku.R;
@@ -40,7 +37,7 @@ import jp.onetake.binzumejigoku.contents.element.Text;
 public class ContentsTextView extends TimerView {
 	/**
 	 * 1文字の内容と描画位置(X, Y)を保持するクラス<br />
-	 * StreamTextViewでしか使わないのでインナークラス
+	 * ContentsTextViewでしか使わないのでインナークラス
 	 */
 	private class Letter {
 		public float x;
@@ -270,10 +267,16 @@ public class ContentsTextView extends TimerView {
 	private float mSentenceSpace;
 	private float mTotalHeight;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ContentsTextView(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public ContentsTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -310,6 +313,9 @@ public class ContentsTextView extends TimerView {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected boolean executeDraw(Canvas canvas, int calledCount) {
 		if (mDetailList.size() > 0) {
@@ -334,7 +340,7 @@ public class ContentsTextView extends TimerView {
 			for (int i = 0 ; i < mDetailList.size() ; i++) {
 				DrawDetail detail = mDetailList.get(i);
 
-				int count = (i == mDetailList.size() - 1) ? calledCount : detail.getTextCount();
+				int count = (calledCount >= 0 && i == mDetailList.size() - 1) ? calledCount : detail.getTextCount();
 
 				for (int x = 0 ; x < count ; x++) {
 					Letter text = detail.getTextAt(x);
@@ -357,10 +363,25 @@ public class ContentsTextView extends TimerView {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void immediate(Canvas canvas) {
+		executeDraw(canvas, -1);
+	}
+
+	/**
+	 * 描画するテキストを保持するTextオブジェクトをセットする
+	 * @param text	テキストを保持するTextオブジェクト
+	 */
 	public void setText(Text text) {
 		mDetailList.add(new DrawDetail(text));
 	}
 
+	/**
+	 * Viewに描画されている文字列を全て消去する
+	 */
 	public void clear() {
 		mDetailList.clear();
 		mTotalHeight = 0.0f;
