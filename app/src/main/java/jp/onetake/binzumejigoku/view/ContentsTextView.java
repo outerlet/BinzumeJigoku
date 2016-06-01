@@ -10,6 +10,9 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import jp.onetake.binzumejigoku.R;
@@ -53,7 +56,7 @@ public class ContentsTextView extends TimerView {
 
 	/**
 	 * テキストとルビそれぞれのLetterを文字数分保持し、レイアウトを決定＋保持するクラス<br />
-	 * StreamTextViewでしか使わないのでインナークラス
+	 * ContentsTextViewでしか使わないのでインナークラス
 	 */
 	private class DrawDetail {
 		private List<Letter> mTextList;
@@ -126,9 +129,13 @@ public class ContentsTextView extends TimerView {
 			float textHeight = textMetrics.bottom - textMetrics.top;
 			float rubyHeight = rubyMetrics.bottom - rubyMetrics.top;
 			float lineHeight = textHeight + rubyHeight + mLineSpace;
-			float posX = 0.0f + mText.getIndent() * mTextPaint.getTextSize();
-			float posY = Math.abs(rubyMetrics.top);
+
 			int lines = 1;
+
+			float posX = (mText.getAlign() == Text.Align.Left) ? 0.0f + mText.getIndent() * mTextPaint.getTextSize() : 0.0f;
+			float posY = Math.abs(rubyMetrics.top);
+			float textEndX = 0.0f;
+			float rubyEndX = 0.0f;
 
 			ContentsInterface cif = ContentsInterface.getInstance();
 			String[] blocks = mText.getText().split(cif.getRubyClosure());
@@ -143,6 +150,7 @@ public class ContentsTextView extends TimerView {
 					float rubyWidth = ruby.length() * mRubyPaint.getTextSize();
 					float length = (textWidth >= rubyWidth) ? textWidth : rubyWidth;
 
+					// 次の文字の描画位置が描画可能範囲をはみ出す場合は次の行へ
 					if (posX + length > width) {
 						posX = 0.0f;
 						posY += lineHeight;
@@ -155,26 +163,38 @@ public class ContentsTextView extends TimerView {
 						float startX = posX + (interval - mRubyPaint.getTextSize()) / 2;
 
 						// ルビの位置決め
-						Letter[] rubyLetters = new Letter[ruby.length()];
+						Letter[] rubys = new Letter[ruby.length()];
 						for (int i = 0 ; i < ruby.length() ; i++) {
-							rubyLetters[i] = new Letter(
+							rubys[i] = new Letter(
 									ruby.substring(i, i + 1), startX + interval * i, posY);
 						}
-						mRubyArray.put(mTextList.size(), rubyLetters);
+						mRubyArray.put(mTextList.size(), rubys);
 
 						// テキストの位置決め
 						for (int i = 0 ; i < text.length() ; i++) {
-							mTextList.add(new Letter(
+							Letter letter = new Letter(
 									text.substring(i, i + 1),
 									posX + mTextPaint.getTextSize() * i,
-									posY + rubyMetrics.bottom + Math.abs(textMetrics.top)));
+									posY + rubyMetrics.bottom + Math.abs(textMetrics.top));
+							mTextList.add(letter);
+
+							float end = letter.x + mTextPaint.getTextSize();
+							if (end > textEndX) {
+								textEndX = end;
+							}
 						}
 					// ルビ描画長の方がテキストのそれより長い
 					} else {
 						// ルビの位置決め
 						Letter[] rubyLetters = new Letter[ruby.length()];
 						for (int i = 0 ; i < ruby.length() ; i++) {
-							rubyLetters[i] = new Letter(ruby.substring(i, i + 1), posX + mRubyPaint.getTextSize() * i, posY);
+							Letter letter = new Letter(ruby.substring(i, i + 1), posX + mRubyPaint.getTextSize() * i, posY);
+							rubyLetters[i] = letter;
+
+							float end = letter.x + mRubyPaint.getTextSize();
+							if (end > rubyEndX) {
+								rubyEndX = end;
+							}
 						}
 						mRubyArray.put(mTextList.size(), rubyLetters);
 
@@ -193,23 +213,52 @@ public class ContentsTextView extends TimerView {
 				// ルビなし(1文まるごとルビがない場合もこちら)
 				} else {
 					for (int i = 0 ; i < str.length() ; i++) {
+						// 次の文字の描画位置が描画可能範囲をはみ出す場合は次の行へ
 						if (posX + mTextPaint.getTextSize() > width) {
 							posX = 0.0f;
 							posY += lineHeight;
 							++lines;
 						}
 
-						mTextList.add(new Letter(
+						Letter letter = new Letter(
 								str.substring(i, i + 1),
 								posX,
-								posY + rubyMetrics.bottom + Math.abs(textMetrics.top)));
+								posY + rubyMetrics.bottom + Math.abs(textMetrics.top));
+						mTextList.add(letter);
+
+						float end = letter.x + mTextPaint.getTextSize();
+						if (end > textEndX) {
+							textEndX = end;
+						}
 
 						posX += mTextPaint.getTextSize();
 					}
 				}
 			}
 
+			if (mText.getAlign() == Text.Align.Right) {
+				if (lines > 1) {
+					throw new IllegalArgumentException("Length of 'text' is too long ('align' needs to be 'left')");
+				} else {
+					float maxEnd = (textEndX >= rubyEndX) ? textEndX : rubyEndX;
+					float moveX = width - maxEnd - mText.getIndent() * mTextPaint.getTextSize();
+
+					for (Letter text : mTextList) {
+						text.x += moveX;
+					}
+
+					for (int i = 0 ; i < mRubyArray.size() ; i++) {
+						Letter[] rubyLetters = mRubyArray.valueAt(i);
+						float moveRubyX = width - rubyLetters.length * mRubyPaint.getTextSize();
+						for (Letter ruby : rubyLetters) {
+							ruby.x += moveRubyX;
+						}
+					}
+				}
+			}
+
 			mIsFinalized = true;
+
 			mHeight = lines * lineHeight;
 		}
 	}

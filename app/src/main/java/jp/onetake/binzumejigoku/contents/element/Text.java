@@ -88,7 +88,7 @@ public class Text extends SectionElement {
 
 	@Override
 	public void save(SQLiteDatabase db, ContentValues values) {
-		String textAlign = getAttribute("text_align");
+		String textAlign = getAttribute("align");
 		if (!TextUtils.isEmpty(textAlign)) {
 			values.put(ContentsTable.VALUE0.getColumnName(), textAlign);
 		}

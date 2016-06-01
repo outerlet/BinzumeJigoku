@@ -148,7 +148,7 @@ public class ContentsInterface {
 
 	public int getMaxSectionIndex() {
 		if (mMaxSectionIndex == -1) {
-			getPreferences().getInt(PREFKEY_MAX_SECTION_INDEX, 0);
+			mMaxSectionIndex = getPreferences().getInt(PREFKEY_MAX_SECTION_INDEX, 0);
 		}
 
 		return mMaxSectionIndex;
