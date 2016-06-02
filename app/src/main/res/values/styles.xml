@@ -20,6 +20,7 @@
 		<item name="android:layout_height">50dp</item>
 		<item name="android:layout_centerHorizontal">true</item>
 		<item name="android:background">@drawable/save_button</item>
+		<!-- item name="android:alpha">0</item -->
 	</style>
 
 </resources>

@@ -26,7 +26,7 @@
 	<string name="label_save_slot3">三ツ目の記錄</string>
 
 	<!-- Message -->
-	<string name="message_confirm_finish">終了しますか？</string>
+	<string name="message_confirm_finish_application">もう一度押して終了</string>
 	<string name="message_confirm_back">物語を中断して前の画面に戻りますか？</string>
 	<string name="message_section_finished">章が終了しました。</string>
 	<string name="message_last_section_finished">最後の章が終了しました。前の画面に戻ります。</string>

@@ -3,8 +3,10 @@ package jp.onetake.binzumejigoku.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.widget.Toast;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
@@ -13,6 +15,9 @@ import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 public class MainActivity extends BasicActivity
 		implements View.OnClickListener, ConfirmDialogFragment.OnConfirmListener {
 	public static final String INTENT_KEY_FINISH_APP	= "MainActivity.INTENT_KEY_FINISH_APP";
+
+	private Handler mHandler;
+	private int mBackPressCount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +33,33 @@ public class MainActivity extends BasicActivity
 			findViewById(R.id.button_section2).setOnClickListener(this);
 			findViewById(R.id.button_section3).setOnClickListener(this);
 			findViewById(R.id.button_query_database).setOnClickListener(this);
+
+			mHandler = new Handler();
+			mBackPressCount = 0;
 		}
 	}
 
 	@Override
 	public void onBackPressed() {
-		ConfirmDialogFragment.newInstance(
-				R.string.phrase_confirm,
-				R.string.message_confirm_finish,
-				R.string.phrase_finish,
-				R.string.phrase_cancel).show(getSupportFragmentManager(), null);
+		if (mBackPressCount > 0) {
+			finish();
+		} else {
+			++mBackPressCount;
+
+			Toast.makeText(this, R.string.message_confirm_finish_application, Toast.LENGTH_LONG).show();
+
+			// 一定時間(1秒)のうちにバックキーを2回押したら終了
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException ie) {}
+
+					mBackPressCount = 0;
+				}
+			}).start();
+		}
 	}
 
 	@Override

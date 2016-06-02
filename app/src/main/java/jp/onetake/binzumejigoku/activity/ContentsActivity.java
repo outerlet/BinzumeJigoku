@@ -145,6 +145,7 @@ public class ContentsActivity extends BasicActivity
 	@Override
 	public void onLongPress(MotionEvent e) {
 		startActivity(new Intent(this, SaveActivity.class));
+		overridePendingTransition(0, 0);
 	}
 
 	@Override
