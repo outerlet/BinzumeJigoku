@@ -1,7 +1,7 @@
 <document>
 	<meta-data ruby_closure="#" ruby_delimiter="|" />
 	<section index="0">
-		<image src="section00" duration="0.5" effect="fade" chain="wait" />
+		<image layer="0" src="section00" duration="0.5" effect="fade" chain="wait" />
 		<text>
 		拝呈　時下益々御清栄、<ruby>奉奉慶賀候|けいがたてまつりそうろう</ruby>。
 		</text>
@@ -24,11 +24,11 @@
 		海洋研究所　御中
 		</text>
 		<clear-text chain="immediate" />
-		<image duration="0.5" effect="fade" chain="wait" />
+		<image layer="0" duration="0.5" effect="fade" chain="wait" />
 	</section>
 	<section index="1">
 		<title chain="wait">第一の瓶の内容</title>
-		<image src="section01" duration="0.5" effect="fade" chain="wait" />
+		<image layer="0" src="section01" duration="0.5" effect="fade" chain="wait" />
 		<text>
 		ああ………この離れ島に、救いの船がとうとう来ました。
 		</text>
@@ -81,11 +81,11 @@
 		皆々様
 		</text>
 		<clear-text />
-		<image duration="0.5" effect="fade" chain="wait" />
+		<image layer="0" duration="0.5" effect="fade" chain="wait" />
 	</section>
 	<section index="2">
 		<title chain="wait">第二の瓶の内容</title>
-		<image src="section02" duration="0.5" effect="fade" chain="wait" />
+		<image layer="0" src="section02" duration="0.5" effect="fade" chain="wait" />
 		<text>
 		ああ。<ruby>隠微|かくれ</ruby>たるに<ruby>鑒|み</ruby>たまう神様よ。
 		</text>
@@ -235,7 +235,7 @@
 		――太郎記す………
 		</text>
 		<clear-text />
-		<image duration="0.5" effect="fade" chain="wait" />
+		<image layer="0" duration="0.5" effect="fade" chain="wait" />
 	</section>
 	<section index="3">
 		<title chain="wait">第三の瓶の内容</title>

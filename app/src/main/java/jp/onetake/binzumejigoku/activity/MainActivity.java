@@ -16,6 +16,8 @@ public class MainActivity extends BasicActivity
 		implements View.OnClickListener, ConfirmDialogFragment.OnConfirmListener {
 	public static final String INTENT_KEY_FINISH_APP	= "MainActivity.INTENT_KEY_FINISH_APP";
 
+	private final long BACKKEY_FINISH_MILLIS = 2000;
+
 	private Handler mHandler;
 	private int mBackPressCount;
 
@@ -48,12 +50,12 @@ public class MainActivity extends BasicActivity
 
 			Toast.makeText(this, R.string.message_confirm_finish_application, Toast.LENGTH_LONG).show();
 
-			// 一定時間(1秒)のうちにバックキーを2回押したら終了
+			// 一定時間(BACKKEY_FINISH_MILLISに定義されているミリ秒)のうちにバックキーを2回押したら終了
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(BACKKEY_FINISH_MILLIS);
 					} catch (InterruptedException ie) {}
 
 					mBackPressCount = 0;

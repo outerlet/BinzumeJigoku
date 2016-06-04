@@ -16,6 +16,9 @@ import jp.onetake.binzumejigoku.fragment.dialog.AlertDialogFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.MultipleConfirmDialogFragment;
 
+/**
+ * ストーリーの進行を制御するアクティビティ
+ */
 public class ContentsActivity extends BasicActivity
 		implements	ContentsFragment.ContentsListener, AlertDialogFragment.OnAlertListener,
 					ConfirmDialogFragment.OnConfirmListener, GestureDetector.OnGestureListener {

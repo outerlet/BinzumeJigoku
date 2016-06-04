@@ -82,8 +82,8 @@ public class ContentsFragment extends Fragment
 						mTextView.clear();
 						break;
 					case Image:
-						mImageView.setImage((Image)element);
-						mImageView.start();
+						int layer = mImageView.setImage((Image)element);
+						mImageView.start(layer);
 						break;
 					default:
 						// Do nothing.
@@ -127,7 +127,7 @@ public class ContentsFragment extends Fragment
 	}
 
 	@Override
-	public void onEffectFinished(ContentsImageView view) {
+	public void onEffectFinished(ContentsImageView view, int layer) {
 		advanceIfChained();
 	}
 

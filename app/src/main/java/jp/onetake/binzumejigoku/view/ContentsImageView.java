@@ -6,69 +6,104 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.element.Image;
 
-public class ContentsImageView extends ImageView {
-	private Image mImage;
+public class ContentsImageView extends FrameLayout {
+	private class ImageHolder {
+		public Image image;
+		public ImageView imageView;
+
+		public ImageHolder(ImageView imageView) {
+			this.imageView = imageView;
+		}
+
+		public void setImage(Image image) {
+			this.image = image;
+
+			Bitmap bitmap = this.image.getBitmap();
+			if (bitmap != null) {
+				imageView.setImageBitmap(this.image.getBitmap());
+			}
+		}
+	}
+
+	private final int NUMBER_OF_LAYERS	= 3;
+
+	private SparseArray<ImageHolder> mImageArray;
 	private EffectListener mListener;
 
 	public ContentsImageView(Context context) {
-		super(context);
+		this(context, null);
 	}
 
 	public ContentsImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		View view = LayoutInflater.from(getContext()).inflate(R.layout.view_contents_image, this);
+
+		mImageArray = new SparseArray<>();
+		for (int i = 0 ; i < NUMBER_OF_LAYERS ; i++) {
+			int viewId = getContext().getResources().getIdentifier(
+					String.format("imageview_layer%1$d", i), "id", getContext().getPackageName());
+			mImageArray.put(i, new ImageHolder((ImageView)view.findViewById(viewId)));
+		}
 	}
 
-	public void setImage(Image image) {
-		mImage = image;
+	public int setImage(Image image) {
+		int layer = image.getLayer();
 
-		Bitmap bitmap = mImage.getBitmap();
-		if (bitmap != null) {
-			setImageBitmap(mImage.getBitmap());
+		if (layer >= NUMBER_OF_LAYERS) {
+			throw new IllegalArgumentException(getContext().getString(R.string.exception_message_layer_number));
 		}
+
+		mImageArray.get(layer).setImage(image);
+
+		return layer;
 	}
 
 	public void setListener(EffectListener listener) {
 		mListener = listener;
 	}
 
-	public void start() {
-		final boolean isVisible = (getVisibility() == View.VISIBLE);
+	public void start(int layer) {
+		final ImageHolder holder = mImageArray.get(layer);
+		final boolean isVisible = (holder.imageView.getVisibility() == View.VISIBLE);
 
-		if (mImage.getEffectType() == Image.EffectType.Fade) {
-			float start = isVisible ? 1.0f : 0.0f;
-			float end = isVisible ? 0.0f : 1.0f;
-
+		if (holder.image.getEffectType() == Image.EffectType.Fade) {
 			if (!isVisible) {
-				setVisibility(View.VISIBLE);
+				holder.imageView.setVisibility(View.VISIBLE);
 			}
 
-			ObjectAnimator anim = ObjectAnimator.ofFloat(this, "alpha", start, end);
-			anim.setDuration(mImage.getDuration());
+			ObjectAnimator anim = ObjectAnimator.ofFloat(
+					holder.imageView, "alpha", isVisible ? 1.0f : 0.0f, isVisible ? 0.0f : 1.0f);
+			anim.setDuration(holder.image.getDuration());
 			anim.addListener(new AnimatorListenerAdapter() {
 				@Override
 				public void onAnimationEnd(Animator animation) {
-					if (mListener != null) {
-						if (isVisible) {
-							setVisibility(View.INVISIBLE);
-						}
+					if (isVisible) {
+						holder.imageView.setVisibility(View.INVISIBLE);
+					}
 
-						mListener.onEffectFinished(ContentsImageView.this);
+					if (mListener != null) {
+						mListener.onEffectFinished(ContentsImageView.this, holder.image.getLayer());
 					}
 				}
 			});
 			anim.start();
-		} else if (mImage.getEffectType() == Image.EffectType.Cut) {
-			setImageAlpha(isVisible ? 0 : 255);
-			setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
+		} else if (holder.image.getEffectType() == Image.EffectType.Cut) {
+			holder.imageView.setImageAlpha(isVisible ? 0 : 255);
+			holder.imageView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
 		}
 	}
 
 	public interface EffectListener {
-		void onEffectFinished(ContentsImageView view);
+		void onEffectFinished(ContentsImageView view, int layer);
 	}
 }

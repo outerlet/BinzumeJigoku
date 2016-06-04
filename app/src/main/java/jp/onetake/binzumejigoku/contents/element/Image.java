@@ -34,6 +34,7 @@ public class Image extends SectionElement {
 	private String mSrc;
 	private long mDuration;
 	private EffectType mEffectType;
+	private int mLayer;
 
 	/**
 	 * コンストラクタ
@@ -50,6 +51,7 @@ public class Image extends SectionElement {
 		values.put(ContentsTable.VALUE0.getColumnName(), getAttribute("src"));
 		values.put(ContentsTable.VALUE1.getColumnName(), getAttribute("duration"));
 		values.put(ContentsTable.VALUE2.getColumnName(), getAttribute("effect"));
+		values.put(ContentsTable.VALUE3.getColumnName(), getAttribute("layer"));
 
 		super.save(db, values);
 	}
@@ -61,6 +63,11 @@ public class Image extends SectionElement {
 		mSrc = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE0));
 		mDuration = (long)(Float.parseFloat(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE1))) * 1000);
 		mEffectType = EffectType.getValue(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE2)));
+		mLayer = Integer.parseInt(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE3)));
+	}
+
+	public int getLayer() {
+		return mLayer;
 	}
 
 	public long getDuration() {
@@ -89,6 +96,7 @@ public class Image extends SectionElement {
 
 	@Override
 	public String toString() {
-		return super.toString() + " : src = " + mSrc + ", duration = " + mDuration + ", effect = " + mEffectType;
+		return String.format("%1$s : layer = %2$d, src = %3$s, duration = %4$d, effect = %5$s",
+				super.toString(), mLayer, mSrc, mDuration, mEffectType.toString());
 	}
 }
