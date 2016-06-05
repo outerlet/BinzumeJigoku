@@ -12,13 +12,20 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 
+/**
+ * メイン画面
+ * <ol>
+ *     <li>進行させる章を選択</li>
+ *     <li>ロード画面を開く</li>
+ * </ol>
+ */
 public class MainActivity extends BasicActivity
 		implements View.OnClickListener, ConfirmDialogFragment.OnConfirmListener {
 	public static final String INTENT_KEY_FINISH_APP	= "MainActivity.INTENT_KEY_FINISH_APP";
 
+	// バックキーをこのミリ秒数以内に2回押したらアプリを終了
 	private final long BACKKEY_FINISH_MILLIS = 2000;
 
-	private Handler mHandler;
 	private int mBackPressCount;
 
 	@Override
@@ -36,7 +43,6 @@ public class MainActivity extends BasicActivity
 			findViewById(R.id.button_section3).setOnClickListener(this);
 			findViewById(R.id.button_query_database).setOnClickListener(this);
 
-			mHandler = new Handler();
 			mBackPressCount = 0;
 		}
 	}
@@ -64,6 +70,12 @@ public class MainActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * <p>
+	 *     この画面はアクションバーを表示するのでtrueを返却するよう実装
+	 * </p>
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected boolean shouldActionBarShown() {
 		return true;
@@ -98,7 +110,7 @@ public class MainActivity extends BasicActivity
 			intent.putExtra(ContentsActivity.KEY_SECTION_INDEX, sectionIndex);
 			startActivity(intent);
 		} else {
-			throw new UnsupportedOperationException(this.getClass().getName() + " : Section index is invalid");
+			throw new UnsupportedOperationException(getString(R.string.exception_message_section_index));
 		}
 	}
 

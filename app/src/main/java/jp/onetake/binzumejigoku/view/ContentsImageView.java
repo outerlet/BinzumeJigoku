@@ -34,6 +34,7 @@ public class ContentsImageView extends FrameLayout {
 		}
 	}
 
+	// レイヤの数
 	private final int NUMBER_OF_LAYERS	= 3;
 
 	private SparseArray<ImageHolder> mImageArray;

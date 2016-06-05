@@ -20,11 +20,14 @@ import jp.onetake.binzumejigoku.contents.xml.ContentsXmlParser;
  * 起動ポイントとなるインスタンス
  */
 public class LaunchActivity extends BasicActivity implements Animator.AnimatorListener, ContentsXmlParser.ParserListener {
+	private final int ANIMATION_DURATION		= 1000;
+	private final int ANIMATION_DELAY_FORWARD	= 500;
+	private final int ANIMATION_DELAY_BACKWARD	= 1000;
+
 	private ImageView mLaunchImage;
 	private ProgressBar mProgressBar;
-
 	private ContentsXmlParser mXmlParser;
-	private boolean mIsForwarding = false;
+	private boolean mIsForward;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading_contents);
 		mXmlParser = new ContentsXmlParser(this);
 
+		mIsForward = false;
+
 		startAnimation(true);
 	}
 
@@ -48,17 +53,21 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		return;
 	}
 
-	private void startAnimation(boolean isForwarding) {
-		float start = isForwarding ? 0.0f : 1.0f;
-		float end = isForwarding ? 1.0f : 0.0f;
+	private void startAnimation(boolean forward) {
+		mIsForward = forward;
 
-		ObjectAnimator anim = ObjectAnimator.ofFloat(mLaunchImage, "alpha", start, end);
-		anim.setDuration(2000);
-		anim.setStartDelay(1000);
+		ObjectAnimator anim = ObjectAnimator.ofFloat(
+				mLaunchImage, "alpha", forward ? 0.0f : 1.0f, forward ? 1.0f : 0.0f);
+		anim.setDuration(ANIMATION_DURATION);
+		anim.setStartDelay(forward ? ANIMATION_DELAY_FORWARD : ANIMATION_DELAY_BACKWARD);
 		anim.addListener(this);
 		anim.start();
+	}
 
-		mIsForwarding = isForwarding;
+	@Override
+	public void onParseFinished() {
+		mProgressBar.setVisibility(View.INVISIBLE);
+		startAnimation(false);
 	}
 
 	@Override
@@ -68,12 +77,12 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 
 	@Override
 	public void onAnimationEnd(Animator animation) {
-		if (mIsForwarding) {
+		if (mIsForward) {
 			if (!ContentsInterface.getInstance().isXmlParsed()) {
 				mProgressBar.setVisibility(View.VISIBLE);
 
 				try {
-					mXmlParser.setListener(this);
+					mXmlParser.setListener(LaunchActivity.this);
 					mXmlParser.parse(getString(R.string.filename_contents));
 				} catch (IOException | XmlPullParserException ex) {
 					ex.printStackTrace();
@@ -98,11 +107,5 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 	@Override
 	public void onAnimationRepeat(Animator animation) {
 		// Do nothing.
-	}
-
-	@Override
-	public void onParseFinished() {
-		mProgressBar.setVisibility(View.INVISIBLE);
-		startAnimation(false);
 	}
 }
