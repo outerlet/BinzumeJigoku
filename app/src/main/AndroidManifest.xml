@@ -22,6 +22,8 @@
 			android:name=".activity.SaveActivity"
 			android:theme="@style/TranslucentActivity">
 		</activity>
+		<activity android:name=".activity.SettingActivity" android:theme="@style/SettingActivity">
+		</activity>
 	</application>
 
 </manifest>

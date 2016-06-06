@@ -25,6 +25,12 @@
 	<string name="label_save_slot2">二ツ目の記錄</string>
 	<string name="label_save_slot3">三ツ目の記錄</string>
 
+	<!-- 設定タイトル -->
+	<string name="title_setting_text_size">文字の大きさ</string>
+	<string name="title_setting_text_speed">文字表示速度</string>
+	<string name="summary_setting_text_size">文字の大きさを設定します</string>
+	<string name="summary_setting_text_speed">文字送りの速さを設定します</string>
+
 	<!-- Message -->
 	<string name="message_confirm_finish_application">もう一度押して終了</string>
 	<string name="message_confirm_back">物語を中断して前の画面に戻りますか？</string>

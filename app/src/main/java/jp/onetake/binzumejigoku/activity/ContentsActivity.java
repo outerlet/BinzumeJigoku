@@ -20,9 +20,8 @@ import jp.onetake.binzumejigoku.fragment.dialog.MultipleConfirmDialogFragment;
  * ストーリーの進行を制御するアクティビティ
  */
 public class ContentsActivity extends BasicActivity
-		implements	ContentsFragment.ContentsListener, AlertDialogFragment.OnAlertListener,
-					ConfirmDialogFragment.OnConfirmListener, GestureDetector.OnGestureListener {
-	public static String KEY_SECTION_INDEX		= "ContentsActivity.KEY_SECTION_INDEX";
+		implements ContentsFragment.ContentsListener, AlertDialogFragment.OnAlertListener, ConfirmDialogFragment.OnConfirmListener {
+	public static String KEY_SECTION_INDEX	= "ContentsActivity.KEY_SECTION_INDEX";
 
 	private final String TAG_SECTION_FRAGMENT		= "ContentsActivity.TAG_SECTION_FRAGMENT";
 	private final String TAG_DIALOG_SECTION			= "ContentsActivity.TAG_DIALOG_SECTION";
@@ -32,6 +31,29 @@ public class ContentsActivity extends BasicActivity
 	private GestureDetectorCompat mGestureDetector;
 	private int mSectionIndex;
 
+	// 各種ジェスチャを捕捉するリスナオブジェクト
+	private GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			ContentsFragment fragment =
+					(ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
+			fragment.advance();
+
+			return true;
+		}
+
+		@Override
+		public boolean onDoubleTap(MotionEvent e) {
+			return super.onDoubleTap(e);
+		}
+
+		@Override
+		public void onLongPress(MotionEvent e) {
+			startActivity(new Intent(ContentsActivity.this, SaveActivity.class));
+			overridePendingTransition(0, 0);
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,10 +62,10 @@ public class ContentsActivity extends BasicActivity
 
 		mSectionIndex = getIntent().getIntExtra(KEY_SECTION_INDEX, -1);
 		if (mSectionIndex == -1) {
-			throw new UnsupportedOperationException(this.getClass().getName() + " : Invalid section index.");
+			throw new UnsupportedOperationException(getString(R.string.exception_message_section_index));
 		}
 
-		mGestureDetector = new GestureDetectorCompat(this, this);
+		mGestureDetector = new GestureDetectorCompat(this, mGestureListener);
 
 		replaceFragment(mSectionIndex);
 	}
@@ -120,39 +142,5 @@ public class ContentsActivity extends BasicActivity
 		transaction.replace(
 				R.id.layout_fragment_container, ContentsFragment.newInstance(sectionIndex), TAG_SECTION_FRAGMENT);
 		transaction.commit();
-	}
-
-	@Override
-	public boolean onDown(MotionEvent e) {
-		return false;
-	}
-
-	@Override
-	public void onShowPress(MotionEvent e) {
-		// Do nothing.
-	}
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		ContentsFragment fragment = (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
-		fragment.advance();
-
-		return true;
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-		return false;
-	}
-
-	@Override
-	public void onLongPress(MotionEvent e) {
-		startActivity(new Intent(this, SaveActivity.class));
-		overridePendingTransition(0, 0);
-	}
-
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		return false;
 	}
 }

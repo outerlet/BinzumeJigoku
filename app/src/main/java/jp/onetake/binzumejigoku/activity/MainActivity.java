@@ -42,6 +42,7 @@ public class MainActivity extends BasicActivity
 			findViewById(R.id.button_section2).setOnClickListener(this);
 			findViewById(R.id.button_section3).setOnClickListener(this);
 			findViewById(R.id.button_query_database).setOnClickListener(this);
+			findViewById(R.id.button_setting).setOnClickListener(this);
 
 			mBackPressCount = 0;
 		}
@@ -100,6 +101,9 @@ public class MainActivity extends BasicActivity
 				break;
 			case R.id.button_query_database:
 				(new ContentsDbOpenHelper(this)).debugPrint();
+				return;
+			case R.id.button_setting:
+				startActivity(new Intent(this, SettingActivity.class));
 				return;
 			default:
 				break;

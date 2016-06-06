@@ -23,4 +23,9 @@
 		<!-- item name="android:alpha">0</item -->
 	</style>
 
+	<!-- Setting Activity -->
+	<style name="SettingActivity" parent="AppTheme">
+		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+	</style>
+
 </resources>

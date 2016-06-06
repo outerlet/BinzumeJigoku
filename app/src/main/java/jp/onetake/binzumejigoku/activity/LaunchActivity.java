@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -34,6 +35,9 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_launch);
+
+		// Preferencesの初期値を設定
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		// コンテンツ操作用オブジェクトを初期化
 		ContentsInterface.getInstance().initialize(getApplicationContext());

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- Text Size -->
+	<android.support.v7.preference.ListPreference
+		android:key="@string/prefkey_text_size"
+		android:title="@string/title_setting_text_size"
+		android:summary="@string/summary_setting_text_size"
+		android:entries="@array/text_size_entries"
+		android:entryValues="@array/text_size_entry_values"
+		android:defaultValue="0"
+		/>
+
+	<!-- Text Speed -->
+	<android.support.v7.preference.ListPreference
+		android:key="@string/prefkey_text_speed"
+		android:title="@string/title_setting_text_speed"
+		android:summary="@string/summary_setting_text_speed"
+		android:entries="@array/text_speed_entries"
+		android:entryValues="@array/text_speed_entry_values"
+		android:defaultValue="0"
+		/>
+
+</android.support.v7.preference.PreferenceScreen>

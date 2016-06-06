@@ -46,4 +46,12 @@
 		android:text="Query database."
 		/>
 
+	<Button
+		android:id="@+id/button_setting"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_above="@+id/button_query_database"
+		android:text="Show Settings."
+		/>
+
 </RelativeLayout>

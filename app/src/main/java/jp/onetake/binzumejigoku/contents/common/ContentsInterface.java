@@ -3,6 +3,7 @@ package jp.onetake.binzumejigoku.contents.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
@@ -11,12 +12,6 @@ import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
  * コンテンツにアクセスするために横断的に必要となるデータの管理や処理を担当する
  */
 public class ContentsInterface {
-	private final String KEY_SHARED_PREFS			= "ContentsInterface.KEY_SHARED_PREFS";
-	private final String PREFKEY_RUBY_DELIMITER		= "ContentsInterface.PREFKEY_RUBY_DELIMITER";
-	private final String PREFKEY_RUBY_CLOSURE		= "ContentsInterface.PREFKEY_RUBY_CLOSURE";
-	private final String PREFKEY_IS_XML_PARSED		= "ContentsInterface.PREFKEY_IS_XML_PARSED";
-	private final String PREFKEY_MAX_SECTION_INDEX	= "ContentsInterface.PREFKEY_MAX_SECTION_INDEX";
-
 	// Singletonなインスタンス
 	private static ContentsInterface mInstance;
 
@@ -51,7 +46,7 @@ public class ContentsInterface {
 	 * @return	SharedPreferences
 	 */
 	public SharedPreferences getPreferences() {
-		return mContext.getSharedPreferences(KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+		return PreferenceManager.getDefaultSharedPreferences(mContext);
 	}
 
 	/**
@@ -79,7 +74,7 @@ public class ContentsInterface {
 		mRubyDelimiter = delimiter;
 
 		getPreferences().edit()
-				.putString(PREFKEY_RUBY_DELIMITER, delimiter)
+				.putString(mContext.getString(R.string.prefkey_ruby_delimiter), delimiter)
 				.apply();
 	}
 
@@ -89,7 +84,8 @@ public class ContentsInterface {
 	 */
 	public String getRubyDelimiter() {
 		if (mRubyDelimiter == null) {
-			mRubyDelimiter = getPreferences().getString(PREFKEY_RUBY_DELIMITER, null);
+			mRubyDelimiter = getPreferences().getString(
+					mContext.getString(R.string.prefkey_ruby_delimiter), null);
 		}
 
 		return mRubyDelimiter;
@@ -104,7 +100,7 @@ public class ContentsInterface {
 		mRubyClosure = closure;
 
 		getPreferences().edit()
-				.putString(PREFKEY_RUBY_CLOSURE, closure)
+				.putString(mContext.getString(R.string.prefkey_ruby_closure), closure)
 				.apply();
 	}
 
@@ -114,7 +110,8 @@ public class ContentsInterface {
 	 */
 	public String getRubyClosure() {
 		if (mRubyClosure == null) {
-			mRubyClosure = getPreferences().getString(PREFKEY_RUBY_CLOSURE, null);
+			mRubyClosure = getPreferences().getString(
+					mContext.getString(R.string.prefkey_ruby_closure), null);
 		}
 
 		return mRubyClosure;
@@ -125,7 +122,7 @@ public class ContentsInterface {
 	 */
 	public void markAsXmlParsed() {
 		getPreferences().edit()
-				.putBoolean(PREFKEY_IS_XML_PARSED, true)
+				.putBoolean(mContext.getString(R.string.prefkey_is_xml_parsed), true)
 				.apply();
 	}
 
@@ -135,20 +132,30 @@ public class ContentsInterface {
 	 * @return	XMLのパース処理が完了している場合true、未完了ならfalse
 	 */
 	public boolean isXmlParsed() {
-		return getPreferences().getBoolean(PREFKEY_IS_XML_PARSED, false);
+		return getPreferences().getBoolean(
+				mContext.getString(R.string.prefkey_is_xml_parsed), false);
 	}
 
+	/**
+	 * 章番号の最大値をセットしてSharedPreferencesに保存する
+	 * @param sectionIndex	章番号の最大値
+	 */
 	public void setMaxSectionIndex(int sectionIndex) {
 		mMaxSectionIndex = sectionIndex;
 
 		getPreferences().edit()
-				.putInt(PREFKEY_MAX_SECTION_INDEX, mMaxSectionIndex)
+				.putInt(mContext.getString(R.string.prefkey_max_section_index), mMaxSectionIndex)
 				.apply();
 	}
 
+	/**
+	 * 章番号の最大値を取得する
+	 * @return	章番号の最大値
+	 */
 	public int getMaxSectionIndex() {
 		if (mMaxSectionIndex == -1) {
-			mMaxSectionIndex = getPreferences().getInt(PREFKEY_MAX_SECTION_INDEX, 0);
+			mMaxSectionIndex = getPreferences().getInt(
+					mContext.getString(R.string.prefkey_max_section_index), 0);
 		}
 
 		return mMaxSectionIndex;
