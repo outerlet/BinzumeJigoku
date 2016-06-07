@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="array_section_titles">
+		<item>@string/title_introduction</item>
+		<item>@string/title_section1</item>
+		<item>@string/title_section2</item>
+		<item>@string/title_section3</item>
+	</string-array>
+
+	<string-array name="array_section_summarys">
+		<item>@string/summary_introduction</item>
+		<item>@string/summary_section1</item>
+		<item>@string/summary_section2</item>
+		<item>@string/summary_section3</item>
+	</string-array>
+
+	<array name="array_section_drawables">
+		<item>@drawable/section00</item>
+		<item>@drawable/section01</item>
+		<item>@drawable/section02</item>
+	</array>
+
+</resources>

@@ -239,7 +239,7 @@
 	</section>
 	<section index="3">
 		<title chain="wait">第三の瓶の内容</title>
-		<text>
+		<text chain="wait">
 		オ父サマ。オ母サマ。ボクタチ兄ダイハ、ナカヨク、タッシャニ、コノシマニ、クラシテイマス。ハヤク、タスケニ、キテクダサイ。
 		</text>
 		<text align="right" chain="wait">
