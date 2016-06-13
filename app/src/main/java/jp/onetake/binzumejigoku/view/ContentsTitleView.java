@@ -86,17 +86,17 @@ public class ContentsTitleView extends TimerView {
 		super(context, attrs);
 
 		if (attrs != null) {
-			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ContentsTitleView);
+			TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ContentsTitleView);
 
-			mDuration = array.getInt(R.styleable.ContentsTitleView_duration, DEFAULT_DURATION);
+			mDuration = typedArray.getInt(R.styleable.ContentsTitleView_duration, DEFAULT_DURATION);
 
-			mTextSize = array.getDimensionPixelSize(
-					R.styleable.ContentsTitleView_titleSize,
+			mTextSize = typedArray.getDimensionPixelSize(
+					R.styleable.ContentsTitleView_textSize,
 					context.getResources().getDimensionPixelSize(R.dimen.default_title_text_size));
 
-			mTextColor = array.getColor(R.styleable.ContentsTitleView_titleColor, DEFAULT_COLOR);
+			mTextColor = typedArray.getColor(R.styleable.ContentsTitleView_textColor, DEFAULT_COLOR);
 
-			array.recycle();
+			typedArray.recycle();
 		}
 	}
 
@@ -104,7 +104,7 @@ public class ContentsTitleView extends TimerView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean executeDraw(Canvas canvas, int calledCount) {
+	protected boolean drawByPeriod(Canvas canvas, int calledCount) {
 		long elapsed = getElapsedMillis();
 
 		float startX = (canvas.getWidth() / 2.0f) - ((mTitleLetters.length * mTextSize) / 2.0f);
@@ -148,7 +148,7 @@ public class ContentsTitleView extends TimerView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void immediate(Canvas canvas) {
+	protected void drawAll(Canvas canvas) {
 		float startX = (canvas.getWidth() / 2.0f) - ((mTitleLetters.length * mTextSize) / 2.0f);
 
 		for (int i = 0 ; i < mTitleLetters.length ; i++) {

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	背景色(透過付きの黒)が表示されたあとにボタンが表示されるという2段階のアニメーションをするための構成
+	レイアウトするだけならLinearLayoutは要らない
+-->
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -10,6 +14,19 @@
 	android:alpha="0"
 	tools:context="jp.onetake.binzumejigoku.activity.SaveActivity">
 
+	<TextView
+		android:id="@+id/textview_mode"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal|top"
+		android:layout_marginTop="16dp"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		android:textColor="@color/white"
+		android:singleLine="true"
+		android:text="@string/phrase_save"
+		/>
+
 	<RelativeLayout
 		android:id="@+id/layout_save_buttons"
 		android:layout_width="match_parent"
@@ -18,27 +35,38 @@
 		android:alpha="0"
 		android:visibility="invisible">
 
-		<Button
+		<jp.onetake.binzumejigoku.view.SaveButton
 			android:id="@+id/button_save2"
 			android:layout_centerInParent="true"
-			android:text="@string/label_save_slot2"
 			style="@style/SaveButton"
 			/>
 
-		<Button
+		<jp.onetake.binzumejigoku.view.SaveButton
 			android:id="@+id/button_save1"
 			android:layout_above="@+id/button_save2"
 			android:layout_marginBottom="60dp"
-			android:text="@string/label_save_slot1"
 			style="@style/SaveButton"
 			/>
 
-		<Button
+		<jp.onetake.binzumejigoku.view.SaveButton
 			android:id="@+id/button_save3"
 			android:layout_below="@+id/button_save2"
 			android:layout_marginTop="60dp"
-			android:text="@string/label_save_slot3"
 			style="@style/SaveButton"
+			/>
+
+		<ImageButton
+			android:id="@+id/imagebutton_change_mode"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="24dp"
+			android:layout_marginBottom="24dp"
+			android:scaleType="fitCenter"
+			android:adjustViewBounds="true"
+			android:background="#00000000"
+			android:src="@drawable/ic_refresh_white_36dp"
 			/>
 
 	</RelativeLayout>

@@ -76,11 +76,11 @@ public abstract class TimerView extends View {
 		mTimerStatus = TimerStatus.Stopped;
 
 		if (attrs != null) {
-			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TimerView);
+			TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimerView);
 
-			mPeriod = (long) array.getInt(R.styleable.TimerView_period, DEFAULT_PERIOD);
+			mPeriod = (long) typedArray.getInt(R.styleable.TimerView_period, DEFAULT_PERIOD);
 
-			array.recycle();
+			typedArray.recycle();
 		}
 	}
 
@@ -108,6 +108,11 @@ public abstract class TimerView extends View {
 		return false;
 	}
 
+	public void immediate() {
+		mTimerStatus = TimerStatus.Stopped;
+		invalidate();
+	}
+
 	/**
 	 * タイマーによるイベントを補足したい場合リスナオブジェクトをセットする
 	 * @param listener	タイマーによるイベントを補足するリスナオブジェクト
@@ -133,12 +138,12 @@ public abstract class TimerView extends View {
 
 		// タイマーが実行されているときであれば次回の描画処理を呼び出す
 		if (mTimerStatus == TimerStatus.Execute) {
-			if (!executeDraw(canvas, ++mCounter)) {
+			if (!drawByPeriod(canvas, ++mCounter)) {
 				mTimerStatus = TimerStatus.WaitForStop;
 			}
 		// タイマーが止まっているときは前回までの描画処理を復元する
 		} else if (mTimerStatus == TimerStatus.Stopped) {
-			immediate(canvas);
+			drawAll(canvas);
 		}
 	}
 
@@ -168,7 +173,7 @@ public abstract class TimerView extends View {
 				}
 			});
 		}
-	};
+	}
 
 	/**
 	 * calledCountで呼び出された回数に応じた描画処理を実行する<br />
@@ -178,12 +183,12 @@ public abstract class TimerView extends View {
 	 * @param calledCount	このメソッドが呼び出された回数
 	 * @return	次回のタイマー処理も実行する場合はtrue
 	 */
-	protected abstract boolean executeDraw(Canvas canvas, int calledCount);
+	protected abstract boolean drawByPeriod(Canvas canvas, int calledCount);
 
 	/**
-	 * 可能な描画処理を全て実行する<br />
-	 * つまり、タイマーが終了した時点と同じ状態に描画する
+	 * 全ての描画処理を行う<br />
+	 * つまりタイマーが終了した時点と同じ状態に描画する
 	 * @param canvas	キャンバス
 	 */
-	protected abstract void immediate(Canvas canvas);
+	protected abstract void drawAll(Canvas canvas);
 }

@@ -51,7 +51,7 @@ public abstract class SectionElement extends Element {
 	 * このインデックスと通し番号で一意の要素を特定できる
 	 * @return	セクションに割り当てられたインデックス
 	 */
-	protected int getSectionIndex() {
+	public int getSectionIndex() {
 		return mSectionIndex;
 	}
 
@@ -60,7 +60,7 @@ public abstract class SectionElement extends Element {
 	 * この通し番号とインデックスで一意の要素を特定できる
 	 * @return	セクション内での通し番号
 	 */
-	protected int getSequence() {
+	public int getSequence() {
 		return mSequence;
 	}
 

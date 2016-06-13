@@ -22,33 +22,101 @@ import jp.onetake.binzumejigoku.contents.element.Title;
 public class ContentsHolder {
 	private Context mContext;
 	private List<SectionElement> mElementList;
-	private int mCurrentIndex;
+	private int mCurrentSequence;
+	private SaveData mSaveData;
 
+	/**
+	 * 章を最初から始める場合のコンストラクタ<br />
+	 * @param context       コンテキスト
+	 * @param sectionIndex  章番号
+	 */
 	public ContentsHolder(Context context, int sectionIndex) {
 		mContext = context;
-		mElementList = new ArrayList<>();
-		mCurrentIndex = -1;
+		mCurrentSequence = -1;
 
-		parse(sectionIndex);
+		mSaveData = ContentsInterface.getInstance().getSaveData(0);
+		mSaveData.setSectionIndex(sectionIndex);
+
+		mElementList = parse(sectionIndex);
 	}
 
+	/**
+	 * セーブデータを使って途中から始めるためのコンストラクタ
+	 * @param context   コンテキスト
+	 * @param saveData	セーブデータ
+	 */
+	public ContentsHolder(Context context, SaveData saveData) {
+		mContext = context;
+		mCurrentSequence = saveData.getSequence();
+
+		mSaveData = ContentsInterface.getInstance().getSaveData(0);
+		mSaveData.setSectionIndex(saveData.getSectionIndex());
+
+		mElementList = parse(saveData.getSectionIndex());
+	}
+
+	/**
+	 * saveDataに保存された状態までコンテンツを進行させ、その時点に戻すために
+	 * 復元すべき要素オブジェクトを全て返却する
+	 * @return  セーブデータが保存された時点で有効な要素オブジェクトのリスト
+	 */
+	public List<SectionElement> getLatestElementList() {
+		List<SectionElement> list = new ArrayList<>();
+		for (ContentsType type : mSaveData.getContentsTypeList()) {
+			int[] seqs = mSaveData.getContentsSequence(type);
+
+			if (type == ContentsType.Image) {
+				for (int i = 0 ; i < seqs.length ; i++) {
+					list.add(mElementList.get(seqs[i]));
+				}
+			} else {
+				list.add(mElementList.get(seqs[0]));
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * コンテンツが進行可能かどうか
+	 * @return  進行可能ならtrue
+	 */
 	public boolean hasNext() {
-		return (mCurrentIndex + 1 < mElementList.size());
+		return (mCurrentSequence + 1 < mElementList.size());
 	}
 
+	/**
+	 * コンテンツをひとつ進行させ、次の要素オブジェクトを返却する<br />
+	 * 併せて最新の状態をセーブする
+	 * @return  次の要素オブジェクト
+	 */
 	public SectionElement next() {
-		return mElementList.get(++mCurrentIndex);
+		// ActivityやFragmentのonPause等のライフサイクルイベントでセーブするとアプリが突然死したときに
+		// 復元できないのでコンテンツが進行するごとにセーブする
+		if (current() != null) {
+			mSaveData.setTimeMillis(System.currentTimeMillis());
+			mSaveData.setLatestElement(current());
+			mSaveData.save(mContext);
+		}
+
+		return mElementList.get(++mCurrentSequence);
 	}
 
+	/**
+	 * コンテンツを進行させることなく現在の要素オブジェクトを返却する
+	 * @return  現在の要素オブジェクト
+	 */
 	public SectionElement current() {
-		return mElementList.get(mCurrentIndex);
+		return (mCurrentSequence >= 0) ? mElementList.get(mCurrentSequence) : null;
 	}
 
 	/**
 	 * sectionIndexに指定したセクションインデックスに該当するセクション要素をDBから読み出して適切な要素オブジェクトを生成する
 	 * @param sectionIndex	セクションに割り当てられたインデックス値
 	 */
-	private void parse(int sectionIndex) throws SQLiteException {
+	private List<SectionElement> parse(int sectionIndex) throws SQLiteException {
+		List<SectionElement> list = new ArrayList<>();
+
 		try (SQLiteDatabase db = ContentsInterface.getInstance().getReadableDatabase();
 			 Cursor cursor = db.rawQuery(
 					 mContext.getString(R.string.db_query_contents_table_sql), new String[] { Integer.toString(sectionIndex) })) {
@@ -79,10 +147,12 @@ public class ContentsHolder {
 
 				elm.load(cursor);
 
-				mElementList.add(elm);
+				list.add(elm);
 
 				cursor.moveToNext();
 			}
 		}
+
+		return list;
 	}
 }

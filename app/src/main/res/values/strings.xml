@@ -6,27 +6,41 @@
 	<!-- コンテンツファイル名 -->
 	<string name="filename_contents">contents_binzume_jigoku.xml</string>
 
+	<!-- Preferences -->
+	<string name="prefkey_ruby_delimiter">PREFKEY_RUBY_DELIMITER</string>
+	<string name="prefkey_ruby_closure">PREFKEY_RUBY_CLOSURE</string>
+	<string name="prefkey_is_xml_parsed">PREFKEY_IS_XML_PARSED</string>
+	<string name="prefkey_max_section_index">PREFKEY_MAX_SECTION_INDEX</string>
+	<string name="prefkey_text_speed">PREFKEY_TEXT_SPEED</string>
+	<string name="prefkey_text_size">PREFKEY_TEXT_SIZE</string>
+
 	<!-- フレーズ -->
-	<string name="phrase_ok">OK</string>
-	<string name="phrase_cancel">キャンセル</string>
+	<string name="phrase_ok">はい</string>
+	<string name="phrase_cancel">いいえ</string>
 	<string name="phrase_confirm">確認</string>
 	<string name="phrase_error">エラー</string>
 	<string name="phrase_finish">終了</string>
 	<string name="phrase_finish_application">アプリを終了</string>
 	<string name="phrase_back">戻る</string>
 	<string name="phrase_next_section">次の章</string>
+	<string name="phrase_save">セーブ</string>
+	<string name="phrase_load">ロード</string>
 
-	<!-- ボタンのラベル -->
-	<string name="label_start_section0">前置きを開始する</string>
-	<string name="label_start_section1">第1章を開始する</string>
-	<string name="label_start_section2">第2章を開始する</string>
-	<string name="label_start_section3">第3章を開始する</string>
-	<string name="label_save_slot1">一ツ目の記錄</string>
-	<string name="label_save_slot2">二ツ目の記錄</string>
-	<string name="label_save_slot3">三ツ目の記錄</string>
+	<!-- メニュー項目 -->
+	<string name="menu_title_load_latest">前回の続き</string>
+	<string name="menu_title_load">ロード</string>
+	<string name="menu_title_setting">設定</string>
+
+	<!-- セーブデータの名前 -->
+	<string name="name_save_data0">前置き</string>
+	<string name="name_save_data1">一ツ目の記錄</string>
+	<string name="name_save_data2">二ツ目の記錄</string>
+	<string name="name_save_data3">三ツ目の記錄</string>
 	
 	<!-- メイン画面 (話の選択) -->
-	<string name="title_introduction">前段</string>
+	<string name="title_main_activity">話の選択</string>
+	<string name="title_setting_activity">設定</string>
+	<string name="title_section0">前置き</string>
 	<string name="title_section1">第一の手紙</string>
 	<string name="title_section2">第二の手紙</string>
 	<string name="title_section3">第三の手紙</string>
@@ -35,7 +49,7 @@
 		神様からも人間からも救われ得ぬ\n哀しき二人より
 	</string>
 	<string name="summary_section2">
-		ああ神様…………\n私たち二人は、こんな苛責に会いながら、病気一つせずに、日に増し丸々と肥って、康強に、美しく長って行くのです、\nこの島の清らかな風と、水と、豊穣な食物と、美しい、楽しい、花と鳥とに護られて…………
+		ああ神様…………\n\n私たち二人は、こんな苛責に会いながら、病気一つせずに、日に増し丸々と肥って、康強に、美しく長って行くのです、\n\nこの島の清らかな風と、水と、豊穣な食物と、美しい、楽しい、花と鳥とに護られて…………
 	</string>
 	<string name="summary_section3">
 		ハヤク、タスケニ、キテクダサイ。
@@ -52,11 +66,22 @@
 	<string name="message_confirm_back">物語を中断して前の画面に戻りますか？</string>
 	<string name="message_section_finished">章が終了しました。</string>
 	<string name="message_last_section_finished">最後の章が終了しました。前の画面に戻ります。</string>
+	<string name="message_save_confirmation">セーブしますか？</string>
+	<string name="message_save_successful">セーブしました。</string>
+	<string name="message_save_failure">セーブに失敗しました。</string>
+	<string name="message_load_confirmation_latest">前回の続きから始めますか？</string>
+	<string name="message_load_confirmation">ロードしますか？</string>
+	<string name="message_load_successful">ロードしました。</string>
+	<string name="message_load_failure">ロードに失敗しました。</string>
 	<string name="message_force_application">アプリを終了します。</string>
 
 	<!-- Exception -->
-	<string name="exception_message_section_index">セクション番号が無効です</string>
-	<string name="exception_message_layer_number">レイヤ番号が無効です</string>
-	<string name="exception_illegal_section_definition">セクションのタイトルと概要の定義が正しくありません</string>
+	<string name="exception_message_section_index">Section number is invalid.</string>
+	<string name="exception_message_layer_number">Layer number is invalid.</string>
+	<string name="exception_illegal_section_definition">Definition of section title and description are not correct.</string>
+	<string name="exception_illegal_contents_fragment">ContentsFragment must be supplied section index or save data.</string>
+	<string name="exception_illegal_contents_type">Illegal contents-type is supplied.</string>
+	<string name="exception_holder_is_null">ContentsHolder must exist when ContentsFragment.restoreFromSaveData is called.</string>
+	<string name="exception_save_data_not_supplied">SaveActivity must be supplied save data.</string>
 
 </resources>

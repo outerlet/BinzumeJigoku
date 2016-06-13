@@ -8,9 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
+import jp.onetake.binzumejigoku.contents.common.SaveData;
 import jp.onetake.binzumejigoku.fragment.ContentsFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.AlertDialogFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
@@ -20,8 +22,9 @@ import jp.onetake.binzumejigoku.fragment.dialog.MultipleConfirmDialogFragment;
  * ストーリーの進行を制御するアクティビティ
  */
 public class ContentsActivity extends BasicActivity
-		implements ContentsFragment.ContentsListener, AlertDialogFragment.OnAlertListener, ConfirmDialogFragment.OnConfirmListener {
+		implements ContentsFragment.ContentsEventListener, AlertDialogFragment.OnAlertListener, ConfirmDialogFragment.OnConfirmListener {
 	public static String KEY_SECTION_INDEX	= "ContentsActivity.KEY_SECTION_INDEX";
+	public static String KEY_SAVE_DATA		= "ContentsActivity.KEY_SAVE_DATA";
 
 	private final String TAG_SECTION_FRAGMENT		= "ContentsActivity.TAG_SECTION_FRAGMENT";
 	private final String TAG_DIALOG_SECTION			= "ContentsActivity.TAG_DIALOG_SECTION";
@@ -30,27 +33,40 @@ public class ContentsActivity extends BasicActivity
 
 	private GestureDetectorCompat mGestureDetector;
 	private int mSectionIndex;
+	private SaveData mPendingSaveData;
 
 	// 各種ジェスチャを捕捉するリスナオブジェクト
 	private GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+		/**
+		 * シングルタップ。話を進行させる
+		 * {@inheritDoc}
+		 */
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
-			ContentsFragment fragment =
-					(ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
-			fragment.advance();
-
+			getFragment().advance();
 			return true;
 		}
 
-		@Override
-		public boolean onDoubleTap(MotionEvent e) {
-			return super.onDoubleTap(e);
-		}
-
+		/**
+		 * 長時間タップ。セーブ画面を開く
+		 * {@inheritDoc}
+		 */
 		@Override
 		public void onLongPress(MotionEvent e) {
-			startActivity(new Intent(ContentsActivity.this, SaveActivity.class));
+			startActivityForResult(
+					new Intent(ContentsActivity.this, SaveActivity.class),
+					getResources().getInteger(R.integer.request_code_save_activity));
 			overridePendingTransition(0, 0);
+		}
+
+		/**
+		 * フリック。上方向でバックログ、下方向で早送り
+		 * {@inheritDoc}
+		 */
+		@Override
+		public boolean onFling(MotionEvent upEvent, MotionEvent moveEvent, float velocityX, float velocityY) {
+			// TODO:フリック操作実装
+			return true;
 		}
 	};
 
@@ -60,14 +76,56 @@ public class ContentsActivity extends BasicActivity
 
 		setContentView(R.layout.activity_contents);
 
-		mSectionIndex = getIntent().getIntExtra(KEY_SECTION_INDEX, -1);
-		if (mSectionIndex == -1) {
-			throw new UnsupportedOperationException(getString(R.string.exception_message_section_index));
-		}
-
 		mGestureDetector = new GestureDetectorCompat(this, mGestureListener);
 
-		replaceFragment(mSectionIndex);
+		// SaveDataが送られてきたらロードしての開始、さもなければ指定された章を最初から
+		// どっちも送られてこなかった場合は不正な呼び出しとしてエラー
+		SaveData saveData = (SaveData)getIntent().getSerializableExtra(KEY_SAVE_DATA);
+		if (saveData != null) {
+			replaceFragmentBySaveData(saveData);
+		} else {
+			mSectionIndex = getIntent().getIntExtra(KEY_SECTION_INDEX, -1);
+			if (mSectionIndex == -1) {
+				throw new UnsupportedOperationException(getString(R.string.exception_message_section_index));
+			}
+
+			replaceFragmentByIndex(mSectionIndex);
+		}
+	}
+
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+
+		if (mPendingSaveData != null) {
+			replaceFragmentBySaveData(mPendingSaveData);
+			mPendingSaveData = null;
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == getResources().getInteger(R.integer.request_code_save_activity)) {
+			// セーブもしくはロードした場合はEXTRA_SAVE_MODEにboolean値が入っている
+			if (data != null && data.hasExtra(SaveActivity.EXTRA_SAVE_MODE)) {
+				boolean isSave = data.getBooleanExtra(SaveActivity.EXTRA_SAVE_MODE, false);
+
+				if (isSave) {
+					int msgId = (resultCode == RESULT_OK) ? R.string.message_save_successful : R.string.message_save_failure;
+					Toast.makeText(this, msgId, Toast.LENGTH_SHORT).show();
+				} else {
+					int slotIndex = data.getIntExtra(SaveActivity.EXTRA_SLOT_INDEX, -1);
+
+					if (slotIndex != -1) {
+						// SaveActivityから帰ってきた直後にフラグメントの操作をするとIllegalStateExceptionが
+						// 発生するので、一旦フィールドに放り込んでおいてonPostResumeで操作する
+						mPendingSaveData = ContentsInterface.getInstance().getSaveData(slotIndex);
+					} else {
+						Toast.makeText(this, R.string.message_load_failure, Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -126,7 +184,7 @@ public class ContentsActivity extends BasicActivity
 		} else if (dialog.getTag().equals(TAG_DIALOG_SECTION)) {
 			// 次の章へ
 			if (which == DialogInterface.BUTTON_POSITIVE) {
-				replaceFragment(++mSectionIndex);
+				replaceFragmentByIndex(++mSectionIndex);
 			// 戻る
 			} else if (which == DialogInterface.BUTTON_NEGATIVE) {
 				finish();
@@ -137,10 +195,23 @@ public class ContentsActivity extends BasicActivity
 		}
 	}
 
-	private void replaceFragment(int sectionIndex) {
+	private void replaceFragmentByIndex(int sectionIndex) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(
 				R.id.layout_fragment_container, ContentsFragment.newInstance(sectionIndex), TAG_SECTION_FRAGMENT);
 		transaction.commit();
+	}
+
+	private void replaceFragmentBySaveData(SaveData saveData) {
+		mSectionIndex = saveData.getSectionIndex();
+
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(
+				R.id.layout_fragment_container, ContentsFragment.newInstance(saveData), TAG_SECTION_FRAGMENT);
+		transaction.commit();
+	}
+
+	private ContentsFragment getFragment() {
+		return (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
 	}
 }

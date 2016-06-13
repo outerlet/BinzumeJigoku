@@ -1,10 +1,20 @@
 <resources>
 
 	<!-- Base application theme. -->
-	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
+	</style>
+
+	<!-- Page Indicator -->
+	<style name="PageIndicator">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_centerVertical">true</item>
+		<item name="android:scaleType">centerInside</item>
+		<item name="android:alpha">0.6</item>
+		<item name="android:adjustViewBounds">true</item>
 	</style>
 
 	<!-- Translucent Activity -->
@@ -16,11 +26,11 @@
 
 	<!-- Save Button -->
 	<style name="SaveButton">
-		<item name="android:layout_width">320dp</item>
-		<item name="android:layout_height">50dp</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">80dp</item>
+		<item name="android:layout_marginLeft">20dp</item>
+		<item name="android:layout_marginRight">20dp</item>
 		<item name="android:layout_centerHorizontal">true</item>
-		<item name="android:background">@drawable/save_button</item>
-		<!-- item name="android:alpha">0</item -->
 	</style>
 
 	<!-- Setting Activity -->

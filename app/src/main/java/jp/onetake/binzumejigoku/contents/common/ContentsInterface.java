@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
 
@@ -20,6 +23,7 @@ public class ContentsInterface {
 	private String mRubyDelimiter;
 	private String mRubyClosure;
 	private int mMaxSectionIndex = -1;
+	private List<SaveData> mSaveDataList;
 
 	/**
 	 * このクラスの唯一のインスタンスを返却する
@@ -39,6 +43,18 @@ public class ContentsInterface {
 	public void initialize(Context context) {
 		mContext = context;
 		mDbHelper = new ContentsDbOpenHelper(context);
+
+		mSaveDataList = new ArrayList<>();
+		int number = context.getResources().getInteger(R.integer.number_save_slot) + 1;
+		for (int i = 0 ; i < number ; i++) {
+			SaveData saveData = new SaveData(i);
+
+			if (!saveData.load(context)) {
+				saveData.setName(SaveData.getSaveName(context, i));
+			}
+
+			mSaveDataList.add(saveData);
+		}
 	}
 
 	/**
@@ -159,5 +175,14 @@ public class ContentsInterface {
 		}
 
 		return mMaxSectionIndex;
+	}
+
+	public SaveData getSaveData(int slotIndex) {
+		for (SaveData saveData : mSaveDataList) {
+			if (slotIndex == saveData.getSlotIndex()) {
+				return saveData;
+			}
+		}
+		return null;
 	}
 }

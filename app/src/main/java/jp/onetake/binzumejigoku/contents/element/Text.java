@@ -20,6 +20,9 @@ import jp.onetake.binzumejigoku.util.Utility;
  * text要素を制御する要素クラス
  */
 public class Text extends SectionElement {
+	/**
+	 * テキストの寄せ方を指定する"align"属性値に対応する列挙値
+	 */
 	public enum Align {
 		Left,	// 左寄せ(デフォルト)
 		Right;	// 右寄せ
@@ -73,8 +76,7 @@ public class Text extends SectionElement {
 					u16Buf = new StringBuilder();
 					utf16 = true;
 				} else if (eventType == XmlPullParser.END_TAG) {
-					char c = (char)Integer.parseInt(u16Buf.toString(), 16);
-					buffer.append("" + c);
+					buffer.append("" + (char)Integer.parseInt(u16Buf.toString(), 16));
 					utf16 = false;
 				}
 			}

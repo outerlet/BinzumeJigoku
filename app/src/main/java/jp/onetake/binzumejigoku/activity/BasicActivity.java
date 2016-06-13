@@ -20,11 +20,6 @@ public class BasicActivity extends AppCompatActivity {
 
 		// フルスクリーン表示設定
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-		// アクションバーを隠す
-		if (!shouldActionBarShown()) {
-			getSupportActionBar().hide();
-		}
 	}
 
 	protected void finishApplication() {
@@ -32,14 +27,5 @@ public class BasicActivity extends AppCompatActivity {
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(MainActivity.INTENT_KEY_FINISH_APP, true);
 		startActivity(intent);
-	}
-
-	/**
-	 * アクションバーを表示するかどうか<br />
-	 * 基本は隠れる(falseが返る)ので、アクションバーを出したい画面(アクティビティ)はこのメソッドをオーバーライドしてtrueを返す
-	 * @return	アクションバーを出したいならfalse
-	 */
-	protected boolean shouldActionBarShown() {
-		return false;
 	}
 }

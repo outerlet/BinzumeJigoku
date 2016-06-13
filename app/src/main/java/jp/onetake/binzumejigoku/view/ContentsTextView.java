@@ -56,21 +56,21 @@ public class ContentsTextView extends TimerView {
 	 * ContentsTextViewでしか使わないのでインナークラス
 	 */
 	private class DrawDetail {
-		private List<Letter> mTextList;
-		private SparseArray<Letter[]> mRubyArray;
-		private Text mText;
-		private float mHeight;
-		private boolean mIsFinalized;
+		private List<Letter> mmTextList;
+		private SparseArray<Letter[]> mmRubyArray;
+		private Text mmText;
+		private float mmHeight;
+		private boolean mmIsFinalized;
 
 		/**
 		 * コンストラクタ
 		 * @param text	テキストとルビを含んだ文字列
 		 */
 		public DrawDetail(Text text) {
-			mText = text;
-			mTextList = new ArrayList<>();
-			mRubyArray = new SparseArray<>();
-			mIsFinalized = false;
+			mmText = text;
+			mmTextList = new ArrayList<>();
+			mmRubyArray = new SparseArray<>();
+			mmIsFinalized = false;
 		}
 
 		/**
@@ -78,7 +78,7 @@ public class ContentsTextView extends TimerView {
 		 * @return	テキストの文字数
 		 */
 		public int getTextCount() {
-			return mTextList.size();
+			return mmTextList.size();
 		}
 
 		/**
@@ -87,7 +87,7 @@ public class ContentsTextView extends TimerView {
 		 * @return	テキスト
 		 */
 		public Letter getTextAt(int index) {
-			return mTextList.get(index);
+			return mmTextList.get(index);
 		}
 
 		/**
@@ -96,7 +96,7 @@ public class ContentsTextView extends TimerView {
 		 * @return	ルビ
 		 */
 		public Letter[] getRubyAt(int index) {
-			return mRubyArray.get(index);
+			return mmRubyArray.get(index);
 		}
 
 		/**
@@ -104,7 +104,7 @@ public class ContentsTextView extends TimerView {
 		 * @return	描画範囲の高さ
 		 */
 		public float getHeight() {
-			return mHeight;
+			return mmHeight;
 		}
 
 		/**
@@ -112,7 +112,7 @@ public class ContentsTextView extends TimerView {
 		 * @return	finalizeメソッド実行済みかどうか。済みならtrue
 		 */
 		public boolean isFinalized() {
-			return mIsFinalized;
+			return mmIsFinalized;
 		}
 
 		/**
@@ -129,13 +129,13 @@ public class ContentsTextView extends TimerView {
 
 			int lines = 1;
 
-			float posX = (mText.getAlign() == Text.Align.Left) ? 0.0f + mText.getIndent() * mTextPaint.getTextSize() : 0.0f;
+			float posX = (mmText.getAlign() == Text.Align.Left) ? 0.0f + mmText.getIndent() * mTextPaint.getTextSize() : 0.0f;
 			float posY = Math.abs(rubyMetrics.top);
 			float textEndX = 0.0f;
 			float rubyEndX = 0.0f;
 
 			ContentsInterface cif = ContentsInterface.getInstance();
-			String[] blocks = mText.getText().split(cif.getRubyClosure());
+			String[] blocks = mmText.getText().split(cif.getRubyClosure());
 			for (String str : blocks) {
 				// ルビ込み
 				int idx = str.indexOf(cif.getRubyDelimiter());
@@ -165,7 +165,7 @@ public class ContentsTextView extends TimerView {
 							rubys[i] = new Letter(
 									ruby.substring(i, i + 1), startX + interval * i, posY);
 						}
-						mRubyArray.put(mTextList.size(), rubys);
+						mmRubyArray.put(mmTextList.size(), rubys);
 
 						// テキストの位置決め
 						for (int i = 0 ; i < text.length() ; i++) {
@@ -173,7 +173,7 @@ public class ContentsTextView extends TimerView {
 									text.substring(i, i + 1),
 									posX + mTextPaint.getTextSize() * i,
 									posY + rubyMetrics.bottom + Math.abs(textMetrics.top));
-							mTextList.add(letter);
+							mmTextList.add(letter);
 
 							float end = letter.x + mTextPaint.getTextSize();
 							if (end > textEndX) {
@@ -193,13 +193,13 @@ public class ContentsTextView extends TimerView {
 								rubyEndX = end;
 							}
 						}
-						mRubyArray.put(mTextList.size(), rubyLetters);
+						mmRubyArray.put(mmTextList.size(), rubyLetters);
 
 						// テキストの位置決め
 						float interval = rubyWidth / text.length();
 						float startX = posX + ((interval - mTextPaint.getTextSize()) / 2);
 						for (int i = 0 ; i < text.length() ; i++) {
-							mTextList.add(new Letter(
+							mmTextList.add(new Letter(
 									text.substring(i, i + 1),
 									startX + interval * i,
 									posY + rubyMetrics.bottom + Math.abs(textMetrics.top)));
@@ -221,7 +221,7 @@ public class ContentsTextView extends TimerView {
 								str.substring(i, i + 1),
 								posX,
 								posY + rubyMetrics.bottom + Math.abs(textMetrics.top));
-						mTextList.add(letter);
+						mmTextList.add(letter);
 
 						float end = letter.x + mTextPaint.getTextSize();
 						if (end > textEndX) {
@@ -233,19 +233,19 @@ public class ContentsTextView extends TimerView {
 				}
 			}
 
-			if (mText.getAlign() == Text.Align.Right) {
+			if (mmText.getAlign() == Text.Align.Right) {
 				if (lines > 1) {
 					throw new IllegalArgumentException("Length of 'text' is too long ('align' needs to be 'left')");
 				} else {
 					float maxEnd = (textEndX >= rubyEndX) ? textEndX : rubyEndX;
-					float moveX = width - maxEnd - mText.getIndent() * mTextPaint.getTextSize();
+					float moveX = width - maxEnd - mmText.getIndent() * mTextPaint.getTextSize();
 
-					for (Letter text : mTextList) {
+					for (Letter text : mmTextList) {
 						text.x += moveX;
 					}
 
-					for (int i = 0 ; i < mRubyArray.size() ; i++) {
-						Letter[] rubyLetters = mRubyArray.valueAt(i);
+					for (int i = 0; i < mmRubyArray.size() ; i++) {
+						Letter[] rubyLetters = mmRubyArray.valueAt(i);
 						float moveRubyX = width - rubyLetters.length * mRubyPaint.getTextSize();
 						for (Letter ruby : rubyLetters) {
 							ruby.x += moveRubyX;
@@ -254,9 +254,9 @@ public class ContentsTextView extends TimerView {
 				}
 			}
 
-			mIsFinalized = true;
+			mmIsFinalized = true;
 
-			mHeight = lines * lineHeight;
+			mmHeight = lines * lineHeight;
 		}
 	}
 
@@ -290,20 +290,20 @@ public class ContentsTextView extends TimerView {
 		Resources res = context.getResources();
 
 		if (attrs != null) {
-			TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ContentsTextView);
+			TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ContentsTextView);
 
-			mTextPaint.setTextSize(array.getDimensionPixelSize(
+			mTextPaint.setTextSize(typedArray.getDimensionPixelSize(
 					R.styleable.ContentsTextView_textSize, res.getDimensionPixelSize(R.dimen.default_text_size)));
-			mTextPaint.setColor(array.getColor(R.styleable.ContentsTextView_textColor, Color.BLACK));
+			mTextPaint.setColor(typedArray.getColor(R.styleable.ContentsTextView_textColor, Color.BLACK));
 
-			mRubyPaint.setTextSize(array.getDimensionPixelSize(
+			mRubyPaint.setTextSize(typedArray.getDimensionPixelSize(
 					R.styleable.ContentsTextView_rubySize, res.getDimensionPixelSize(R.dimen.default_ruby_size)));
-			mRubyPaint.setColor(array.getColor(R.styleable.ContentsTextView_rubyColor, Color.BLACK));
+			mRubyPaint.setColor(typedArray.getColor(R.styleable.ContentsTextView_rubyColor, Color.BLACK));
 
-			mLineSpace = (float)array.getDimensionPixelSize(R.styleable.ContentsTextView_lineSpace, 0);
-			mSentenceSpace = (float)array.getDimensionPixelSize(R.styleable.ContentsTextView_sentenceSpace, 0);
+			mLineSpace = (float)typedArray.getDimensionPixelSize(R.styleable.ContentsTextView_lineSpace, 0);
+			mSentenceSpace = (float)typedArray.getDimensionPixelSize(R.styleable.ContentsTextView_sentenceSpace, 0);
 
-			array.recycle();
+			typedArray.recycle();
 		} else {
 			mTextPaint.setTextSize(res.getDimensionPixelSize(R.dimen.default_text_size));
 			mTextPaint.setColor(Color.BLACK);
@@ -317,7 +317,7 @@ public class ContentsTextView extends TimerView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean executeDraw(Canvas canvas, int calledCount) {
+	protected boolean drawByPeriod(Canvas canvas, int calledCount) {
 		if (mDetailList.size() > 0) {
 			DrawDetail latestDetail = mDetailList.get(mDetailList.size() - 1);
 
@@ -367,8 +367,8 @@ public class ContentsTextView extends TimerView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void immediate(Canvas canvas) {
-		executeDraw(canvas, -1);
+	protected void drawAll(Canvas canvas) {
+		drawByPeriod(canvas, -1);
 	}
 
 	/**

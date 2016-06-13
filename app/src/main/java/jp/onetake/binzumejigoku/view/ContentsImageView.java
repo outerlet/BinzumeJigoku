@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -17,14 +18,14 @@ import jp.onetake.binzumejigoku.contents.element.Image;
 
 public class ContentsImageView extends FrameLayout {
 	private class ImageHolder {
-		public Image image;
-		public ImageView imageView;
+		Image image;
+		ImageView imageView;
 
-		public ImageHolder(ImageView imageView) {
+		ImageHolder(ImageView imageView) {
 			this.imageView = imageView;
 		}
 
-		public void setImage(Image image) {
+		void setImage(Image image) {
 			this.image = image;
 
 			Bitmap bitmap = this.image.getBitmap();
@@ -34,9 +35,9 @@ public class ContentsImageView extends FrameLayout {
 		}
 	}
 
-	// レイヤの数
-	private final int NUMBER_OF_LAYERS	= 3;
+	private final int DEFAULT_NUMBER_OF_LAYERS	= 1;
 
+	private int mNumberOfLayers;
 	private SparseArray<ImageHolder> mImageArray;
 	private EffectListener mListener;
 
@@ -47,20 +48,31 @@ public class ContentsImageView extends FrameLayout {
 	public ContentsImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		View view = LayoutInflater.from(getContext()).inflate(R.layout.view_contents_image, this);
+		if (attrs != null) {
+			TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ContentsImageView);
+
+			mNumberOfLayers = typedArray.getInt(R.styleable.ContentsImageView_numberOfLayers, DEFAULT_NUMBER_OF_LAYERS);
+
+			typedArray.recycle();
+		}
+
+		setLayoutParams(new FrameLayout.LayoutParams(
+				FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
 		mImageArray = new SparseArray<>();
-		for (int i = 0 ; i < NUMBER_OF_LAYERS ; i++) {
-			int viewId = getContext().getResources().getIdentifier(
-					String.format("imageview_layer%1$d", i), "id", getContext().getPackageName());
-			mImageArray.put(i, new ImageHolder((ImageView)view.findViewById(viewId)));
+		for (int i = 0 ; i < mNumberOfLayers ; i++) {
+			ImageView imageView = (ImageView)LayoutInflater.from(
+					getContext()).inflate(R.layout.view_contents_image_layer, this, false);
+
+			this.addView(imageView);
+			mImageArray.put(i, new ImageHolder(imageView));
 		}
 	}
 
 	public int setImage(Image image) {
 		int layer = image.getLayer();
 
-		if (layer >= NUMBER_OF_LAYERS) {
+		if (layer >= mNumberOfLayers) {
 			throw new IllegalArgumentException(getContext().getString(R.string.exception_message_layer_number));
 		}
 
@@ -99,8 +111,17 @@ public class ContentsImageView extends FrameLayout {
 			});
 			anim.start();
 		} else if (holder.image.getEffectType() == Image.EffectType.Cut) {
-			holder.imageView.setImageAlpha(isVisible ? 0 : 255);
+			holder.imageView.setAlpha(isVisible ? 0.0f : 1.0f);
 			holder.imageView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
+		}
+	}
+
+	public void immediate(int layer) {
+		ImageHolder holder = mImageArray.get(layer);
+
+		if (holder.image.getBitmap() != null) {
+			holder.imageView.setAlpha(1.0f);
+			holder.imageView.setVisibility(View.VISIBLE);
 		}
 	}
 

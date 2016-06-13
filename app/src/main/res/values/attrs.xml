@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<attr name="textSize" format="dimension" />
+	<attr name="textColor" format="color" />
+
 	<!-- TimerView -->
 	<declare-styleable name="TimerView">
+		<!-- タイマーの単位時間(ms) -->
 		<attr name="period" format="integer" />
 	</declare-styleable>
 
 	<!-- ContentsTextView -->
 	<declare-styleable name="ContentsTextView">
-		<attr name="textSize" format="dimension" />
-		<attr name="textColor" format="color" />
+		<!-- 標準テキストのテキストサイズ -->
+		<attr name="textSize" />
+		<!-- 標準テキストのテキスト色 -->
+		<attr name="textColor" />
+		<!-- ルビのテキストサイズ -->
 		<attr name="rubySize" format="dimension" />
+		<!-- ルビのテキスト色 -->
 		<attr name="rubyColor" format="color" />
+		<!-- 行間隔 -->
 		<attr name="lineSpace" format="dimension" />
+		<!-- テキストのかたまりごとの間隔 -->
 		<attr name="sentenceSpace" format="dimension" />
 	</declare-styleable>
 
 	<!-- ContentsTitleView -->
 	<declare-styleable name="ContentsTitleView">
+		<!-- テキストサイズ -->
+		<attr name="textSize" />
+		<!-- テキスト色 -->
+		<attr name="textColor" />
+		<!-- タイトルを表示する時間 -->
 		<attr name="duration" format="integer" />
-		<attr name="titleSize" format="dimension" />
-		<attr name="titleColor" format="color" />
+	</declare-styleable>
+
+	<!-- ContentsImageView -->
+	<declare-styleable name="ContentsImageView">
+		<!-- レイヤの数 -->
+		<attr name="numberOfLayers" format="integer" />
 	</declare-styleable>
 
 </resources>

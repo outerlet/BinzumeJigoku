@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Number of save slot -->
+	<integer name="number_save_slot">3</integer>
+
+	<!-- Request code for 'startActivityForResult' -->
+	<integer name="request_code_save_activity">10001</integer>
+
+</resources>

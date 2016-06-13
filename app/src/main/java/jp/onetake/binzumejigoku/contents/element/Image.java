@@ -12,13 +12,16 @@ import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 
 /**
- * image要素を制御する要素クラス
+ * 画像を表示するimage要素を制御する要素クラス
  */
 public class Image extends SectionElement {
+	/**
+	 * 画像を表示する際のエフェクトに対応する列挙値
+	 */
 	public enum EffectType {
-		Unknown,
-		Fade,
-		Cut;
+		Unknown,	// 不明(便宜上の値)
+		Fade,		// フェードイン・アウト
+		Cut;		// カットイン・アウト
 
 		public static EffectType getValue(String effectText) {
 			for (EffectType e : EffectType.values()) {
@@ -96,7 +99,8 @@ public class Image extends SectionElement {
 
 	@Override
 	public String toString() {
-		return String.format("%1$s : layer = %2$d, src = %3$s, duration = %4$d, effect = %5$s",
+		return String.format(
+				"%1$s : layer = %2$d, src = %3$s, duration = %4$d, effect = %5$s",
 				super.toString(), mLayer, mSrc, mDuration, mEffectType.toString());
 	}
 }
