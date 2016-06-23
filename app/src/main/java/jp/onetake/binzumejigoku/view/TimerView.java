@@ -85,6 +85,30 @@ public abstract class TimerView extends View {
 	}
 
 	/**
+	 * タイマーの実行間隔を指定する
+	 * @param period	実行間隔(ms)
+	 */
+	public void setPeriod(long period) {
+		mPeriod = period;
+	}
+
+	/**
+	 * タイマーによるイベントを補足したい場合リスナオブジェクトをセットする
+	 * @param listener	タイマーによるイベントを補足するリスナオブジェクト
+	 */
+	public void setListener(TimerListener listener) {
+		mListener = listener;
+	}
+
+	/**
+	 * startメソッドが実行されてからの経過時間を返す
+	 * @return	startメソッドが実行されてからの経過時間
+	 */
+	protected long getElapsedMillis() {
+		return System.currentTimeMillis() - mStartMillis;
+	}
+
+	/**
 	 * 描画を開始する<br />
 	 * 描画が行われたら、つまりタイマーが開始したら呼び出し元にtrueが返る
 	 * @return	描画が行われた(タイマーが開始した)かどうか
@@ -108,25 +132,12 @@ public abstract class TimerView extends View {
 		return false;
 	}
 
+	/**
+	 * タイマーによらず、できるものを全て描画する
+	 */
 	public void immediate() {
 		mTimerStatus = TimerStatus.Stopped;
 		invalidate();
-	}
-
-	/**
-	 * タイマーによるイベントを補足したい場合リスナオブジェクトをセットする
-	 * @param listener	タイマーによるイベントを補足するリスナオブジェクト
-	 */
-	public void setListener(TimerListener listener) {
-		mListener = listener;
-	}
-
-	/**
-	 * startメソッドが実行されてからの経過時間を返す
-	 * @return	startメソッドが実行されてからの経過時間
-	 */
-	protected long getElapsedMillis() {
-		return System.currentTimeMillis() - mStartMillis;
 	}
 
 	/**

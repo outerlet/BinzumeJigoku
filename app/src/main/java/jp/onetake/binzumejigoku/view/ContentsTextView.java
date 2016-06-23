@@ -380,6 +380,16 @@ public class ContentsTextView extends TimerView {
 	}
 
 	/**
+	 * テキストの大きさを設定する
+	 * @param textSize	本文の大きさ(px)
+	 * @param rubySize	ルビの大きさ(px)
+	 */
+	public void setTextSize(float textSize, float rubySize) {
+		mTextPaint.setTextSize(textSize);
+		mRubyPaint.setTextSize(rubySize);
+	}
+
+	/**
 	 * Viewに描画されている文字列を全て消去する
 	 */
 	public void clear() {

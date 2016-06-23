@@ -7,4 +7,8 @@
 	<!-- Request code for 'startActivityForResult' -->
 	<integer name="request_code_save_activity">10001</integer>
 
+	<integer name="default_text_period">50</integer>
+	<integer name="long_text_period">100</integer>
+	<integer name="short_text_period">10</integer>
+
 </resources>

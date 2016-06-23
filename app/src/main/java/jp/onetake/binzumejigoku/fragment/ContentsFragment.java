@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsHolder;
+import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.SaveData;
 import jp.onetake.binzumejigoku.contents.element.Image;
 import jp.onetake.binzumejigoku.contents.element.SectionElement;
@@ -62,8 +63,11 @@ public class ContentsFragment extends Fragment
 		mTitleView = (ContentsTitleView)view.findViewById(R.id.titleview_title);
 		mTitleView.setListener(this);
 
+		ContentsInterface cif = ContentsInterface.getInstance();
 		mTextView = (ContentsTextView)view.findViewById(R.id.textview_contents);
 		mTextView.setListener(this);
+		mTextView.setPeriod(cif.getTextPeriod());
+		mTextView.setTextSize(cif.getTextSize(), cif.getRubySize());
 
 		return view;
 	}

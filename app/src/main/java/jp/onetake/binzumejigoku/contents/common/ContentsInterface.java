@@ -61,7 +61,7 @@ public class ContentsInterface {
 	 * アプリで利用するSharedPreferencesはここから取得する
 	 * @return	SharedPreferences
 	 */
-	public SharedPreferences getPreferences() {
+	private SharedPreferences getPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(mContext);
 	}
 
@@ -177,6 +177,11 @@ public class ContentsInterface {
 		return mMaxSectionIndex;
 	}
 
+	/**
+	 * slotIndexに指定したインデックスに保存されているSaveDataを取得する
+	 * @param slotIndex	セーブスロットを示すインデックス値
+	 * @return	SaveDataオブジェクト
+	 */
 	public SaveData getSaveData(int slotIndex) {
 		for (SaveData saveData : mSaveDataList) {
 			if (slotIndex == saveData.getSlotIndex()) {
@@ -184,5 +189,50 @@ public class ContentsInterface {
 			}
 		}
 		return null;
+	}
+
+	public float getTextSize() {
+		int size = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_size), "0"));
+		int dimenId = R.dimen.default_text_size;
+		switch (size) {
+			case 1:
+				dimenId = R.dimen.large_text_size;
+				break;
+			case -1:
+				dimenId = R.dimen.small_text_size;
+				break;
+		}
+
+		return mContext.getResources().getDimensionPixelSize(dimenId);
+	}
+
+	public float getRubySize() {
+		int size = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_size), "0"));
+		int dimenId = R.dimen.default_ruby_size;
+		switch (size) {
+			case 1:
+				dimenId = R.dimen.large_ruby_size;
+				break;
+			case -1:
+				dimenId = R.dimen.small_ruby_size;
+				break;
+		}
+
+		return mContext.getResources().getDimensionPixelSize(dimenId);
+	}
+
+	public int getTextPeriod() {
+		int speed = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_speed), "0"));
+		int intId = R.integer.default_text_period;
+		switch (speed) {
+			case 1:
+				intId = R.integer.short_text_period;
+				break;
+			case -1:
+				intId = R.integer.long_text_period;
+				break;
+		}
+
+		return mContext.getResources().getInteger(intId);
 	}
 }

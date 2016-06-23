@@ -99,6 +99,10 @@ public class MainActivity extends BasicActivity
 		mViewPager.addOnPageChangeListener(mPageChangeListener);
 
 		mBackPressCount = 0;
+
+		android.util.Log.i("SETTING", "TextSize = " + ContentsInterface.getInstance().getTextSize());
+		android.util.Log.i("SETTING", "RubySize = " + ContentsInterface.getInstance().getRubySize());
+		android.util.Log.i("SETTING", "TextSpeed = " + ContentsInterface.getInstance().getTextPeriod());
 	}
 
 	@Override

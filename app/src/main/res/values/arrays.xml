@@ -39,7 +39,6 @@
 		<item>普通</item>
 		<item>小さい</item>
 	</string-array>
-
 	<string-array name="text_size_entry_values">
 		<item>1</item>
 		<item>0</item>
