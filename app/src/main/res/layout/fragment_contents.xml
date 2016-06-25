@@ -22,7 +22,7 @@
 		app:rubySize="8sp"
 		app:period="50"
 		app:lineSpace="0dp"
-		app:sentenceSpace="12dp"
+		app:sentenceSpace="@dimen/sentence_space"
 		/>
 
 	<jp.onetake.binzumejigoku.view.ContentsTitleView

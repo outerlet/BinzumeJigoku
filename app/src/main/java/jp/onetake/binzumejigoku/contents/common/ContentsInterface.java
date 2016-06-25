@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
 
@@ -23,7 +20,7 @@ public class ContentsInterface {
 	private String mRubyDelimiter;
 	private String mRubyClosure;
 	private int mMaxSectionIndex = -1;
-	private List<SaveData> mSaveDataList;
+	private SaveData[] mSaveDatas;
 
 	/**
 	 * このクラスの唯一のインスタンスを返却する
@@ -37,15 +34,15 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * このクラスを初期化する
+	 * このオブジェクトを初期化する
 	 * @param context	コンテキスト
 	 */
 	public void initialize(Context context) {
 		mContext = context;
 		mDbHelper = new ContentsDbOpenHelper(context);
 
-		mSaveDataList = new ArrayList<>();
 		int number = context.getResources().getInteger(R.integer.number_save_slot) + 1;
+		mSaveDatas = new SaveData[number];
 		for (int i = 0 ; i < number ; i++) {
 			SaveData saveData = new SaveData(i);
 
@@ -53,8 +50,16 @@ public class ContentsInterface {
 				saveData.setName(SaveData.getSaveName(context, i));
 			}
 
-			mSaveDataList.add(saveData);
+			mSaveDatas[i] = saveData;
 		}
+	}
+
+	/**
+	 * このオブジェクトが初期化されているかどうか確認する
+	 * @return	初期化されていればtrue
+	 */
+	public boolean isInitialized() {
+		return (mContext != null);
 	}
 
 	/**
@@ -183,12 +188,11 @@ public class ContentsInterface {
 	 * @return	SaveDataオブジェクト
 	 */
 	public SaveData getSaveData(int slotIndex) {
-		for (SaveData saveData : mSaveDataList) {
-			if (slotIndex == saveData.getSlotIndex()) {
-				return saveData;
-			}
-		}
-		return null;
+		return mSaveDatas[slotIndex];
+	}
+
+	public void setSaveData(int slotIndex, SaveData saveData) {
+		mSaveDatas[slotIndex] = saveData;
 	}
 
 	public float getTextSize() {
@@ -223,13 +227,13 @@ public class ContentsInterface {
 
 	public int getTextPeriod() {
 		int speed = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_speed), "0"));
-		int intId = R.integer.default_text_period;
+		int intId = R.integer.text_period_millis_default;
 		switch (speed) {
 			case 1:
-				intId = R.integer.short_text_period;
+				intId = R.integer.text_period_millis_fast;
 				break;
 			case -1:
-				intId = R.integer.long_text_period;
+				intId = R.integer.text_period_millis_slow;
 				break;
 		}
 

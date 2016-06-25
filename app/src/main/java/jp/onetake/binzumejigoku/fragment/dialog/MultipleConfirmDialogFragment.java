@@ -36,6 +36,7 @@ public class MultipleConfirmDialogFragment extends DialogFragment implements Dia
 
 		MultipleConfirmDialogFragment dialog = new MultipleConfirmDialogFragment();
 		dialog.setArguments(params);
+		dialog.setCancelable(false);
 		return dialog;
 	}
 
@@ -49,7 +50,6 @@ public class MultipleConfirmDialogFragment extends DialogFragment implements Dia
 				.setPositiveButton(params.getInt(KEY_POSITIVE_LABEL, -1), this)
 				.setNegativeButton(params.getInt(KEY_NEGATIVE_LABEL, -1), this)
 				.setNeutralButton(params.getInt(KEY_NEUTRAL_LABEL, -1), this)
-				.setCancelable(false)
 				.create();
 	}
 

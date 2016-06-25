@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
@@ -21,16 +20,18 @@ import jp.onetake.binzumejigoku.contents.common.SaveData;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.view.SaveButton;
 
-public class SaveActivity extends BasicActivity
-		implements View.OnClickListener, ObjectAnimator.AnimatorListener, ConfirmDialogFragment.OnConfirmListener {
+/**
+ * セーブ・ロードを行うことのできるアクティビティ
+ */
+public class SaveActivity extends BasicActivity implements View.OnClickListener, ConfirmDialogFragment.OnConfirmListener {
+	/** セーブモードかどうかをIntentのExtraにセットするためのキー */
 	public final static String EXTRA_SAVE_MODE	= "SaveActivity.EXTRA_SAVE_MODE";
+
+	/** ロードしたとき呼び出し元のActivityにそのスロット番号を通知するためのキー */
 	public final static String EXTRA_SLOT_INDEX = "SaveActivity.EXTRA_SLOT_INDEX";
 
 	private final String TAG_DIALOG_SAVE	= "SaveActivity.TAG_DIALOG_SAVE";
 	private final String TAG_DIALOG_LOAD	= "SaveActivity.TAG_DIALOG_LOAD";
-
-	private final int ANIMATION_DURATION_BGCOLOR	= 300;
-	private final int ANIMATION_DURATION_MOVE_Y		= 300;
 
 	private LinearLayout mRootLayout;
 	private TextView mModeView;
@@ -39,6 +40,9 @@ public class SaveActivity extends BasicActivity
 	private SaveData mTargetData;
 	private boolean mIsSaveMode;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,7 +78,7 @@ public class SaveActivity extends BasicActivity
 
 		// 背景が透過付きの黒になったあと、ボタンがせり上がってくるアニメーション
 		ObjectAnimator anim = ObjectAnimator.ofFloat(mRootLayout, "alpha", 0.0f, 1.0f);
-		anim.setDuration(ANIMATION_DURATION_BGCOLOR);
+		anim.setDuration(getResources().getInteger(R.integer.save_animation_duration_bgcolor));
 		anim.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationEnd(Animator animation) {
@@ -84,41 +88,39 @@ public class SaveActivity extends BasicActivity
 				animSet.playTogether(
 						ObjectAnimator.ofFloat(mButtonLayout, "alpha", 0.0f, 1.0f),
 						ObjectAnimator.ofFloat(mButtonLayout, "translationY", 0.0f, moveY));
-				animSet.setDuration(ANIMATION_DURATION_MOVE_Y);
-				animSet.addListener(SaveActivity.this);
+				animSet.setDuration(getResources().getInteger(R.integer.save_animation_duration_move_y));
 				animSet.start();
 			}
 		});
 		anim.start();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onClick(View view) {
 		// セーブスロット選択
 		if (view.getId() != R.id.imagebutton_change_mode) {
-			switch (view.getId()) {
-				case R.id.button_save1:
-					mTargetData = ContentsInterface.getInstance().getSaveData(1);
-					break;
-				case R.id.button_save2:
-					mTargetData = ContentsInterface.getInstance().getSaveData(2);
-					break;
-				case R.id.button_save3:
-					mTargetData = ContentsInterface.getInstance().getSaveData(3);
-					break;
-				default:
-					Toast.makeText(this, R.string.message_save_successful, Toast.LENGTH_LONG).show();
-					return;
+			// なんかおかしな操作が行われた(ありえないボタン操作)
+			if (view.getId() != R.id.button_save1 && view.getId() != R.id.button_save2 && view.getId() != R.id.button_save3) {
+				throw new UnsupportedOperationException(getString(R.string.exception_unexpected_save_button_clicked));
 			}
 
+			mTargetData = ((SaveButton)view).getSaveData();
+
+			// セーブ
 			if (mIsSaveMode) {
-				ConfirmDialogFragment
-						.newInstance(R.string.phrase_confirm, R.string.message_save_confirmation)
-						.show(getSupportFragmentManager(), TAG_DIALOG_SAVE);
+				showDialogFragment(
+						ConfirmDialogFragment.newInstance(R.string.phrase_confirm, R.string.message_save_confirmation),
+						TAG_DIALOG_SAVE);
+			// セーブされたデータがなければロードしない
 			} else {
-				ConfirmDialogFragment
-						.newInstance(R.string.phrase_confirm, R.string.message_load_confirmation)
-						.show(getSupportFragmentManager(), TAG_DIALOG_LOAD);
+				if (mTargetData.hasSaved()) {
+					showDialogFragment(
+							ConfirmDialogFragment.newInstance(R.string.phrase_confirm, R.string.message_load_confirmation),
+							TAG_DIALOG_LOAD);
+				}
 			}
 		// セーブ・ロード切り替え
 		} else {
@@ -127,30 +129,9 @@ public class SaveActivity extends BasicActivity
 		}
 	}
 
-	@Override
-	public void onAnimationEnd(Animator animation) {
-		if (animation instanceof ObjectAnimator) {
-			if (((ObjectAnimator)animation).getTarget() == mRootLayout) {
-				Toast.makeText(this, "Finished", Toast.LENGTH_SHORT).show();
-			}
-		}
-	}
-
-	@Override
-	public void onAnimationStart(Animator animation) {
-		// Do nothing.
-	}
-
-	@Override
-	public void onAnimationCancel(Animator animation) {
-		// Do nothing.
-	}
-
-	@Override
-	public void onAnimationRepeat(Animator animation) {
-		// Do nothing.
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onConfirmed(DialogFragment dialog, int which) {
 		if (which == DialogInterface.BUTTON_POSITIVE) {

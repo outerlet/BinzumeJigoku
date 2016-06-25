@@ -130,6 +130,23 @@ public class Text extends SectionElement {
 		return mText;
 	}
 
+	public String getPlainText() {
+		ContentsInterface cif = ContentsInterface.getInstance();
+		StringBuilder buffer = new StringBuilder();
+
+		for (String text : mText.split(cif.getRubyClosure())) {
+			int idx = text.indexOf(cif.getRubyDelimiter());
+
+			if (idx != -1) {
+				buffer.append(text.substring(0, idx));
+			} else {
+				buffer.append(text);
+			}
+		}
+
+		return buffer.toString();
+	}
+
 	@Override
 	public ContentsType getContentsType() {
 		return ContentsType.Text;

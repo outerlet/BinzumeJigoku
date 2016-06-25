@@ -21,15 +21,14 @@ import jp.onetake.binzumejigoku.contents.xml.ContentsXmlParser;
  * 起動ポイントとなるインスタンス
  */
 public class LaunchActivity extends BasicActivity implements Animator.AnimatorListener, ContentsXmlParser.ParserListener {
-	private final int ANIMATION_DURATION		= 1000;
-	private final int ANIMATION_DELAY_FORWARD	= 500;
-	private final int ANIMATION_DELAY_BACKWARD	= 1000;
-
 	private ImageView mLaunchImage;
 	private ProgressBar mProgressBar;
 	private ContentsXmlParser mXmlParser;
 	private boolean mIsForward;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,9 +37,6 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 
 		// Preferencesの初期値を設定
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-		// コンテンツ操作用オブジェクトを初期化
-		ContentsInterface.getInstance().initialize(getApplicationContext());
 
 		mLaunchImage = (ImageView)findViewById(R.id.imageview_launch_title);
 		mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading_contents);
@@ -51,34 +47,51 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		startAnimation(true);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onBackPressed() {
 		// このActivityでバックキーは無効
 		return;
 	}
 
+	/**
+	 * 起動時アニメーションを順方向または逆方向に開始する
+	 * @param forward	順方向にアニメーションさせるならtrue
+	 */
 	private void startAnimation(boolean forward) {
 		mIsForward = forward;
 
 		ObjectAnimator anim = ObjectAnimator.ofFloat(
 				mLaunchImage, "alpha", forward ? 0.0f : 1.0f, forward ? 1.0f : 0.0f);
-		anim.setDuration(ANIMATION_DURATION);
-		anim.setStartDelay(forward ? ANIMATION_DELAY_FORWARD : ANIMATION_DELAY_BACKWARD);
+		anim.setDuration(getResources().getInteger(R.integer.launch_animation_duration));
+		anim.setStartDelay(getResources().getInteger(
+				forward ? R.integer.launch_animation_delay_forward : R.integer.launch_animation_delay_backward));
 		anim.addListener(this);
 		anim.start();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onParseFinished() {
 		mProgressBar.setVisibility(View.INVISIBLE);
 		startAnimation(false);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAnimationStart(Animator animation) {
 		// Do nothing.
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAnimationEnd(Animator animation) {
 		if (mIsForward) {
@@ -103,11 +116,17 @@ public class LaunchActivity extends BasicActivity implements Animator.AnimatorLi
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAnimationCancel(Animator animation) {
 		// Do nothing.
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAnimationRepeat(Animator animation) {
 		// Do nothing.

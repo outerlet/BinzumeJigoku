@@ -15,6 +15,7 @@ public class ProgressDialogFragment extends DialogFragment {
 
 		ProgressDialogFragment fragment = new ProgressDialogFragment();
 		fragment.setArguments(params);
+		fragment.setCancelable(false);
 		return fragment;
 	}
 
@@ -23,7 +24,6 @@ public class ProgressDialogFragment extends DialogFragment {
 		ProgressDialog dialog = new ProgressDialog(getContext());
 		dialog.setMessage(getArguments().getString(DIALOG_MESSAGE));
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setCancelable(false);
 
 		return dialog;
 	}

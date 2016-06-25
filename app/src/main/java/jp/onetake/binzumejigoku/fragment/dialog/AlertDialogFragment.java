@@ -39,6 +39,7 @@ public class AlertDialogFragment extends DialogFragment implements DialogInterfa
 
 		AlertDialogFragment dialog = new AlertDialogFragment();
 		dialog.setArguments(params);
+		dialog.setCancelable(false);
 		return dialog;
 	}
 
@@ -52,7 +53,6 @@ public class AlertDialogFragment extends DialogFragment implements DialogInterfa
 				.setTitle(params.getInt(KEY_TITLE))
 				.setMessage(params.getInt(KEY_MESSAGE))
 				.setPositiveButton(buttonLabel, this)
-				.setCancelable(false)
 				.create();
 	}
 

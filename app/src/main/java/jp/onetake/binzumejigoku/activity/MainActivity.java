@@ -20,7 +20,8 @@ import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.view.MainFragmentPagerAdapter;
 
 /**
- * メイン画面
+ * メイン画面<br />
+ * 以下のアクションを行うことができる
  * <ol>
  *     <li>進行させる章を選択</li>
  *     <li>ロード画面を開く</li>
@@ -28,6 +29,7 @@ import jp.onetake.binzumejigoku.view.MainFragmentPagerAdapter;
  */
 public class MainActivity extends BasicActivity
 		implements MainFragment.SectionSelectListener, ConfirmDialogFragment.OnConfirmListener {
+	/** アプリケーションを終了させるためのインテントを発行する際Extraにセットするキー */
 	public static final String INTENT_KEY_FINISH_APP	= "MainActivity.INTENT_KEY_FINISH_APP";
 
 	private final String TAG_DIALOG_LOAD_LATEST	= "MainActivity.TAG_DIALOG_LOAD_LATEST";
@@ -41,6 +43,9 @@ public class MainActivity extends BasicActivity
 
 	private int mBackPressCount;
 
+	/**
+	 * 章を選択するときに使うViewPagerに関わるイベントを捕捉するリスナ
+	 */
 	private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
 		@Override
 		public void onPageSelected(int position) {
@@ -60,6 +65,9 @@ public class MainActivity extends BasicActivity
 		}
 	};
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,19 +107,21 @@ public class MainActivity extends BasicActivity
 		mViewPager.addOnPageChangeListener(mPageChangeListener);
 
 		mBackPressCount = 0;
-
-		android.util.Log.i("SETTING", "TextSize = " + ContentsInterface.getInstance().getTextSize());
-		android.util.Log.i("SETTING", "RubySize = " + ContentsInterface.getInstance().getRubySize());
-		android.util.Log.i("SETTING", "TextSpeed = " + ContentsInterface.getInstance().getTextPeriod());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onStop() {
+		super.onStop();
 
 		mViewPager.removeOnPageChangeListener(mPageChangeListener);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == getResources().getInteger(R.integer.request_code_save_activity)) {
@@ -129,6 +139,9 @@ public class MainActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onBackPressed() {
 		if (mBackPressCount > 0) {
@@ -152,12 +165,18 @@ public class MainActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.menu_load_latest) {
@@ -175,6 +194,9 @@ public class MainActivity extends BasicActivity
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onSectionSelected(int sectionIndex) {
 		Intent intent = new Intent(this, ContentsActivity.class);
@@ -182,6 +204,9 @@ public class MainActivity extends BasicActivity
 		startActivity(intent);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onConfirmed(DialogFragment dialog, int which) {
 		if (dialog.getTag().equals(TAG_DIALOG_LOAD_LATEST)) {

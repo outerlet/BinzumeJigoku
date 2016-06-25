@@ -57,6 +57,7 @@ public class ConfirmDialogFragment extends DialogFragment implements DialogInter
 
 		ConfirmDialogFragment dialog = new ConfirmDialogFragment();
 		dialog.setArguments(params);
+		dialog.setCancelable(false);
 		return dialog;
 	}
 
@@ -66,8 +67,7 @@ public class ConfirmDialogFragment extends DialogFragment implements DialogInter
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
 				.setTitle(params.getInt(KEY_TITLE))
-				.setMessage(params.getInt(KEY_MESSAGE))
-				.setCancelable(false);
+				.setMessage(params.getInt(KEY_MESSAGE));
 
 		int positive = params.getInt(KEY_POSITIVE_LABEL, -1);
 		builder.setPositiveButton((positive != -1) ? positive : R.string.phrase_ok, this);

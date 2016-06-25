@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
@@ -34,8 +35,9 @@ public class ContentsHolder {
 		mContext = context;
 		mCurrentSequence = -1;
 
-		mSaveData = ContentsInterface.getInstance().getSaveData(0);
+		mSaveData = new SaveData(0);
 		mSaveData.setSectionIndex(sectionIndex);
+		ContentsInterface.getInstance().setSaveData(0, mSaveData);
 
 		mElementList = parse(sectionIndex);
 	}
@@ -50,6 +52,7 @@ public class ContentsHolder {
 		mCurrentSequence = saveData.getSequence();
 
 		mSaveData = ContentsInterface.getInstance().getSaveData(0);
+		mSaveData.copyFrom(saveData, false);
 		mSaveData.setSectionIndex(saveData.getSectionIndex());
 
 		mElementList = parse(saveData.getSectionIndex());
@@ -62,16 +65,11 @@ public class ContentsHolder {
 	 */
 	public List<SectionElement> getLatestElementList() {
 		List<SectionElement> list = new ArrayList<>();
-		for (ContentsType type : mSaveData.getContentsTypeList()) {
-			int[] seqs = mSaveData.getContentsSequence(type);
 
-			if (type == ContentsType.Image) {
-				for (int i = 0 ; i < seqs.length ; i++) {
-					list.add(mElementList.get(seqs[i]));
-				}
-			} else {
-				list.add(mElementList.get(seqs[0]));
-			}
+		Map<ContentsType, Integer> map = mSaveData.getContentsSequence();
+
+		for (ContentsType type : map.keySet()) {
+			list.add(mElementList.get(map.get(type)));
 		}
 
 		return list;
@@ -91,15 +89,15 @@ public class ContentsHolder {
 	 * @return  次の要素オブジェクト
 	 */
 	public SectionElement next() {
+		SectionElement elm = mElementList.get(++mCurrentSequence);
+
 		// ActivityやFragmentのonPause等のライフサイクルイベントでセーブするとアプリが突然死したときに
 		// 復元できないのでコンテンツが進行するごとにセーブする
-		if (current() != null) {
-			mSaveData.setTimeMillis(System.currentTimeMillis());
-			mSaveData.setLatestElement(current());
-			mSaveData.save(mContext);
-		}
+		mSaveData.setTimeMillis(System.currentTimeMillis());
+		mSaveData.setLatestElement(elm);
+		mSaveData.save(mContext);
 
-		return mElementList.get(++mCurrentSequence);
+		return elm;
 	}
 
 	/**

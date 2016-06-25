@@ -1,14 +1,12 @@
 package jp.onetake.binzumejigoku.activity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
@@ -33,7 +31,7 @@ public class ContentsActivity extends BasicActivity
 
 	private GestureDetectorCompat mGestureDetector;
 	private int mSectionIndex;
-	private SaveData mPendingSaveData;
+	private float mFlingDistance;
 
 	// 各種ジェスチャを捕捉するリスナオブジェクト
 	private GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
@@ -48,35 +46,37 @@ public class ContentsActivity extends BasicActivity
 		}
 
 		/**
-		 * 長時間タップ。セーブ画面を開く
+		 * ロングタップ。セーブ画面を開く
 		 * {@inheritDoc}
 		 */
 		@Override
 		public void onLongPress(MotionEvent e) {
-			startActivityForResult(
-					new Intent(ContentsActivity.this, SaveActivity.class),
-					getResources().getInteger(R.integer.request_code_save_activity));
-			overridePendingTransition(0, 0);
+			getFragment().requestSaveActivity();
 		}
 
 		/**
-		 * フリック。上方向でバックログ、下方向で早送り
+		 * フリックで早送り
 		 * {@inheritDoc}
 		 */
 		@Override
 		public boolean onFling(MotionEvent upEvent, MotionEvent moveEvent, float velocityX, float velocityY) {
-			// TODO:フリック操作実装
+			if (moveEvent.getY() - upEvent.getY() > mFlingDistance) {
+				// 将来的に、ここに早送り処理を入れる予定
+			}
 			return true;
 		}
 	};
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_contents);
 
 		mGestureDetector = new GestureDetectorCompat(this, mGestureListener);
+		mFlingDistance = getResources().getDimensionPixelSize(R.dimen.fling_detect_action_y);
 
 		// SaveDataが送られてきたらロードしての開始、さもなければ指定された章を最初から
 		// どっちも送られてこなかった場合は不正な呼び出しとしてエラー
@@ -93,41 +93,22 @@ public class ContentsActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	protected void onPostResume() {
-		super.onPostResume();
-
-		if (mPendingSaveData != null) {
-			replaceFragmentBySaveData(mPendingSaveData);
-			mPendingSaveData = null;
+	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			getFragment().requestBacklogActivity();
+			return true;
 		}
+
+		return super.onKeyLongPress(keyCode, event);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == getResources().getInteger(R.integer.request_code_save_activity)) {
-			// セーブもしくはロードした場合はEXTRA_SAVE_MODEにboolean値が入っている
-			if (data != null && data.hasExtra(SaveActivity.EXTRA_SAVE_MODE)) {
-				boolean isSave = data.getBooleanExtra(SaveActivity.EXTRA_SAVE_MODE, false);
-
-				if (isSave) {
-					int msgId = (resultCode == RESULT_OK) ? R.string.message_save_successful : R.string.message_save_failure;
-					Toast.makeText(this, msgId, Toast.LENGTH_SHORT).show();
-				} else {
-					int slotIndex = data.getIntExtra(SaveActivity.EXTRA_SLOT_INDEX, -1);
-
-					if (slotIndex != -1) {
-						// SaveActivityから帰ってきた直後にフラグメントの操作をするとIllegalStateExceptionが
-						// 発生するので、一旦フィールドに放り込んでおいてonPostResumeで操作する
-						mPendingSaveData = ContentsInterface.getInstance().getSaveData(slotIndex);
-					} else {
-						Toast.makeText(this, R.string.message_load_failure, Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		}
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onBackPressed() {
 		ConfirmDialogFragment.newInstance(
@@ -137,6 +118,9 @@ public class ContentsActivity extends BasicActivity
 				R.string.phrase_cancel).show(getSupportFragmentManager(), TAG_DIALOG_BACKKEY);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		mGestureDetector.onTouchEvent(event);
@@ -144,6 +128,9 @@ public class ContentsActivity extends BasicActivity
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onSectionFinished() {
 		if (mSectionIndex >= ContentsInterface.getInstance().getMaxSectionIndex()) {
@@ -161,6 +148,17 @@ public class ContentsActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void onLoadRequested(int slotIndex) {
+		replaceFragmentBySaveData(ContentsInterface.getInstance().getSaveData(slotIndex));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onConfirmed(DialogFragment dialog) {
 		if (dialog.getTag().equals(TAG_DIALOG_LAST_SECTION)) {
@@ -168,6 +166,9 @@ public class ContentsActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onConfirmed(DialogFragment dialog, int which) {
 		// Backキーを押した時のダイアログ
@@ -195,22 +196,36 @@ public class ContentsActivity extends BasicActivity
 		}
 	}
 
+	/**
+	 * 章を示すインデックス値を指定してフラグメントを生成・置換する
+	 * @param sectionIndex	章を示すインデックス値
+	 */
 	private void replaceFragmentByIndex(int sectionIndex) {
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(
-				R.id.layout_fragment_container, ContentsFragment.newInstance(sectionIndex), TAG_SECTION_FRAGMENT);
-		transaction.commit();
+		postFragment(
+				R.id.layout_fragment_container,
+				FragmentMethod.Replace,
+				ContentsFragment.newInstance(sectionIndex),
+				TAG_SECTION_FRAGMENT);
 	}
 
+	/**
+	 * 特定のセーブデータをもとにフラグメントを生成・置換する
+	 * @param saveData	セーブデータ
+	 */
 	private void replaceFragmentBySaveData(SaveData saveData) {
 		mSectionIndex = saveData.getSectionIndex();
 
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		transaction.replace(
-				R.id.layout_fragment_container, ContentsFragment.newInstance(saveData), TAG_SECTION_FRAGMENT);
-		transaction.commit();
+		postFragment(
+				R.id.layout_fragment_container,
+				FragmentMethod.Replace,
+				ContentsFragment.newInstance(saveData),
+				TAG_SECTION_FRAGMENT);
 	}
 
+	/**
+	 * 物語を進めるためのフラグメントを取得する
+	 * @return	フラグメント
+	 */
 	private ContentsFragment getFragment() {
 		return (ContentsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SECTION_FRAGMENT);
 	}

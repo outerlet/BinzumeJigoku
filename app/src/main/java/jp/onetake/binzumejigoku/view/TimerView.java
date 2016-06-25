@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import jp.onetake.binzumejigoku.R;
 
 /**
- * 一定時間ごとに描画処理を繰り返す、内部にタイマーを持つView
+ * 一定時間ごとに描画処理を繰り返すView
  */
 public abstract class TimerView extends View {
 	/**
@@ -21,6 +19,7 @@ public abstract class TimerView extends View {
 	 */
 	public enum TimerStatus {
 		Stopped,		// 停止
+		WaitForStart,	// 実行待ち
 		Execute,		// 実行中
 		WaitForStop,	// 停止待ち
 	}
@@ -33,30 +32,30 @@ public abstract class TimerView extends View {
 		 * タイマーが開始された
 		 * @param view	TimerView
 		 */
-		void onStarted(TimerView view);
+		void onTimerStarted(TimerView view);
 
 		/**
 		 * タイマーに設定された単位時間が経過した
 		 * @param view	TimerView
 		 */
-		void onPeriod(TimerView view);
+		void onTimerPeriod(TimerView view);
 
 		/**
 		 * タイマーが停止した
 		 * @param view	TimerView
 		 */
-		void onStopped(TimerView view);
+		void onTimerStopped(TimerView view);
 	}
 
 	private static int DEFAULT_PERIOD = 500;
 
 	private Handler mHandler;
-	private Timer mTimer;
 	private TimerStatus mTimerStatus;
 	private TimerListener mListener;
+	private TimerViewThread mCurrentThread;
 	private int mCounter;
 	private long mStartMillis;
-	private long mPeriod;
+	private long mPeriodMillis;
 
 	/**
 	 * {@inheritDoc}
@@ -78,7 +77,7 @@ public abstract class TimerView extends View {
 		if (attrs != null) {
 			TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimerView);
 
-			mPeriod = (long) typedArray.getInt(R.styleable.TimerView_period, DEFAULT_PERIOD);
+			mPeriodMillis = (long) typedArray.getInt(R.styleable.TimerView_period, DEFAULT_PERIOD);
 
 			typedArray.recycle();
 		}
@@ -86,10 +85,18 @@ public abstract class TimerView extends View {
 
 	/**
 	 * タイマーの実行間隔を指定する
-	 * @param period	実行間隔(ms)
+	 * @param millis	実行間隔(ms)
 	 */
-	public void setPeriod(long period) {
-		mPeriod = period;
+	public void setPeriod(long millis) {
+		mPeriodMillis = millis;
+	}
+
+	/**
+	 * タイマーの実行間隔を指定する
+	 * @return	実行間隔(ms)
+	 */
+	public long getPeriod() {
+		return mPeriodMillis;
 	}
 
 	/**
@@ -111,20 +118,20 @@ public abstract class TimerView extends View {
 	/**
 	 * 描画を開始する<br />
 	 * 描画が行われたら、つまりタイマーが開始したら呼び出し元にtrueが返る
+	 * @param delay タイマー開始までの遅延時間(ms)
 	 * @return	描画が行われた(タイマーが開始した)かどうか
 	 */
-	public boolean start() {
+	public boolean start(long delay) {
 		if (mTimerStatus == TimerStatus.Stopped) {
 			if (mListener != null) {
-				mListener.onStarted(this);
+				mListener.onTimerStarted(this);
 			}
 
-			mTimerStatus = TimerStatus.Execute;
+			mTimerStatus = TimerStatus.WaitForStart;
 			mCounter = 0;
-			mStartMillis = System.currentTimeMillis();
 
-			mTimer = new Timer(true);
-			mTimer.schedule(new TimerViewTask(), mPeriod, mPeriod);
+			mCurrentThread = new TimerViewThread(delay);
+			mCurrentThread.start();
 
 			return true;
 		}
@@ -141,48 +148,85 @@ public abstract class TimerView extends View {
 	}
 
 	/**
+	 * タイマーを停止する
+	 */
+	public void cancel() {
+		if (mTimerStatus != TimerStatus.Stopped) {
+			mTimerStatus = TimerStatus.WaitForStop;
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// タイマーが実行されているときであれば次回の描画処理を呼び出す
-		if (mTimerStatus == TimerStatus.Execute) {
-			if (!drawByPeriod(canvas, ++mCounter)) {
-				mTimerStatus = TimerStatus.WaitForStop;
-			}
-		// タイマーが止まっているときは前回までの描画処理を復元する
-		} else if (mTimerStatus == TimerStatus.Stopped) {
-			drawAll(canvas);
+		switch (mTimerStatus) {
+			case Execute:
+				if (!drawByPeriod(canvas, ++mCounter)) {
+					mTimerStatus = TimerStatus.WaitForStop;
+				}
+				break;
+			case WaitForStop:
+				drawByPeriod(canvas, mCounter);
+				break;
+			case Stopped:
+				drawAll(canvas);
+				break;
+			default:
+				// 何もしない
 		}
 	}
 
 	/**
-	 * 指定した時間間隔で描画処理を行うタスク
+	 * 指定した時間間隔で描画処理を行うスレッド
 	 */
-	private class TimerViewTask extends TimerTask {
+	private class TimerViewThread extends Thread {
+		private long mmDelay;
+
+		public TimerViewThread(long delay) {
+			mmDelay = delay;
+		}
+
 		@Override
 		public void run() {
-			mHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					if (mTimerStatus == TimerStatus.Execute) {
+			try {
+				Thread.sleep(mmDelay);
+			} catch (InterruptedException ire) {}
+
+			mTimerStatus = TimerStatus.Execute;
+			mStartMillis = System.currentTimeMillis();
+
+			while (mTimerStatus == TimerStatus.Execute) {
+				try {
+					Thread.sleep(mPeriodMillis);
+				} catch (InterruptedException ire) {}
+
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
 						invalidate();
 
 						if (mListener != null) {
-							mListener.onPeriod(TimerView.this);
-						}
-					} else if (mTimerStatus == TimerStatus.WaitForStop) {
-						mTimer.cancel();
-						mTimerStatus = TimerStatus.Stopped;
-
-						if (mListener != null) {
-							mListener.onStopped(TimerView.this);
+							mListener.onTimerPeriod(TimerView.this);
 						}
 					}
-				}
-			});
+				});
+			}
+
+			mTimerStatus = TimerStatus.Stopped;
+
+			// コールバックはUIスレッドに戻す
+			if (mListener != null) {
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						mListener.onTimerStopped(TimerView.this);
+					}
+				});
+			}
 		}
 	}
 

@@ -5,6 +5,7 @@
 
 	<!-- コンテンツファイル名 -->
 	<string name="filename_contents">contents_binzume_jigoku.xml</string>
+	<string name="filename_save_data_format">binzume-jigoku_%1$02d</string>
 
 	<!-- Preferences -->
 	<string name="prefkey_ruby_delimiter">PREFKEY_RUBY_DELIMITER</string>
@@ -25,6 +26,8 @@
 	<string name="phrase_next_section">次の章</string>
 	<string name="phrase_save">セーブ</string>
 	<string name="phrase_load">ロード</string>
+	<string name="phrase_no_save">保存されていない</string>
+	<string name="phrase_text_history">テキスト履歴</string>
 
 	<!-- メニュー項目 -->
 	<string name="menu_title_load_latest">前回の続き</string>
@@ -36,7 +39,7 @@
 	<string name="name_save_data1">一ツ目の記錄</string>
 	<string name="name_save_data2">二ツ目の記錄</string>
 	<string name="name_save_data3">三ツ目の記錄</string>
-	
+
 	<!-- メイン画面 (話の選択) -->
 	<string name="title_main_activity">話の選択</string>
 	<string name="title_setting_activity">設定</string>
@@ -77,11 +80,12 @@
 
 	<!-- Exception -->
 	<string name="exception_message_section_index">Section number is invalid.</string>
-	<string name="exception_message_layer_number">Layer number is invalid.</string>
+	<string name="exception_message_imageview_visibility">At least one ImageView must be invisible.</string>
 	<string name="exception_illegal_section_definition">Definition of section title and description are not correct.</string>
 	<string name="exception_illegal_contents_fragment">ContentsFragment must be supplied section index or save data.</string>
 	<string name="exception_illegal_contents_type">Illegal contents-type is supplied.</string>
 	<string name="exception_holder_is_null">ContentsHolder must exist when ContentsFragment.restoreFromSaveData is called.</string>
 	<string name="exception_save_data_not_supplied">SaveActivity must be supplied save data.</string>
+	<string name="exception_unexpected_save_button_clicked">Unexpected save button is clicked.</string>
 
 </resources>

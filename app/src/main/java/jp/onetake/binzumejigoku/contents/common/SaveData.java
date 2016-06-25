@@ -8,32 +8,38 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import jp.onetake.binzumejigoku.contents.element.Image;
+import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.element.SectionElement;
+import jp.onetake.binzumejigoku.contents.element.Text;
 
 /**
- * セーブデータ
+ * 1つのセーブデータを表現するクラス
  */
 public class SaveData implements Serializable {
 	private static final long serialVersionUID = -3692542681255401454L;
-
-	private final String FILENAME_FORMAT	= "binzume-jigoku_%1$02d";
-	private final int MAX_SEQUENCE_NUMBER	= 10000;
 
 	private int mSlotIndex;
 	private int mSectionIndex;
 	private int mSequence;
 	private String mName;
 	private long mTimeMillis;
-	private HashMap<String, int[]> mRestoreMap;
-	private boolean mHasSaved;
+	private Map<String, Integer> mRestoreMap;
+	private List<String> mBacklogList;
 
+	private transient boolean mHasSaved;
+
+	/**
+	 * stringリソースに定義されている、slotIndexに対応するセーブデータのタイトルを取得する
+	 * @param context	コンテキスト
+	 * @param slotIndex	セーブスロットの番号(0-)
+	 * @return	セーブデータのタイトル
+	 */
 	public static String getSaveName(Context context, int slotIndex) {
 		int strId = context.getResources().getIdentifier("name_save_data" + slotIndex, "string", context.getPackageName());
 		return context.getString(strId);
@@ -41,16 +47,26 @@ public class SaveData implements Serializable {
 
 	/**
 	 * コンストラクタ
+	 * @param slotIndex セーブスロットの番号(0-)
 	 */
 	public SaveData(int slotIndex) {
 		mSlotIndex = slotIndex;
 		mRestoreMap = new HashMap<>();
+		mBacklogList = new ArrayList<>();
 	}
 
+	/**
+	 * セクション番号(0-)をセットする
+	 * @param sectionIndex	セクション番号(0-)
+	 */
 	public void setSectionIndex(int sectionIndex) {
 		mSectionIndex = sectionIndex;
 	}
 
+	/**
+	 * セーブスロットの番号を取得する
+	 * @return	セーブスロットの番号
+	 */
 	public int getSlotIndex() {
 		return mSlotIndex;
 	}
@@ -72,70 +88,73 @@ public class SaveData implements Serializable {
 		return mSequence;
 	}
 
+	/**
+	 * セーブデータの名前をセットする
+	 * @param name	セーブデータの名前
+	 */
 	public void setName(String name) {
 		mName = name;
 	}
 
+	/**
+	 * セーブデータの名前を返却する
+	 * @return	セーブデータの名前
+	 */
 	public String getName() {
 		return mName;
 	}
 
+	/**
+	 * セーブした時間をセットする
+	 * @param timeMillis	セーブした時間。エポックからのミリ秒
+	 */
 	public void setTimeMillis(long timeMillis) {
 		mTimeMillis = timeMillis;
 	}
 
+	/**
+	 * セーブした時間を示す文字列を「yyyy/MM/dd hh:mm:ss」形式で返却する
+	 * @return	セーブした時間を示す文字列
+	 */
 	public String getTimeText() {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(mTimeMillis);
 
-		return String.format("%1$d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d",
+		return String.format(
+				Locale.US,
+				"%1$d/%2$02d/%3$02d %4$02d:%5$02d:%6$02d",
 				c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH),
 				c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
 	}
 
+	/**
+	 * このセーブデータでセーブが行われたことがあるかを返却する
+	 * @return	このセーブデータでセーブが行われたことがあればtrue
+	 */
 	public boolean hasSaved() {
 		return mHasSaved;
 	}
 
 	/**
-	 * このセーブデータから復元すべき要素オブジェクトの種類を全て返却する
-	 * @return  要素オブジェクトの種類
+	 * 復元すべき要素の種類とシーケンス番号のペアを複数格納したMapを返却する
+	 * @return  復元すべき要素の種類とシーケンス番号のペアを複数格納したMap
 	 */
-	public List<ContentsType> getContentsTypeList() {
-		List<ContentsType> keyList = new ArrayList<>();
+	public Map<ContentsType, Integer> getContentsSequence() {
+		Map<ContentsType, Integer> map = new HashMap<>();
+
 		for (String key : mRestoreMap.keySet()) {
-			keyList.add(ContentsType.getValue(key));
+			map.put(ContentsType.getValue(key), mRestoreMap.get(key));
 		}
 
-		return keyList;
+		return map;
 	}
 
 	/**
-	 * 要素オブジェクトの種類に対応するシーケンス番号を配列で取得する<br />
-	 * Image要素は複数のレイヤーがあるのでlength>=1の配列、それ以外の要素はlength==1の配列
-	 * @param type  要素オブジェクトの種類
-	 * @return  シーケンス番号の配列
+	 * セーブされた時点までのバックログを文字列のリストで返却する
+	 * @return	バックログのリスト
 	 */
-	public int[] getContentsSequence(ContentsType type) {
-		for (String key : mRestoreMap.keySet()) {
-			if (type == ContentsType.getValue(key)) {
-				if (type == ContentsType.Image) {
-					int[] imageNumbers = mRestoreMap.get(key);
-
-					int[] seqs = new int[imageNumbers.length];
-					int idx = 0;
-					for (int imageNumber : imageNumbers) {
-						seqs[idx++] = imageNumber % MAX_SEQUENCE_NUMBER;
-					}
-
-					return seqs;
-				} else {
-					return mRestoreMap.get(key);
-				}
-			}
-		}
-
-		return null;
+	public List<String> getBacklogList() {
+		return mBacklogList;
 	}
 
 	/**
@@ -143,39 +162,14 @@ public class SaveData implements Serializable {
 	 * @param elm   要素オブジェクト
 	 */
 	public void setLatestElement(SectionElement elm) {
+		// 要素の保存
 		if (elm.getContentsType().shouldSave()) {
-			// Image要素については1つのレイヤに複数の番号は要らないので別扱い
-			if (elm instanceof Image) {
-				Image image = (Image)elm;
+			mRestoreMap.put(elm.getContentsType().getKeyString(), elm.getSequence());
+		}
 
-				// 被らないように4桁目以下はシーケンス番号、5桁目以上をレイヤ番号とする
-				int imageNumber = image.getLayer() * MAX_SEQUENCE_NUMBER + image.getSequence();
-
-				if (mRestoreMap.containsKey(ContentsType.Image.getKeyString())) {
-					int[] imageNumbers = mRestoreMap.get(ContentsType.Image.getKeyString());
-
-					boolean found = false;
-					for (int i = 0 ; i < imageNumbers.length ; i++) {
-						if (image.getLayer() == imageNumbers[i] / MAX_SEQUENCE_NUMBER) {
-							imageNumbers[i] = imageNumber;
-							found = true;
-							break;
-						}
-					}
-
-					if (!found) {
-						int[] temp = Arrays.copyOf(imageNumbers, imageNumbers.length + 1);
-						temp[temp.length - 1] = imageNumber;
-
-						mRestoreMap.put(ContentsType.Image.getKeyString(), temp);
-					}
-				} else {
-					mRestoreMap.put(
-							ContentsType.Image.getKeyString(), new int[] { imageNumber });
-				}
-			} else {
-				mRestoreMap.put(elm.getContentsType().getKeyString(), new int[] { elm.getSequence() });
-			}
+		// バックログテキストの保存
+		if (elm.getContentsType() == ContentsType.Text) {
+			mBacklogList.add(((Text)elm).getPlainText());
 		}
 
 		mSequence = elm.getSequence();
@@ -187,7 +181,7 @@ public class SaveData implements Serializable {
 	 */
 	public boolean save(Context context) {
 		try (ObjectOutputStream oos =
-					 new ObjectOutputStream(context.openFileOutput(getFileName(), Context.MODE_PRIVATE))) {
+					 new ObjectOutputStream(context.openFileOutput(getFileName(context), Context.MODE_PRIVATE))) {
 			oos.writeObject(this);
 
 			mHasSaved = true;
@@ -204,14 +198,13 @@ public class SaveData implements Serializable {
 	 * @return  ロードに成功したらtrue
 	 */
 	public boolean load(Context context) {
-		try (ObjectInputStream ois = new ObjectInputStream(context.openFileInput(getFileName()))) {
+		try (ObjectInputStream ois = new ObjectInputStream(context.openFileInput(getFileName(context)))) {
 			copyFrom((SaveData) ois.readObject(), true);
 			mHasSaved = true;
 
 			return true;
 		} catch (FileNotFoundException fne) {
 			// ファイルが見つからないだけなら何もしない
-			fne.printStackTrace();
 		} catch (IOException | ClassNotFoundException ice) {
 			ice.printStackTrace();
 		}
@@ -219,17 +212,27 @@ public class SaveData implements Serializable {
 		return false;
 	}
 
-	public void copyFrom(SaveData other, boolean setName) {
+	/**
+	 * otherからこのオブジェクトにセーブデータの中身をコピーする
+	 * @param other			コピー元となるセーブデータ
+	 * @param containsName	セーブデータの名前もコピーするかどうか。trueなら含める
+	 */
+	public void copyFrom(SaveData other, boolean containsName) {
 		this.mSectionIndex = other.mSectionIndex;
 		this.mSequence = other.mSequence;
 		this.mTimeMillis = other.mTimeMillis;
 
-		if (setName) {
+		if (containsName) {
 			this.mName = other.mName;
 		}
 
 		for (String key : other.mRestoreMap.keySet()) {
 			this.mRestoreMap.put(key, other.mRestoreMap.get(key));
+		}
+
+		this.mBacklogList.clear();
+		for (String log : other.mBacklogList) {
+			this.mBacklogList.add(log);
 		}
 	}
 
@@ -237,7 +240,7 @@ public class SaveData implements Serializable {
 	 * slotNumberに対応するセーブファイル名を取得する
 	 * @return  セーブファイル名
 	 */
-	private String getFileName() {
-		return String.format(Locale.JAPANESE, FILENAME_FORMAT, mSlotIndex);
+	private String getFileName(Context context) {
+		return String.format(Locale.JAPANESE, context.getString(R.string.filename_save_data_format), mSlotIndex);
 	}
 }
