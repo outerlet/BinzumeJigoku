@@ -13,17 +13,37 @@
 		app:numberOfLayers="3"
 		/>
 
-	<jp.onetake.binzumejigoku.view.ContentsTextView
-		android:id="@+id/textview_contents"
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_margin="8dp"
-		app:textSize="18sp"
-		app:rubySize="8sp"
-		app:period="50"
-		app:lineSpace="0dp"
-		app:sentenceSpace="@dimen/sentence_space"
-		/>
+		android:layout_margin="8dp">
+
+		<ImageView
+			android:id="@+id/imageview_advance_indicator"
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:padding="6dp"
+			android:alpha="0"
+			android:scaleType="center"
+			android:src="@drawable/ic_wait_advance_24dp"
+			/>
+
+		<jp.onetake.binzumejigoku.view.ContentsTextView
+			android:id="@+id/textview_contents"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_above="@+id/imageview_advance_indicator"
+			app:textSize="18sp"
+			app:rubySize="8sp"
+			app:period="50"
+			app:lineSpace="0dp"
+			app:sentenceSpace="@dimen/sentence_space"
+			/>
+
+	</RelativeLayout>
 
 	<jp.onetake.binzumejigoku.view.ContentsTitleView
 		android:id="@+id/titleview_title"

@@ -1,13 +1,15 @@
 package jp.onetake.binzumejigoku.fragment;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import jp.onetake.binzumejigoku.R;
@@ -52,9 +54,12 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	private ContentsTitleView mTitleView;
 	private ContentsTextView mTextView;
 
+	private ImageView mIndicatorView;
+	private ObjectAnimator mIndicatorAnimation;
+
 	private ContentsHolder mHolder;
 	private boolean mIsOngoing;
-	private int mAdvanceCount;
+	private int mAdvancedCount;
 
 	/**
 	 * 章番号からインスタンスを生成する<br />
@@ -102,6 +107,8 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		mTextView.setPeriod(cif.getTextPeriod());
 		mTextView.setTextSize(cif.getTextSize(), cif.getRubySize());
 
+		mIndicatorView = (ImageView)view.findViewById(R.id.imageview_advance_indicator);
+
 		return view;
 	}
 
@@ -144,8 +151,13 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 			throw new IllegalArgumentException(getString(R.string.exception_illegal_contents_fragment));
 		}
 
+		mIndicatorAnimation = ObjectAnimator.ofFloat(mIndicatorView, "alpha", 0.0f, 1.0f);
+		mIndicatorAnimation.setRepeatMode(ValueAnimator.REVERSE);
+		mIndicatorAnimation.setRepeatCount(ValueAnimator.INFINITE);
+		mIndicatorAnimation.setDuration(1000);
+
 		mIsOngoing = false;
-		mAdvanceCount = 0;
+		mAdvancedCount = 0;
 	}
 
 	@Override
@@ -154,7 +166,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 
 		// 開始と同時にひとつだけ物語を進める
 		// セーブ・ロード画面やバックログから戻ってきた場合は例外
-		if (mAdvanceCount == 0) {
+		if (mAdvancedCount == 0) {
 			advance();
 		}
 	}
@@ -201,13 +213,18 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	 */
 	public void advance() {
 		if (!mIsOngoing) {
+			if (mIndicatorAnimation.isRunning()) {
+				mIndicatorAnimation.cancel();
+				mIndicatorView.setAlpha(0.0f);
+			}
+
 			if (mHolder.hasNext()) {
 				SectionElement element = mHolder.next();
 
 				mIsOngoing = (element instanceof Title || element instanceof Text || element instanceof Image);
 
 				// onResumeで物語を進めるとエフェクトに引っかかりができてしまうので、最初だけは遅延時間を設けておく
-				long delay = (mAdvanceCount == 0) ? getResources().getInteger(R.integer.delay_millis_section_start) : 0;
+				long delay = (mAdvancedCount == 0) ? getResources().getInteger(R.integer.delay_millis_section_start) : 0;
 
 				switch (element.getContentsType()) {
 					case Title:
@@ -230,7 +247,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 						// Do nothing.
 				}
 
-				++mAdvanceCount;
+				++mAdvancedCount;
 
 				// "chain"属性が"immediate"なら更に進める
 				if (element.getChainType() == SectionElement.ChainType.Immediate) {
@@ -278,14 +295,19 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	}
 
 	/**
-	 * "chain"属性が指定されているならユーザーからのインタラクションがなくても物語を先に進める
+	 * 今しがた処理した要素に"chain"属性が指定されているかどうか判定し、指定されていれば
+	 * ユーザーからのインタラクション無しでも物語を先に進める
+	 * @return 物語を先に進めた(="chain"が指定されていた)場合はtrue
 	 */
-	private void advanceIfChained() {
+	private boolean advanceIfChained() {
 		mIsOngoing = false;
 
 		if (mHolder.current().getChainType() == SectionElement.ChainType.Wait) {
 			advance();
+			return true;
 		}
+
+		return false;
 	}
 
 	@Override
@@ -310,11 +332,17 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 			}
 		}
 
-		advanceIfChained();
+		// 自動的に物語が進まないならページを進められることを示すアニメーション
+		if (!advanceIfChained()) {
+			mIndicatorAnimation.start();
+		}
 	}
 
 	@Override
 	public void onEffectFinished(ContentsImageView view) {
-		advanceIfChained();
+		// 自動的に物語が進まないならページを進められることを示すアニメーション
+		if (!advanceIfChained()) {
+			mIndicatorAnimation.start();
+		}
 	}
 }
