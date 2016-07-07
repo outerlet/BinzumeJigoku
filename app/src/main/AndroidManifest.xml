@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="jp.onetake.binzumejigoku"
-		  xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+		  package="jp.onetake.binzumejigoku">
 
 	<application
 		android:allowBackup="true"
@@ -11,6 +11,7 @@
 		<activity android:name=".activity.LaunchActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
+
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
@@ -18,11 +19,21 @@
 		</activity>
 		<activity android:name=".activity.ContentsActivity">
 		</activity>
-		<activity android:name=".activity.SaveActivity" android:theme="@style/TranslucentActivityTheme">
+		<activity
+			android:name=".activity.SaveActivity"
+			android:theme="@style/TranslucentActivityTheme">
 		</activity>
-		<activity android:name=".activity.SettingActivity" android:theme="@style/SettingActivityTheme">
+		<activity
+			android:name=".activity.SettingActivity"
+			android:theme="@style/SettingActivityTheme">
 		</activity>
-		<activity android:name=".activity.BacklogActivity" android:theme="@style/TranslucentActivityTheme">
+		<activity
+			android:name=".activity.BacklogActivity"
+			android:theme="@style/TranslucentActivityTheme">
+		</activity>
+		<activity
+			android:name=".activity.TutorialActivity"
+			android:theme="@style/TranslucentActivityTheme">
 		</activity>
 	</application>
 

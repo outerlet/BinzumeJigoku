@@ -5,6 +5,8 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +20,12 @@ import jp.onetake.binzumejigoku.activity.SaveActivity;
 import jp.onetake.binzumejigoku.contents.common.ContentsHolder;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.SaveData;
+import jp.onetake.binzumejigoku.contents.element.ClearText;
 import jp.onetake.binzumejigoku.contents.element.Image;
 import jp.onetake.binzumejigoku.contents.element.SectionElement;
 import jp.onetake.binzumejigoku.contents.element.Text;
 import jp.onetake.binzumejigoku.contents.element.Title;
+import jp.onetake.binzumejigoku.contents.element.Wait;
 import jp.onetake.binzumejigoku.view.ContentsImageView;
 import jp.onetake.binzumejigoku.view.ContentsTextView;
 import jp.onetake.binzumejigoku.view.ContentsTitleView;
@@ -50,6 +54,8 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	private static final String KEY_SECTION_INDEX	= "ContentsFragment.KEY_SECTION_INDEX";
 	private static final String KEY_SAVE_DATA		= "ContentsFragment.KEY_SAVE_DATA";
 
+	private final int MESSAGE_WHAT_WAIT_FINISHED	= 10001;
+
 	private ContentsImageView mImageView;
 	private ContentsTitleView mTitleView;
 	private ContentsTextView mTextView;
@@ -60,6 +66,14 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	private ContentsHolder mHolder;
 	private boolean mIsOngoing;
 	private int mAdvancedCount;
+
+	private Handler mWaitHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			mIsOngoing = false;
+			advance();
+		}
+	};
 
 	/**
 	 * 章番号からインスタンスを生成する<br />
@@ -128,8 +142,6 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 			mHolder = new ContentsHolder(getActivity(), saveData);
 
 			for (SectionElement e : mHolder.getLatestElementList()) {
-				android.util.Log.i("CHECK", "Type = " + e.getContentsType().toString());
-
 				switch (e.getContentsType()) {
 					case Title:
 						mTitleView.setTitle((Title)e);
@@ -151,10 +163,11 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 			throw new IllegalArgumentException(getString(R.string.exception_illegal_contents_fragment));
 		}
 
+		// タップ待ちであることを示すインジケータ
 		mIndicatorAnimation = ObjectAnimator.ofFloat(mIndicatorView, "alpha", 0.0f, 1.0f);
 		mIndicatorAnimation.setRepeatMode(ValueAnimator.REVERSE);
 		mIndicatorAnimation.setRepeatCount(ValueAnimator.INFINITE);
-		mIndicatorAnimation.setDuration(1000);
+		mIndicatorAnimation.setDuration(getResources().getInteger(R.integer.duration_indicator_switch));
 
 		mIsOngoing = false;
 		mAdvancedCount = 0;
@@ -221,7 +234,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 			if (mHolder.hasNext()) {
 				SectionElement element = mHolder.next();
 
-				mIsOngoing = (element instanceof Title || element instanceof Text || element instanceof Image);
+				mIsOngoing = !(element instanceof ClearText);
 
 				// onResumeで物語を進めるとエフェクトに引っかかりができてしまうので、最初だけは遅延時間を設けておく
 				long delay = (mAdvancedCount == 0) ? getResources().getInteger(R.integer.delay_millis_section_start) : 0;
@@ -236,12 +249,25 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 						mTextView.setText((Text)element);
 						mTextView.start(delay);
 						break;
-					case ClearText:
-						mTextView.clear();
-						break;
 					case Image:
 						mImageView.setImage((Image)element);
 						mImageView.start(delay);
+						break;
+					case Wait:
+						final long duration = ((Wait)element).getDuration();
+						(new Thread() {
+							@Override
+							public void run() {
+								try {
+									Thread.sleep(duration);
+								} catch (InterruptedException ire) {}
+
+								mWaitHandler.obtainMessage(MESSAGE_WHAT_WAIT_FINISHED).sendToTarget();
+							}
+						}).start();
+						break;
+					case ClearText:
+						mTextView.clear();
 						break;
 					default:
 						// Do nothing.
@@ -254,6 +280,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 					advance();
 				}
 			} else {
+				// セクションが最後まで進んだのでオートセーブデータは利用できないものとしてマーク
+				ContentsInterface.getInstance().getSaveData(0).markAsUnusable();
+
 				if (getActivity() instanceof ContentsEventListener) {
 					((ContentsEventListener)getActivity()).onSectionFinished();
 				}

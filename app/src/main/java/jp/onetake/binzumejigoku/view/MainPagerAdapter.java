@@ -9,10 +9,10 @@ import java.util.List;
 
 import jp.onetake.binzumejigoku.fragment.MainFragment;
 
-public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
+public class MainPagerAdapter extends FragmentPagerAdapter {
 	private List<MainFragment> mFragmentList;
 
-	public MainFragmentPagerAdapter(FragmentManager fm) {
+	public MainPagerAdapter(FragmentManager fm) {
 		super(fm);
 
 		mFragmentList = new ArrayList<>();

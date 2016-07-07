@@ -10,6 +10,7 @@ public enum ContentsType {
 	Title,		// 章タイトル
 	Image,		// 背景画像
 	Text,		// テキスト
+	Wait,		// 指定時間待機する
 	ClearText;	// 表示されているテキストをクリアする
 
 	/**

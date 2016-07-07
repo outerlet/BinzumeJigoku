@@ -81,6 +81,10 @@ public class ContentsTextView extends TimerView {
 			return mmTextList.size();
 		}
 
+		public int getColor() {
+			return mmText.getColor();
+		}
+
 		/**
 		 * インデックス値indexにあるテキスト1文字を取得する
 		 * @param index	取得したいテキストのインデックス
@@ -339,6 +343,9 @@ public class ContentsTextView extends TimerView {
 
 			for (int i = 0 ; i < mDetailList.size() ; i++) {
 				DrawDetail detail = mDetailList.get(i);
+
+				mTextPaint.setColor(detail.getColor());
+				mRubyPaint.setColor(detail.getColor());
 
 				int count = (calledCount >= 0 && i == mDetailList.size() - 1) ? calledCount : detail.getTextCount();
 

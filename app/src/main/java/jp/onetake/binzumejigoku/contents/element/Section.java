@@ -51,6 +51,9 @@ public class Section extends Element {
 					case Text:
 						source = new Text(getContext(), mIndex, sequence++);
 						break;
+					case Wait:
+						source = new Wait(getContext(), mIndex, sequence++);
+						break;
 					case ClearText:
 						source = new ClearText(getContext(), mIndex, sequence++);
 						break;

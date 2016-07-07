@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<attr name="textSize" format="dimension" />
+	<attr name="textSizeSp" format="integer" />
 	<attr name="textColor" format="color" />
+	<attr name="space" format="dimension" />
+	<attr name="duration" format="integer" />
 
 	<!-- TimerView -->
 	<declare-styleable name="TimerView">
@@ -32,13 +35,37 @@
 		<!-- テキスト色 -->
 		<attr name="textColor" />
 		<!-- タイトルを表示する時間 -->
-		<attr name="duration" format="integer" />
+		<attr name="duration" />
 	</declare-styleable>
 
 	<!-- ContentsImageView -->
 	<declare-styleable name="ContentsImageView">
 		<!-- レイヤの数 -->
 		<attr name="numberOfLayers" format="integer" />
+	</declare-styleable>
+
+	<!-- FadeInTextView -->
+	<declare-styleable name="FadeInTextView">
+		<!-- テキストサイズ(sp) -->
+		<attr name="textSizeSp" />
+		<!-- テキスト色 -->
+		<attr name="textColor" />
+		<!-- テキスト間のサイズ -->
+		<attr name="space" />
+		<!-- 単一テキストの表示アニメーションにかける時間(ms) -->
+		<attr name="duration" />
+	</declare-styleable>
+	
+	<!-- PagerIndicatorView -->
+	<declare-styleable name="PagerIndicatorView">
+		<!-- インジケータの半径 -->
+		<attr name="radius" format="dimension" />
+		<!-- インジケータ同士の間隔 -->
+		<attr name="space" />
+		<!-- アクティブなインジケータの色 -->
+		<attr name="activeColor" format="color" />
+		<!-- 非アクティブなインジケータの色 -->
+		<attr name="inactiveColor" format="color" />
 	</declare-styleable>
 
 </resources>

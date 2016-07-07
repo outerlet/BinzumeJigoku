@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.text.TextUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -17,7 +18,7 @@ import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 import jp.onetake.binzumejigoku.util.Utility;
 
 /**
- * text要素を制御する要素クラス
+ * テキストの表示を制御する要素クラス
  */
 public class Text extends SectionElement {
 	/**
@@ -28,11 +29,14 @@ public class Text extends SectionElement {
 		Right;	// 右寄せ
 
 		public static Align getValue(String align) {
-			for (Align a : values()) {
-				if (align.equalsIgnoreCase(a.toString())) {
-					return a;
+			if (!TextUtils.isEmpty(align)) {
+				for (Align a : values()) {
+					if (align.equalsIgnoreCase(a.toString())) {
+						return a;
+					}
 				}
 			}
+
 			return Left;
 		}
 	}
@@ -40,6 +44,7 @@ public class Text extends SectionElement {
 	private String mText;
 	private Align mAlign;
 	private int mIndent;
+	private int mColor;
 
 	/**
 	 * コンストラクタ
@@ -91,14 +96,16 @@ public class Text extends SectionElement {
 	@Override
 	public void save(SQLiteDatabase db, ContentValues values) {
 		String textAlign = getAttribute("align");
-		if (!TextUtils.isEmpty(textAlign)) {
-			values.put(ContentsTable.VALUE0.getColumnName(), textAlign);
-		}
+		values.put(ContentsTable.VALUE0.getColumnName(), TextUtils.isEmpty(textAlign) ? "" : textAlign);
 
 		String indent = getAttribute("indent");
-		if (!TextUtils.isEmpty(indent)) {
-			values.put(ContentsTable.VALUE1.getColumnName(), indent);
-		}
+		values.put(ContentsTable.VALUE1.getColumnName(), TextUtils.isEmpty(indent) ? "0" : indent);
+
+		String textSize = getAttribute("text_size");
+		values.put(ContentsTable.VALUE2.getColumnName(), TextUtils.isEmpty(textSize) ? "" : textSize);
+
+		String colorString = getAttribute("color");
+		values.put(ContentsTable.VALUE3.getColumnName(), TextUtils.isEmpty(colorString) ? "" : colorString);
 
 		values.put(ContentsTable.CONTENTS_TEXT.getColumnName(), mText);
 
@@ -109,11 +116,11 @@ public class Text extends SectionElement {
 	public void load(Cursor cursor) {
 		super.load(cursor);
 
-		String align = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE0));
-		mAlign = (TextUtils.isEmpty(align)) ? Align.Left : Align.getValue(align);
+		mAlign = Align.getValue(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE0)));
+		mIndent = Integer.parseInt(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE1)));
 
-		String indent = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE1));
-		mIndent = (TextUtils.isEmpty(indent)) ? 0 : Integer.parseInt(indent);
+		String colorString = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE3));
+		mColor = (TextUtils.isEmpty(colorString)) ? Color.BLACK : Color.parseColor(colorString);
 
 		mText = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
 	}
@@ -124,6 +131,10 @@ public class Text extends SectionElement {
 
 	public int getIndent() {
 		return mIndent;
+	}
+
+	public int getColor() {
+		return mColor;
 	}
 
 	public String getText() {

@@ -11,23 +11,36 @@ import jp.onetake.binzumejigoku.R;
  * コンテンツの内容をデータベースに保存したりデータベースから読み出したりするためのヘルパクラス
  */
 public class ContentsDbOpenHelper extends SQLiteOpenHelper {
+	public static final int INVALID_DB_VERSION	= -1;
+
 	private Context mContext;
+	private int mCurrentVersion;
 
 	public ContentsDbOpenHelper(Context context) {
 		super(context, context.getString(R.string.db_name), null, context.getResources().getInteger(R.integer.db_version));
 
 		mContext = context;
+		mCurrentVersion = INVALID_DB_VERSION;
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(mContext.getString(R.string.db_create_contents_table_sql));
+		mCurrentVersion = mContext.getResources().getInteger(R.integer.db_version);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(mContext.getString(R.string.db_drop_contents_table_sql));
 		onCreate(db);
+	}
+
+	public boolean isModified() {
+		return (mCurrentVersion != INVALID_DB_VERSION);
+	}
+
+	public int getCurrentVersion() {
+		return mCurrentVersion;
 	}
 
 	public void debugPrint() {

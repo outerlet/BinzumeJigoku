@@ -2,7 +2,6 @@ package jp.onetake.binzumejigoku.contents.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
 import jp.onetake.binzumejigoku.R;
@@ -46,8 +45,14 @@ public class ContentsInterface {
 		for (int i = 0 ; i < number ; i++) {
 			SaveData saveData = new SaveData(i);
 
+			// セーブデータを読み込む
+			// オートセーブデータが保存されてない場合はまだ物語が始まってないので、使用できないものとしてマークする
 			if (!saveData.load(context)) {
 				saveData.setName(SaveData.getSaveName(context, i));
+
+				if (i == 0) {
+					saveData.markAsUnusable();
+				}
 			}
 
 			mSaveDatas[i] = saveData;
@@ -71,19 +76,11 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * 読み込み可能なデータベースを取得する
-	 * @return	読み込みモードのデータベース
+	 * データベースにアクセスするためのヘルパオブジェクトを取得する
+	 * @return	データベースにアクセスするためのヘルパオブジェクト
 	 */
-	public SQLiteDatabase getReadableDatabase() {
-		return mDbHelper.getReadableDatabase();
-	}
-
-	/**
-	 * 書き込み可能なデータベースを取得する
-	 * @return	書き込みモードのデータベース
-	 */
-	public SQLiteDatabase getWritableDatabase() {
-		return mDbHelper.getWritableDatabase();
+	public ContentsDbOpenHelper getDatabaseHelper() {
+		return mDbHelper;
 	}
 
 	/**
@@ -139,25 +136,6 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * XMLのパース処理が完了した場合、処理が終わったことを記録する
-	 */
-	public void markAsXmlParsed() {
-		getPreferences().edit()
-				.putBoolean(mContext.getString(R.string.prefkey_is_xml_parsed), true)
-				.apply();
-	}
-
-	/**
-	 * XMLのパース処理が完了しているかどうか<br />
-	 * これまでにmarkAsXmlParsedが呼び出されたことがあるかどうかに等しい
-	 * @return	XMLのパース処理が完了している場合true、未完了ならfalse
-	 */
-	public boolean isXmlParsed() {
-		return getPreferences().getBoolean(
-				mContext.getString(R.string.prefkey_is_xml_parsed), false);
-	}
-
-	/**
 	 * 章番号の最大値をセットしてSharedPreferencesに保存する
 	 * @param sectionIndex	章番号の最大値
 	 */
@@ -191,10 +169,36 @@ public class ContentsInterface {
 		return mSaveDatas[slotIndex];
 	}
 
+	/**
+	 * スロット番号slotIndexにsaveDataをセットする
+	 * @param slotIndex スロット番号
+	 * @param saveData  セーブデータ
+	 */
 	public void setSaveData(int slotIndex, SaveData saveData) {
 		mSaveDatas[slotIndex] = saveData;
 	}
 
+	/**
+	 * チュートリアルが終了したことを記録する
+	 */
+	public void markAsTutorialFinished() {
+		getPreferences().edit()
+				.putBoolean(mContext.getString(R.string.prefkey_tutorial_finished), true)
+				.apply();
+	}
+
+	/**
+	 * チュートリアルが終了しているかを取得する
+	 * @return  チュートリアルが済んでいればtrue
+	 */
+	public boolean isTutorialFinished() {
+		return getPreferences().getBoolean(mContext.getString(R.string.prefkey_tutorial_finished), false);
+	}
+
+	/**
+	 * テキストの描画サイズを取得する
+	 * @return  テキストの描画サイズ(px)
+	 */
 	public float getTextSize() {
 		int size = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_size), "0"));
 		int dimenId = R.dimen.default_text_size;
@@ -210,6 +214,10 @@ public class ContentsInterface {
 		return mContext.getResources().getDimensionPixelSize(dimenId);
 	}
 
+	/**
+	 * ルビの描画サイズを取得する
+	 * @return  ルビの描画サイズ(px)
+	 */
 	public float getRubySize() {
 		int size = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_size), "0"));
 		int dimenId = R.dimen.default_ruby_size;
@@ -225,6 +233,10 @@ public class ContentsInterface {
 		return mContext.getResources().getDimensionPixelSize(dimenId);
 	}
 
+	/**
+	 * テキストの描画間隔を取得する
+	 * @return  テキストの描画間隔(ms)
+	 */
 	public int getTextPeriod() {
 		int speed = Integer.parseInt(getPreferences().getString(mContext.getString(R.string.prefkey_text_speed), "0"));
 		int intId = R.integer.text_period_millis_default;

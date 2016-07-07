@@ -1,48 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string-array name="array_section_titles">
+	<!-- 章のタイトル -->
+	<string-array name="section_titles">
 		<item>@string/title_section0</item>
 		<item>@string/title_section1</item>
 		<item>@string/title_section2</item>
 		<item>@string/title_section3</item>
 	</string-array>
 
-	<string-array name="array_section_summarys">
+	<!-- 章の概要 -->
+	<string-array name="section_summarys">
 		<item>@string/summary_introduction</item>
 		<item>@string/summary_section1</item>
 		<item>@string/summary_section2</item>
 		<item>@string/summary_section3</item>
 	</string-array>
 
-	<array name="array_section_drawables">
-		<item>@drawable/section00</item>
-		<item>@drawable/section01</item>
-		<item>@drawable/section02</item>
+	<!-- 章のイメージ画像 -->
+	<array name="section_drawables">
+		<item>@drawable/section0_01</item>
+		<item>@drawable/section1_01</item>
+		<item>@drawable/section2_01</item>
+		<item>@drawable/section3_00</item>
 	</array>
 
-	<!-- Setting (Text Speed) -->
+	<!-- 設定タイトル：テキスト送りのスピード -->
 	<string-array name="text_speed_entries">
 		<item>早い</item>
 		<item>普通</item>
 		<item>遅い</item>
 	</string-array>
+
+	<!-- 設定値：テキスト送りのスピード -->
 	<string-array name="text_speed_entry_values">
 		<item>1</item>
 		<item>0</item>
 		<item>-1</item>
 	</string-array>
 
-	<!-- Setting (Text Size) -->
+	<!-- 設定タイトル：テキストサイズ -->
 	<string-array name="text_size_entries">
 		<item>大きい</item>
 		<item>普通</item>
 		<item>小さい</item>
 	</string-array>
+
+	<!-- 設定値：テキストサイズ -->
 	<string-array name="text_size_entry_values">
 		<item>1</item>
 		<item>0</item>
 		<item>-1</item>
+	</string-array>
+
+	<!-- チュートリアル(1ページ目) -->
+	<string-array name="tutorial_texts_page1">
+		<item>『瓶詰地獄』あるいは『瓶詰の地獄』は、小説家・夢野久作氏（1889/1/4 - 1936/3/11）の作品です。</item>
+		<item>前置きと三通の手紙から構成された本作は掌編というべき短い作品であり、筋書きもさほど難しいものではありません。</item>
+		<item>しかし三通のどれが最初でどれが最後なのか、時系列を考慮しつつ読み進めると、この物語は様々な矛盾をはらんでいることが分かります。</item>
+		<item>矛盾点については、多くの方が考察しておられます。この物語をどの順番で読み、どのように解釈するかは、読者それぞれに委ねられていることの証かと思います。</item>
+	</string-array>
+
+	<!-- チュートリアル(2ページ目) -->
+	<string-array name="tutorial_texts_page2">
+		<item>このアプリは、『瓶詰地獄』という作品を色々な解釈で楽しんで頂ければと思い作成したものです。</item>
+		<item>前置きと三通の手紙の四つを別々に読んで頂けるようになっていますので、気になったものから読むなり、順番通りに読むなり自由に使ってみて下さい。</item>
+		<item>また、本作にはインモラルな内容や現代では不適切と思われる表現、難読な漢字が見られますが、原文を尊重し一切手を加えていません。その点、ご承知おき頂ければと思います。</item>
+	</string-array>
+
+	<!-- チュートリアル(3ページ目) -->
+	<string-array name="tutorial_texts_page3">
+		<item>読む手紙を選択する画面（以下「メインメニュー」と表記）で、前置きと三通の手紙のどれを読むか選択します。</item>
+		<item>テキストが進んでいるときに画面をタップすると、その文章だけ早送りすることができます。</item>
+		<item>テキストを表示しているときにバックキーを長押しすると、今まで読んだテキストを確認することができます。</item>
+		<item>任意の地点でセーブまたはロードができます。また、最新の地点が自動的にセーブされます。そこから引き続き読みたい場合はメインメニューから再開して下さい。</item>
+		<item>メインメニューから設定画面を開くことができます。ここでは、文字の大きさや文字送りのスピードを選択することができます。</item>
 	</string-array>
 
 </resources>

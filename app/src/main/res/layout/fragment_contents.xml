@@ -36,10 +36,10 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentTop="true"
 			android:layout_above="@+id/imageview_advance_indicator"
-			app:textSize="18sp"
-			app:rubySize="8sp"
-			app:period="50"
-			app:lineSpace="0dp"
+			app:textSize="@dimen/default_text_size"
+			app:rubySize="@dimen/default_ruby_size"
+			app:period="@integer/text_period_millis_default"
+			app:lineSpace="@dimen/line_space"
 			app:sentenceSpace="@dimen/sentence_space"
 			/>
 

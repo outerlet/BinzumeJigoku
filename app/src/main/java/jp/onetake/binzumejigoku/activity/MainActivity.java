@@ -17,14 +17,16 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.fragment.MainFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
-import jp.onetake.binzumejigoku.view.MainFragmentPagerAdapter;
+import jp.onetake.binzumejigoku.view.MainPagerAdapter;
 
 /**
  * メイン画面<br />
  * 以下のアクションを行うことができる
  * <ol>
  *     <li>進行させる章を選択</li>
+ *     <li>続きから始める（オートセーブから始める）</li>
  *     <li>ロード画面を開く</li>
+ *     <li>設定を開く</li>
  * </ol>
  */
 public class MainActivity extends BasicActivity
@@ -40,6 +42,7 @@ public class MainActivity extends BasicActivity
 	private ViewPager mViewPager;
 	private ImageView mIndicatorLeft;
 	private ImageView mIndicatorRight;
+	private MenuItem mContinueMenuItem;
 
 	private int mBackPressCount;
 
@@ -84,14 +87,14 @@ public class MainActivity extends BasicActivity
 		mIndicatorLeft = (ImageView)findViewById(R.id.imageview_indicator_left);
 		mIndicatorRight = (ImageView)findViewById(R.id.imageview_indicator_right);
 
-		String[] titles = getResources().getStringArray(R.array.array_section_titles);
-		String[] summaries = getResources().getStringArray(R.array.array_section_summarys);
-		TypedArray typedArray = getResources().obtainTypedArray(R.array.array_section_drawables);
+		String[] titles = getResources().getStringArray(R.array.section_titles);
+		String[] summaries = getResources().getStringArray(R.array.section_summarys);
+		TypedArray typedArray = getResources().obtainTypedArray(R.array.section_drawables);
 		if (titles.length != summaries.length) {
 			throw new IllegalStateException(getString(R.string.exception_illegal_section_definition));
 		}
 
-		MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getSupportFragmentManager());
+		MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
 		for (int i = 0 ; i < titles.length ; i++) {
 			if (i < typedArray.length()) {
 				adapter.addPage(titles[i], summaries[i], true, typedArray.getResourceId(i, 0));
@@ -107,6 +110,20 @@ public class MainActivity extends BasicActivity
 		mViewPager.addOnPageChangeListener(mPageChangeListener);
 
 		mBackPressCount = 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// コンティニューできなければメニューを出さない
+		// onResumeのほうがonMenuCreatedより先に呼び出されるのでNULL対策
+		if (mContinueMenuItem != null) {
+			mContinueMenuItem.setVisible(ContentsInterface.getInstance().getSaveData(0).isUsable());
+		}
 	}
 
 	/**
@@ -171,6 +188,11 @@ public class MainActivity extends BasicActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+
+		// コンティニューできなければメニュー自体出さない
+		mContinueMenuItem = menu.findItem(R.id.menu_continue);
+		mContinueMenuItem.setVisible(ContentsInterface.getInstance().getSaveData(0).isUsable());
+
 		return true;
 	}
 
@@ -179,16 +201,21 @@ public class MainActivity extends BasicActivity
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.menu_load_latest) {
-			ConfirmDialogFragment
-					.newInstance(R.string.phrase_confirm, R.string.message_load_confirmation_latest)
-					.show(getSupportFragmentManager(), TAG_DIALOG_LOAD_LATEST);
+		if (item.getItemId() == R.id.menu_continue) {
+			// 前回のセーブデータが使える(章の終わりまで行ってない)場合のみロードを確認する
+			if (ContentsInterface.getInstance().getSaveData(0).isUsable()) {
+				ConfirmDialogFragment
+						.newInstance(R.string.phrase_confirm, R.string.message_load_confirmation_latest)
+						.show(getSupportFragmentManager(), TAG_DIALOG_LOAD_LATEST);
+			}
 		} else if (item.getItemId() == R.id.menu_load) {
 			Intent intent = new Intent(this, SaveActivity.class);
 			intent.putExtra(SaveActivity.EXTRA_SAVE_MODE, false);
 			startActivityForResult(intent, getResources().getInteger(R.integer.request_code_save_activity));
 		} else if (item.getItemId() == R.id.menu_setting) {
 			startActivity(new Intent(this, SettingActivity.class));
+		} else if (item.getItemId() == R.id.menu_tutorial) {
+			startActivity(new Intent(this, TutorialActivity.class));
 		}
 
 		return true;

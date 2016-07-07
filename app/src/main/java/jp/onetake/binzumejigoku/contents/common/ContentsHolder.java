@@ -16,6 +16,7 @@ import jp.onetake.binzumejigoku.contents.element.Image;
 import jp.onetake.binzumejigoku.contents.element.SectionElement;
 import jp.onetake.binzumejigoku.contents.element.Text;
 import jp.onetake.binzumejigoku.contents.element.Title;
+import jp.onetake.binzumejigoku.contents.element.Wait;
 
 /**
  * SectionのIndex値に応じたセクションのコンテンツをDBから読み取り、それぞれに応じた要素オブジェクトを生成・保持するクラス
@@ -24,7 +25,7 @@ public class ContentsHolder {
 	private Context mContext;
 	private List<SectionElement> mElementList;
 	private int mCurrentSequence;
-	private SaveData mSaveData;
+	private SaveData mAutoSaveData;
 
 	/**
 	 * 章を最初から始める場合のコンストラクタ<br />
@@ -35,9 +36,9 @@ public class ContentsHolder {
 		mContext = context;
 		mCurrentSequence = -1;
 
-		mSaveData = new SaveData(0);
-		mSaveData.setSectionIndex(sectionIndex);
-		ContentsInterface.getInstance().setSaveData(0, mSaveData);
+		mAutoSaveData = new SaveData(0);
+		mAutoSaveData.setSectionIndex(sectionIndex);
+		ContentsInterface.getInstance().setSaveData(0, mAutoSaveData);
 
 		mElementList = parse(sectionIndex);
 	}
@@ -51,9 +52,9 @@ public class ContentsHolder {
 		mContext = context;
 		mCurrentSequence = saveData.getSequence();
 
-		mSaveData = ContentsInterface.getInstance().getSaveData(0);
-		mSaveData.copyFrom(saveData, false);
-		mSaveData.setSectionIndex(saveData.getSectionIndex());
+		mAutoSaveData = ContentsInterface.getInstance().getSaveData(0);
+		mAutoSaveData.copyFrom(saveData, false);
+		mAutoSaveData.setSectionIndex(saveData.getSectionIndex());
 
 		mElementList = parse(saveData.getSectionIndex());
 	}
@@ -66,7 +67,7 @@ public class ContentsHolder {
 	public List<SectionElement> getLatestElementList() {
 		List<SectionElement> list = new ArrayList<>();
 
-		Map<ContentsType, Integer> map = mSaveData.getContentsSequence();
+		Map<ContentsType, Integer> map = mAutoSaveData.getContentsSequence();
 
 		for (ContentsType type : map.keySet()) {
 			list.add(mElementList.get(map.get(type)));
@@ -93,9 +94,9 @@ public class ContentsHolder {
 
 		// ActivityやFragmentのonPause等のライフサイクルイベントでセーブするとアプリが突然死したときに
 		// 復元できないのでコンテンツが進行するごとにセーブする
-		mSaveData.setTimeMillis(System.currentTimeMillis());
-		mSaveData.setLatestElement(elm);
-		mSaveData.save(mContext);
+		mAutoSaveData.setTimeMillis(System.currentTimeMillis());
+		mAutoSaveData.setLatestElement(elm);
+		mAutoSaveData.save(mContext);
 
 		return elm;
 	}
@@ -115,7 +116,7 @@ public class ContentsHolder {
 	private List<SectionElement> parse(int sectionIndex) throws SQLiteException {
 		List<SectionElement> list = new ArrayList<>();
 
-		try (SQLiteDatabase db = ContentsInterface.getInstance().getReadableDatabase();
+		try (SQLiteDatabase db = ContentsInterface.getInstance().getDatabaseHelper().getReadableDatabase();
 			 Cursor cursor = db.rawQuery(
 					 mContext.getString(R.string.db_query_contents_table_sql), new String[] { Integer.toString(sectionIndex) })) {
 			cursor.moveToFirst();
@@ -135,6 +136,9 @@ public class ContentsHolder {
 						break;
 					case Text:
 						elm = new Text(mContext, sectionIndex, sequence);
+						break;
+					case Wait:
+						elm = new Wait(mContext, sectionIndex, sequence);
 						break;
 					case ClearText:
 						elm = new ClearText(mContext, sectionIndex, sequence);

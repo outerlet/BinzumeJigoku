@@ -4,8 +4,8 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<item
-		android:id="@+id/menu_load_latest"
-		android:title="@string/menu_title_load_latest"
+		android:id="@+id/menu_continue"
+		android:title="@string/menu_title_continue"
 		android:icon="@drawable/ic_schedule_white_24dp"
 		app:showAsAction="always"
 		/>
@@ -21,7 +21,13 @@
 		android:id="@+id/menu_setting"
 		android:title="@string/menu_title_setting"
 		android:icon="@drawable/ic_settings_white_24dp"
-		app:showAsAction="ifRoom"
+		app:showAsAction="always"
+		/>
+
+	<item
+		android:id="@+id/menu_tutorial"
+		android:title="@string/phrase_tutorial"
+		app:showAsAction="never"
 		/>
 
 </menu>

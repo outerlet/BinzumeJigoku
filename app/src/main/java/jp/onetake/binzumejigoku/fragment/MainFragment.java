@@ -23,10 +23,10 @@ public class MainFragment extends Fragment {
 	}
 
 	private static final String KEY_SECTION_INDEX		= "MainFragment.KEY_SECTION_INDEX";
-	private static final String KEY_TITLE				= "MainFragment.KEY_TITLE";
+	private static final String KEY_TITLE					= "MainFragment.KEY_TITLE";
 	private static final String KEY_SUMMARY				= "MainFragment.KEY_SUMMARY";
 	private static final String KEY_SHOW_TITLE			= "MainFragment.KEY_SHOW_TITLE";
-	private static final String KEY_BACKGROUND_RESID	= "MainFragment.KEY_BACKGROUND_RESID";
+	private static final String KEY_BACKGROUND_RESID		= "MainFragment.KEY_BACKGROUND_RESID";
 	private static final int UNKNOWN_DRAWABLE_RESID		= -1;
 
 	public static MainFragment newInstance(int sectionIndex, String title, String summary, boolean showTitle) {

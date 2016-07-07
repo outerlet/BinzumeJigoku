@@ -24,6 +24,7 @@ import jp.onetake.binzumejigoku.contents.element.Text;
 public class SaveData implements Serializable {
 	private static final long serialVersionUID = -3692542681255401454L;
 
+	private boolean mIsUsable;
 	private int mSlotIndex;
 	private int mSectionIndex;
 	private int mSequence;
@@ -53,6 +54,7 @@ public class SaveData implements Serializable {
 		mSlotIndex = slotIndex;
 		mRestoreMap = new HashMap<>();
 		mBacklogList = new ArrayList<>();
+		mIsUsable = true;
 	}
 
 	/**
@@ -61,6 +63,14 @@ public class SaveData implements Serializable {
 	 */
 	public void setSectionIndex(int sectionIndex) {
 		mSectionIndex = sectionIndex;
+	}
+
+	public void markAsUnusable() {
+		mIsUsable = false;
+	}
+
+	public boolean isUsable() {
+		return mIsUsable;
 	}
 
 	/**
@@ -221,6 +231,7 @@ public class SaveData implements Serializable {
 		this.mSectionIndex = other.mSectionIndex;
 		this.mSequence = other.mSequence;
 		this.mTimeMillis = other.mTimeMillis;
+		this.mIsUsable = other.mIsUsable;
 
 		if (containsName) {
 			this.mName = other.mName;
