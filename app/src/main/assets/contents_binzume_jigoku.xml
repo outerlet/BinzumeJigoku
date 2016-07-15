@@ -155,6 +155,7 @@
 		私が死にましたならば、あとから、きっと、アヤ子も身を投げるであろうことが、わかり切っているからでした。
 		</text>
 		<clear-text chain="immediate" />
+		<image src="section2_02" duration="1.0" effect="fade" chain="wait" />
 		<text>
 		私と、アヤ子の二人が、あのボートの上で、附添いの<ruby>乳母|ばあや</ruby>夫妻や、センチョーサンや、ウンテンシュさん達を、波に<ruby>浚|さら</ruby>われたまま、この小さな離れ島に<ruby>漂|なが</ruby>れついてから、もう何年になりましょうか。
 		</text>
@@ -216,6 +217,7 @@
 		私たちは、ホントに<ruby>幸福|しあわせ</ruby>で、<ruby>平安|やすらか</ruby>でした。この島は天国のようでした。
 		</text>
 		<clear-text chain="immediate" />
+		<image src="section2_03" duration="1.0" effect="fade" chain="wait" />
 		<text>
 		かような離れ島の中の、たった二人切りの<ruby>幸福|しあわせ</ruby>の中に、恐ろしい悪魔が忍び込んで来ようと、どうして思われましょう。
 		</text>
@@ -347,68 +349,70 @@
 		見るとアヤ子は、はるかに海の中に突き出ている岬の<ruby>大磐|おおいわ</ruby>の上に<ruby>跪|ひざまず</ruby>いて、大空を仰ぎながらお祈りをしているようです。
 		</text>
 		<clear-text chain="immediate" />
-		<text>
+		<image src="section2_04" duration="1.0" effect="fade" chain="wait" />
+		<text color="#ffffffff">
 		私は二足三足うしろへ、よろめきました。荒浪に取り捲かれた紫色の<ruby>大磐|おおいわ</ruby>の上に、夕日を受けて血のように輝いている<ruby>処女|おとめ</ruby>の背中の<ruby>神々|こうごう</ruby>しさ…………。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		ズンズンと<ruby>潮|うしお</ruby>が高まって来て、膝の下の<ruby>海藻|かいそう</ruby>を洗い漂わしているのも心付かずに、<ruby>黄金色|こがねいろ</ruby>の<ruby>滝浪|たきなみ</ruby>を浴びながら一心に祈っている、その姿の<ruby>崇高|けだか</ruby>さ…………まぶしさ…………。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		私は<ruby>身体|からだ</ruby>を石のように<ruby>固|こわ</ruby>ばらせながら、<ruby>暫|しばら</ruby>くの間、ボンヤリと眼をみはっておりました。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		けれども、そのうちにフイッと、そうしているアヤ子の決心がわかりますと、私はハッとして飛び上がりました。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		夢中になって馳け出して、<ruby>貝殻|かいがら</ruby>ばかりの岩の上を、傷だらけになって<ruby>辷|すべ</ruby>りながら、岬の<ruby>大磐|おおいわ</ruby>の上に這い上りました。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		キチガイのように<ruby>暴|あ</ruby>れ狂い、<ruby>哭|な</ruby>き<ruby>喚|さけ</ruby>ぶアヤ子を、両腕にシッカリと<ruby>抱|だ</ruby>き<ruby>抱|かか</ruby>えて、<ruby>身体|からだ</ruby>中血だらけになって、やっとの思いで、<ruby>小舎|こや</ruby>の処へ帰って来ました。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		けれども私たちの<ruby>小舎|こや</ruby>は、もうそこにはありませんでした。聖書や枯れ草と一緒に、白い煙となって、青空のはるか向うに消え失せてしまっているのでした。
 		</text>
 		<clear-text chain="immediate" />
-		<text>
+		<text color="#ffffffff">
 		それから<ruby>後|のち</ruby>の私たち二人は、<ruby>肉体|からだ</ruby>も<ruby>霊魂|たましい</ruby>も、ホントウの<ruby>幽暗|くらやみ</ruby>に<ruby>逐|お</ruby>い出されて、夜となく、昼となく<ruby>哀哭|かなし</ruby>み、<ruby>切歯|はがみ</ruby>しなければならなくなりました。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		そうしてお互い相抱き、慰さめ、励まし、祈り、悲しみ合うことは愚か、同じ処に寝る事さえも出来ない気もちになってしまったのでした。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		それは、おおかた、私が聖書を焼いた罰なのでしょう。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		夜になると星の光りや、浪の音や、虫の声や、風の葉ずれや、木の実の落ちる音が、一ツ一ツに聖書の言葉を<ruby>咡|ささ</ruby>やきながら、私たち二人を取り巻いて、一歩一歩と近づいて来るように思われるのでした。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		そうして身動き一つ出来ず、<ruby>微睡|まどろ</ruby>むことも出来ないままに、離れ離れになって<ruby>悶|もだ</ruby>えている私たち二人の心を、<ruby>窺視|うかがい</ruby>に来るかのように物怖ろしいのでした。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		こうして長い長い夜が明けますと、今度は同じように長い長い昼が来ます。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		そうするとこの島の中に照る太陽も、
 		</text>
-		<text>
+		<text color="#ffffffff">
 		唄う<ruby>鸚鵡|おうむ</ruby>も、
 		</text>
-		<text>
+		<text color="#ffffffff">
 		舞う極楽鳥も、
 		</text>
-		<text>
+		<text color="#ffffffff">
 		玉虫も、蛾も、ヤシも、パイナプルも、花の色も、
 		</text>
-		<text>
+		<text color="#ffffffff">
 		草の<ruby>芳香|かおり</ruby>も、海も、雲も、風も、虹も、
 		</text>
-		<text>
+		<text color="#ffffffff">
 		みんなアヤ子の、まぶしい姿や、息苦しい肌の<ruby>香|か</ruby>とゴッチャになって、グルグルグルグルと渦巻き輝やきながら、四方八方から私を包み殺そうとして、襲いかかって来るように思われるのです。
 		</text>
-		<text>
+		<text color="#ffffffff">
 		その中から、私とおんなじ苦しみに<ruby>囚|とら</ruby>われているアヤ子の、なやましい<ruby>瞳|め</ruby>が、神様のような悲しみと悪魔のようなホホエミとを別々に<ruby>籠|こ</ruby>めて、いつまでもいつまでも私を、ジイッと見つめているのです。
 		</text>
 		<clear-text chain="immediate" />
+		<image src="section2_01" duration="1.0" effect="fade" chain="wait" />
 		<text>
 		鉛筆が無くなりかけていますから、もうあまり長く書かれません。
 		</text>

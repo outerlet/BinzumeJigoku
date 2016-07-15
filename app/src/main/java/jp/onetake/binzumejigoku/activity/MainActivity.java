@@ -119,6 +119,8 @@ public class MainActivity extends BasicActivity
 	protected void onResume() {
 		super.onResume();
 
+		mViewPager.addOnPageChangeListener(mPageChangeListener);
+
 		// コンティニューできなければメニューを出さない
 		// onResumeのほうがonMenuCreatedより先に呼び出されるのでNULL対策
 		if (mContinueMenuItem != null) {
@@ -130,8 +132,8 @@ public class MainActivity extends BasicActivity
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onPause() {
+		super.onPause();
 
 		mViewPager.removeOnPageChangeListener(mPageChangeListener);
 	}
