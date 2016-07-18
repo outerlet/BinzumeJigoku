@@ -16,6 +16,10 @@
 	<string name="prefkey_text_size">PREFKEY_TEXT_SIZE</string>
 	<string name="prefkey_tutorial_finished">PREFKEY_TUTORIAL_FINISHED</string>
 
+	<!-- In App Billing -->
+	<string name="iab_license_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn11jcLLuCgCHyCX2aGk1jyX+cYJzOlSTKSsiuI5l7hb6a89r5RG+l4CkXPSDOrtXnSfs7BbQqMFODPvQp8mmxPxClmEusFscv1jz7PdGUD/0oHVN1zLSRc6JNlMOj2Xf++Tq4H1E1eaDA4cKpMwA2QfV8AvDJFe/nj+IHfxD78EmE3sGUC7eK2MzOCobb1NlX4HytxA3P44k0Kq6oukChc64pbitcqOjmZm2n7imGG+TGdWT1SXMm88B96zlJJNIn3p8zNzZxCuPKSsnMUpqQuFT+uwQpQM28t5NQqLBXAjYOeIbjWDW0+daVT0fLA8YN3nAywDMgjHiGXnAh7wn6QIDAQAB</string>
+	<string name="iab_item_id">consume_0001</string>
+
 	<!-- フレーズ -->
 	<string name="phrase_ok">はい</string>
 	<string name="phrase_cancel">いいえ</string>
@@ -94,6 +98,8 @@
 	<string name="exception_holder_is_null">ContentsHolder must exist when ContentsFragment.restoreFromSaveData is called.</string>
 	<string name="exception_save_data_not_supplied">SaveActivity must be supplied save data.</string>
 	<string name="exception_unexpected_save_button_clicked">Unexpected save button is clicked.</string>
+	<string name="exception_iab_not_supported">In App Billing is not supported. : CODE = </string>
+	<string name="exception_iab_query_invalid_response">Response code is not zero. : CODE = </string>
 
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>

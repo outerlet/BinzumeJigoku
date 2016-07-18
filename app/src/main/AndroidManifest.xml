@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  package="jp.onetake.binzumejigoku">
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="jp.onetake.binzumejigoku">
+
+	<uses-permission android:name="com.android.vending.BILLING" />
 
 	<application
 		android:allowBackup="true"
@@ -33,6 +36,10 @@
 		</activity>
 		<activity
 			android:name=".activity.TutorialActivity"
+			android:theme="@style/TranslucentActivityTheme">
+		</activity>
+		<activity
+			android:name=".activity.InAppBillingActivity"
 			android:theme="@style/TranslucentActivityTheme">
 		</activity>
 	</application>

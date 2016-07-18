@@ -22,6 +22,7 @@
 	<!-- 'startActivityForResult'メソッドに指定するリクエストコード -->
 	<integer name="request_code_tutorial_activity">10001</integer>
 	<integer name="request_code_save_activity">10002</integer>
+	<integer name="request_code_execute_purchase">10003</integer>
 
 	<!-- テキストの更新間隔 -->
 	<integer name="text_period_millis_default">50</integer>
