@@ -14,6 +14,9 @@ import jp.onetake.binzumejigoku.view.TutorialPagerAdapter;
  * チュートリアルを実行するアクティビティ
  */
 public class TutorialActivity extends BasicActivity {
+	private ViewPager mViewPager;
+	private PagerIndicatorView mPagerIndicator;
+
 	// ページ切り替えをしたときのイベントを捕捉するリスナ
 	// ・初めて表示したページでアニメーションを発生させる
 	// ・ページのインジケータを切り替える
@@ -29,6 +32,7 @@ public class TutorialActivity extends BasicActivity {
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			// アクティビティが最初に表示されたとき。1ページ目のアニメーションを開始しインジケータを1つめに合わせる
 			if (position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && !mmFirstAnimation) {
 				((TutorialPagerAdapter)mViewPager.getAdapter()).startAnimation(position, true);
 				mmFirstAnimation = true;
@@ -40,9 +44,6 @@ public class TutorialActivity extends BasicActivity {
 			// Do nothing.
 		}
 	};
-
-	private ViewPager mViewPager;
-	private PagerIndicatorView mPagerIndicator;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

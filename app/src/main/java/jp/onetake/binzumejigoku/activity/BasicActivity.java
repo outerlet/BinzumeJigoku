@@ -89,18 +89,10 @@ public class BasicActivity extends AppCompatActivity {
 		startActivity(intent);
 	}
 
-	protected void showDialogFragment(DialogFragment dialog, String tag) {
-		try {
-			dialog.show(getSupportFragmentManager(), tag);
-		} catch (IllegalStateException ise) {
-			mPending = new PendingFragment(-1, FragmentMethod.Dialog, dialog, tag);
-		}
-	}
-
 	/**
 	 * Fragmentを置き換える<br />
-	 * FragmentTransaction#replaceやDialogFragment#showでは、メソッドを実行するタイミングによって
-	 * IllegalStateExceptionが出てしまう。その事象への対策も込み
+	 * FragmentTransaction#replaceでは、メソッドを実行するタイミングによってIllegalStateExceptionが発生してしまう<br />
+	 * Illegal...が発生したときはそのFragmentをペンディング状態で保持しておきonPostResumeで改めて表示させる
 	 * @param containerViewId	Fragmentを配置するViewのID
 	 * @param method			Fragmentを配置するのに使うメソッド
 	 * @param fragment			配置するFragment
@@ -122,6 +114,21 @@ public class BasicActivity extends AppCompatActivity {
 			trans.commit();
 		} catch (IllegalStateException ise) {
 			mPending = new PendingFragment(containerViewId, method, fragment, tag);
+		}
+	}
+
+	/**
+	 * DialogFragmentを使ってダイアログを表示する<br />
+	 * postFragmentと同様、DialogFragment#showでは、メソッドを実行するタイミングによってIllegalStateExceptionが発生してしまう<br />
+	 * Illegal...が発生したときはそのFragmentをペンディング状態で保持しておきonPostResumeで改めて表示させる
+	 * @param dialog	表示するダイアログに対応したダイアログフラグメント
+	 * @param tag		ダイアログに関連づけるタグ文字列
+	 */
+	protected void showDialogFragment(DialogFragment dialog, String tag) {
+		try {
+			dialog.show(getSupportFragmentManager(), tag);
+		} catch (IllegalStateException ise) {
+			mPending = new PendingFragment(-1, FragmentMethod.Dialog, dialog, tag);
 		}
 	}
 }

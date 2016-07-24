@@ -23,10 +23,14 @@ import java.util.ArrayList;
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.exception.ContentsException;
 
+/**
+ * アプリ内アイテム（投げ銭＝寄付）の購入を担当するアクティビティ
+ */
 public class InAppBillingActivity extends BasicActivity {
-	private final int MESSAGE_WHAT_IAB_NOT_SUPPORTED	= 10001;
-	private final int MESSAGE_WHAT_QUERY_SUCCEEDED		= 10002;
-	private final int MESSAGE_WHAT_QUERY_FAILED 		= 10003;
+	/* アイテム問い合わせにおいて、どういう結果が返されたかをHandler側で判別するためにwhatに与えるint値 */
+	private final int MESSAGE_WHAT_IAB_NOT_SUPPORTED	= 10001;	// 端末がIABをサポートしていない
+	private final int MESSAGE_WHAT_QUERY_SUCCEEDED		= 10002;	// 問い合わせが正常に完了した
+	private final int MESSAGE_WHAT_QUERY_FAILED 		= 10003;	// 問い合わせにおいて何かしらの問題が発生した
 
 	private IInAppBillingService mService;
 
@@ -53,6 +57,7 @@ public class InAppBillingActivity extends BasicActivity {
 				ArrayList<String> detailList = (ArrayList<String>)msg.obj;
 
 				try {
+					// アイテム情報を取得した
 					if (detailList.size() > 0) {
 						for (String detail : detailList) {
 							JSONObject json = new JSONObject(detail);
@@ -60,11 +65,12 @@ public class InAppBillingActivity extends BasicActivity {
 							String price = json.getString("price");
 
 							android.util.Log.i("IAB-CHECK", "SKU = " + sku + ", PRICE = " + price);
-
-							executePurchase();
-
-							return;
 						}
+
+						executePurchase();
+
+						return;
+					// アイテム情報が取得できなかった
 					} else {
 						Toast.makeText(InAppBillingActivity.this, "Detail list is empty.", Toast.LENGTH_SHORT).show();
 					}
@@ -89,6 +95,9 @@ public class InAppBillingActivity extends BasicActivity {
 		}
 	};
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +107,9 @@ public class InAppBillingActivity extends BasicActivity {
 		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -107,13 +119,16 @@ public class InAppBillingActivity extends BasicActivity {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == getResources().getInteger(R.integer.request_code_execute_purchase)) {
 			int resCode = data.getIntExtra("RESPONSE_CODE", 0);
 			String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
-			String signature = data.getStringExtra("INAPP_DATA_SIGNATURE");
 
+			// 課金処理に成功した
 			if (resultCode == RESULT_OK && resCode == 0) {
 				try {
 					JSONObject jo = new JSONObject(purchaseData);
@@ -123,6 +138,7 @@ public class InAppBillingActivity extends BasicActivity {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+			// 課金処理がうまくいかなかった
 			} else {
 				Toast.makeText(this, "Purchase failed...", Toast.LENGTH_SHORT).show();
 			}
@@ -149,7 +165,7 @@ public class InAppBillingActivity extends BasicActivity {
 
 						Bundle details = mService.getSkuDetails(3, getPackageName(), "inapp", query);
 
-						// SKUの一覧を取得
+						// SKUの一覧を非同期で取得
 						int resCodeQuery = details.getInt("RESPONSE_CODE");
 						if (resCodeQuery == 0) {
 							mHandler.obtainMessage(MESSAGE_WHAT_QUERY_SUCCEEDED, details.getStringArrayList("DETAILS_LIST")).sendToTarget();
@@ -170,10 +186,13 @@ public class InAppBillingActivity extends BasicActivity {
 		}).start();
 	}
 
+	/**
+	 * 課金処理をIABのサービスにリクエストする
+	 * @return	trueの場合は課金処理のリクエストが行われている
+	 */
 	private boolean executePurchase() {
 		try {
 			Bundle intentBundle = mService.getBuyIntent(3, getPackageName(), getString(R.string.iab_item_id), "inapp", null);
-			// Bundle intentBundle = mService.getBuyIntent(3, getPackageName(), "android.test.purchased", "inapp", null);
 
 			int resCode = intentBundle.getInt("RESPONSE_CODE");
 			if (resCode == 0) {

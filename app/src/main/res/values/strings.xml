@@ -7,7 +7,7 @@
 	<string name="filename_contents">contents_binzume_jigoku.xml</string>
 	<string name="filename_save_data_format">binzume-jigoku_%1$02d</string>
 
-	<!-- Preference Keys -->
+	<!-- プリファレンスキー -->
 	<string name="prefkey_ruby_delimiter">PREFKEY_RUBY_DELIMITER</string>
 	<string name="prefkey_ruby_closure">PREFKEY_RUBY_CLOSURE</string>
 	<string name="prefkey_current_db_version">PREFKEY_CURRENT_DB_VERSION</string>
@@ -15,9 +15,10 @@
 	<string name="prefkey_text_speed">PREFKEY_TEXT_SPEED</string>
 	<string name="prefkey_text_size">PREFKEY_TEXT_SIZE</string>
 	<string name="prefkey_tutorial_finished">PREFKEY_TUTORIAL_FINISHED</string>
+	<string name="prefkey_donation_nosave">PREFKEY_DONATION_NOSAVE</string>
+	<string name="prefkey_about_work_nosave">PREFKEY_ABOUT_WORK</string>
 
-	<!-- In App Billing -->
-	<string name="iab_license_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn11jcLLuCgCHyCX2aGk1jyX+cYJzOlSTKSsiuI5l7hb6a89r5RG+l4CkXPSDOrtXnSfs7BbQqMFODPvQp8mmxPxClmEusFscv1jz7PdGUD/0oHVN1zLSRc6JNlMOj2Xf++Tq4H1E1eaDA4cKpMwA2QfV8AvDJFe/nj+IHfxD78EmE3sGUC7eK2MzOCobb1NlX4HytxA3P44k0Kq6oukChc64pbitcqOjmZm2n7imGG+TGdWT1SXMm88B96zlJJNIn3p8zNzZxCuPKSsnMUpqQuFT+uwQpQM28t5NQqLBXAjYOeIbjWDW0+daVT0fLA8YN3nAywDMgjHiGXnAh7wn6QIDAQAB</string>
+	<!-- In App Billing関連 -->
 	<string name="iab_item_id">consume_0001</string>
 
 	<!-- フレーズ -->
@@ -34,6 +35,8 @@
 	<string name="phrase_no_save">保存されていない</string>
 	<string name="phrase_text_history">テキスト履歴</string>
 	<string name="phrase_tutorial">チュートリアル</string>
+	<string name="phrase_execute_donation">寄付する</string>
+	<string name="phrase_cancel_donation">やめておく</string>
 
 	<!-- メニュー項目 -->
 	<string name="menu_title_continue">前回の続き</string>
@@ -64,16 +67,25 @@
 		ハヤク、タスケニ、キテクダサイ。
 	</string>
 
-	<!-- 設定 -->
+	<!-- チュートリアル -->
 	<string name="title_tutorial_page1">このアプリについて</string>
 	<string name="title_tutorial_page2">このアプリについて</string>
 	<string name="title_tutorial_page3">操作方法</string>
+
+	<!-- 設定 -->
+	<string name="title_setting_group_text">表示設定</string>
+	<string name="title_setting_group_donation">ご寄付</string>
+	<string name="title_setting_group_other">その他</string>
 	<string name="title_setting_text_size">文字の大きさ</string>
 	<string name="title_setting_text_speed">文字表示速度</string>
+	<string name="title_setting_donation">投げ銭</string>
+	<string name="title_setting_about_this_work">「瓶詰地獄」について</string>
 	<string name="summary_setting_text_size">文字の大きさを設定します</string>
 	<string name="summary_setting_text_speed">文字送りの速さを設定します</string>
+	<string name="summary_setting_donation">このアプリを気に入って頂けたらご寄付頂けると幸いです</string>
+	<string name="summary_setting_about_this_work">「瓶詰地獄」についての情報です</string>
 
-	<!-- Message -->
+	<!-- メッセージ -->
 	<string name="message_confirm_finish_application">もう一度押して終了</string>
 	<string name="message_confirm_back">物語を中断して前の画面に戻りますか？</string>
 	<string name="message_section_finished">章が終了しました。</string>
@@ -86,10 +98,14 @@
 	<string name="message_load_successful">ロードしました。</string>
 	<string name="message_load_failure">ロードに失敗しました。</string>
 	<string name="message_force_application">アプリを終了します。</string>
+	<string name="message_confirm_donation">
+		このアプリを気に入って頂けたら、ご寄付頂けると幸いです。\n※お支払い頂かなくても機能が制限させるなどはありません。
+	</string>
 
+	<!-- エラー(ユーザーが確認できるもの) -->
 	<string name="error_app_initialize">アプリの初期化に失敗しました</string>
 
-	<!-- Exception -->
+	<!-- 例外(ユーザーが確認できないもの。デバッグ用) -->
 	<string name="exception_message_section_index">Section number is invalid.</string>
 	<string name="exception_message_imageview_visibility">At least one ImageView must be invisible.</string>
 	<string name="exception_illegal_section_definition">Definition of section title and description are not correct.</string>

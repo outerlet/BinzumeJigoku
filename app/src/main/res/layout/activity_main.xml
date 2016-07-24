@@ -23,7 +23,7 @@
 
 	</android.support.design.widget.AppBarLayout>
 
-	<RelativeLayout
+	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -36,7 +36,7 @@
 
 		<ImageView
 			android:id="@+id/imageview_indicator_left"
-			android:layout_alignParentStart="true"
+			android:layout_gravity="center_vertical|start"
 			android:visibility="invisible"
 			android:src="@drawable/page_indicator_left"
 			style="@style/PageIndicator"
@@ -44,12 +44,24 @@
 
 		<ImageView
 			android:id="@+id/imageview_indicator_right"
-			android:layout_alignParentEnd="true"
+			android:layout_gravity="center_horizontal|end"
 			android:visibility="visible"
 			android:src="@drawable/page_indicator_right"
 			style="@style/PageIndicator"
 			/>
 
-	</RelativeLayout>
+		<jp.onetake.binzumejigoku.view.PagerIndicatorView
+			android:id="@+id/pager_indicator_main"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="bottom"
+			android:layout_marginBottom="12dp"
+			app:radius="@dimen/pager_indicator_radius"
+			app:space="@dimen/pager_indicator_space"
+			app:activeColor="@color/white"
+			app:inactiveColor="@color/gray"
+			/>
+
+	</FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

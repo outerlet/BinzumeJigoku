@@ -18,6 +18,8 @@ import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.fragment.MainFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.view.MainPagerAdapter;
+import jp.onetake.binzumejigoku.view.PagerIndicatorView;
+import jp.onetake.binzumejigoku.view.TutorialPagerAdapter;
 
 /**
  * メイン画面<br />
@@ -42,6 +44,7 @@ public class MainActivity extends BasicActivity
 	private ViewPager mViewPager;
 	private ImageView mIndicatorLeft;
 	private ImageView mIndicatorRight;
+	private PagerIndicatorView mPagerIndicator;
 	private MenuItem mContinueMenuItem;
 
 	private int mBackPressCount;
@@ -50,16 +53,23 @@ public class MainActivity extends BasicActivity
 	 * 章を選択するときに使うViewPagerに関わるイベントを捕捉するリスナ
 	 */
 	private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+		private boolean mmFirstAnimation = false;
+
 		@Override
 		public void onPageSelected(int position) {
 			mIndicatorLeft.setVisibility((position == 0) ? View.INVISIBLE : View.VISIBLE);
 			mIndicatorRight.setVisibility(
 					(position == mViewPager.getAdapter().getCount() - 1) ? View.INVISIBLE : View.VISIBLE);
+
+			mPagerIndicator.setActiveIndex(position);
 		}
 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-			// Do nothing.
+			// アクティビティが最初に表示されたとき。インジケータを1つめに合わせる
+			if (position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && !mmFirstAnimation) {
+				mmFirstAnimation = true;
+			}
 		}
 
 		@Override
@@ -108,6 +118,10 @@ public class MainActivity extends BasicActivity
 		mViewPager = (ViewPager)findViewById(R.id.viewpager_section);
 		mViewPager.setAdapter(adapter);
 		mViewPager.addOnPageChangeListener(mPageChangeListener);
+
+		mPagerIndicator = (PagerIndicatorView)findViewById(R.id.pager_indicator_main);
+		mPagerIndicator.setPageCount(adapter.getCount());
+		mPagerIndicator.setActiveIndex(0);
 
 		mBackPressCount = 0;
 	}
@@ -218,8 +232,6 @@ public class MainActivity extends BasicActivity
 			startActivity(new Intent(this, SettingActivity.class));
 		} else if (item.getItemId() == R.id.menu_tutorial) {
 			startActivity(new Intent(this, TutorialActivity.class));
-		} else if (item.getItemId() == R.id.menu_debug) {
-			startActivity(new Intent(this, InAppBillingActivity.class));
 		}
 
 		return true;
