@@ -23,9 +23,9 @@ public class MetaData extends Element {
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
 		super.parse(parser);
 
-		ContentsInterface handler = ContentsInterface.getInstance();
-		handler.setRubyDelimiter(getAttribute("ruby_delimiter"));
-		handler.setRubyClosure(getAttribute("ruby_closure"));
+		ContentsInterface cif = ContentsInterface.getInstance();
+		cif.setRubyDelimiter(getAttribute("ruby_delimiter"));
+		cif.setRubyClosure(getAttribute("ruby_closure"));
 	}
 
 	@Override

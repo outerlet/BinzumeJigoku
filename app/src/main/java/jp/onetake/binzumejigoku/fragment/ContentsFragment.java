@@ -46,9 +46,22 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 
 		/**
 		 * セーブ＆ロード画面で任意のスロットが指定されてロードが要求されたイベントを捉えるリスナメソッド
-		 * @param slotIndex
+		 * @param slotIndex	ロードされる対象のセーブデータに対応するインデックス値
 		 */
 		void onLoadRequested(int slotIndex);
+	}
+
+	/**
+	 * Wait要素によって発生する待機時間が終了したあとに投げられるメッセージを捕捉するハンドラクラス
+	 */
+	private class WaitHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			if (msg.what == MESSAGE_WHAT_WAIT_FINISHED) {
+				mIsOngoing = false;
+				advance();
+			}
+		}
 	}
 
 	private static final String KEY_SECTION_INDEX	= "ContentsFragment.KEY_SECTION_INDEX";
@@ -67,13 +80,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	private boolean mIsOngoing;
 	private int mAdvancedCount;
 
-	private Handler mWaitHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			mIsOngoing = false;
-			advance();
-		}
-	};
+	private Handler mWaitHandler = new WaitHandler();
 
 	/**
 	 * 章番号からインスタンスを生成する<br />
@@ -224,6 +231,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	/**
 	 * 物語をひとつ先に進める
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public void advance() {
 		if (!mIsOngoing) {
 			if (mIndicatorAnimation.isRunning()) {
@@ -260,7 +268,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 							public void run() {
 								try {
 									Thread.sleep(duration);
-								} catch (InterruptedException ire) {}
+								} catch (InterruptedException ignored) {}
 
 								mWaitHandler.obtainMessage(MESSAGE_WHAT_WAIT_FINISHED).sendToTarget();
 							}
@@ -326,7 +334,7 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 	/**
 	 * 今しがた処理した要素に"chain"属性が指定されているかどうか判定し、指定されていれば
 	 * ユーザーからのインタラクション無しでも物語を先に進める
-	 * @return 物語を先に進めた(="chain"が指定されていた)場合はtrue
+	 * @return 物語を先に進めた(chain属性が指定されていた)場合はtrue
 	 */
 	private boolean advanceIfChained() {
 		mIsOngoing = false;

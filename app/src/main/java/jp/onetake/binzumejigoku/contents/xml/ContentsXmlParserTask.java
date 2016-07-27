@@ -12,8 +12,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
+import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
 import jp.onetake.binzumejigoku.contents.element.MetaData;
 import jp.onetake.binzumejigoku.contents.element.Section;
 
@@ -80,13 +82,20 @@ public class ContentsXmlParserTask extends AsyncTask<String, Void, Object> {
 	@Override
 	protected Object doInBackground(String... fileNames) {
 		ContentsInterface cif = ContentsInterface.getInstance();
+		ContentsDbOpenHelper helper = cif.getDatabaseHelper();
 
-		// XMLを解析した結果を保存するためのデータベースオブジェクト
-		// データベースに更新がかかってないなら何もしない
-		SQLiteDatabase db = cif.getDatabaseHelper().getWritableDatabase();
-		if (!cif.getDatabaseHelper().isModified()) {
+		// データベースにデータが入っていれば何もしない
+		// (以下、Android4.4＋Nexus5で確認した不具合への対処)
+		// アプリを初めて起動したあとバックキー2回押しで終了させて、プロセスが死なないうちにフォアグラウンドに回すと
+		// DbOpenHelperのonCreateが実行されるのにテーブルにはデータが入ったままというおかしな状況になる
+		// その状況で後続のパース処理＆DBへのINSERTを行うとSQLiteConstraintException(恐らくPrimary Keyの問題)が
+		// 発生するので、データが入ってれば後続のパース処理は行わないようにする
+		if (helper.isContentsExists()) {
 			return new ResultHolder(false, null);
 		}
+
+		// XMLを解析した結果を保存するためのデータベースオブジェクト
+		SQLiteDatabase db = helper.getWritableDatabase();
 
 		try {
 			// XML解析のためのパーサを取得

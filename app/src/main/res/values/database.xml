@@ -25,6 +25,9 @@
 				CONTENTS_TEXT text,
 				unique(SECTION, SEQUENCE))
 	</string>
+	<string name="db_query_count_table_sql">
+		select count(*) from TBL_CONTENTS
+	</string>
 	<string name="db_query_contents_table_sql">
 		select	SECTION,
 				SEQUENCE,

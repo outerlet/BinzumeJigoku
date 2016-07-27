@@ -99,11 +99,15 @@
 	<string name="message_load_failure">ロードに失敗しました。</string>
 	<string name="message_force_application">アプリを終了します。</string>
 	<string name="message_confirm_donation">
-		このアプリを気に入って頂けたら、ご寄付頂けると幸いです。\n※お支払い頂かなくても機能が制限させるなどはありません。
+		このアプリを気に入って頂けたら、ご寄付頂けると幸いです。\n※お支払い頂かなくても機能が制限されるなどはありません。
 	</string>
+	<string name="message_thanks_donation">ご寄付頂きありがとうございます！\n引き続き本アプリをお楽しみ下さい。</string>
+	<string name="message_already_donated">既にご寄付頂いています。ありがとうございました。</string>
 
 	<!-- エラー(ユーザーが確認できるもの) -->
-	<string name="error_app_initialize">アプリの初期化に失敗しました</string>
+	<string name="error_app_initialize">アプリの初期化に失敗しました。</string>
+	<string name="error_purchase_not_supported">この端末ではアプリ内購入を行うことができません。</string>
+	<string name="error_purchase_failed">アプリ内購入に失敗しました。もしよろしければ、時間をおいて再度お試し下さい。</string>
 
 	<!-- 例外(ユーザーが確認できないもの。デバッグ用) -->
 	<string name="exception_message_section_index">Section number is invalid.</string>
@@ -115,7 +119,8 @@
 	<string name="exception_save_data_not_supplied">SaveActivity must be supplied save data.</string>
 	<string name="exception_unexpected_save_button_clicked">Unexpected save button is clicked.</string>
 	<string name="exception_iab_not_supported">In App Billing is not supported. : CODE = </string>
-	<string name="exception_iab_query_invalid_response">Response code is not zero. : CODE = </string>
+	<string name="exception_iab_query_invalid_response">Failed to query SKUs. : CODE = </string>
+	<string name="exception_iab_cannot_get_purchases">Failed to getPurchases. : CODE = </string>
 
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>
