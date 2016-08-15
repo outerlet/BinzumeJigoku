@@ -51,7 +51,7 @@ public class SettingActivity extends BasicActivity
 		if (prefKey.equals(getString(R.string.prefkey_donation_nosave))) {
 			showDialogFragment(
 					ConfirmDialogFragment.newInstance(
-							R.string.phrase_confirm, R.string.message_confirm_donation, R.string.phrase_execute_donation, R.string.phrase_cancel_donation),
+							R.string.phrase_confirm, R.string.message_confirm_for_purchase, R.string.phrase_execute_donation, R.string.phrase_cancel_donation),
 					TAG_DIALOG_CONFIRM_DONATION);
 
 			return true;
@@ -70,7 +70,7 @@ public class SettingActivity extends BasicActivity
 	public void onConfirmed(DialogFragment dialog, int which) {
 		if (dialog.getTag().equals(TAG_DIALOG_CONFIRM_DONATION)) {
 			if (which == DialogInterface.BUTTON_POSITIVE) {
-				startActivity(new Intent(this, InAppBillingActivity.class));
+				startActivity(new Intent(this, PurchaseActivity.class));
 			}
 		}
 

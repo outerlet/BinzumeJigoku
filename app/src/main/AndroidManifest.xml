@@ -39,7 +39,7 @@
 			android:theme="@style/TranslucentActivityTheme">
 		</activity>
 		<activity
-			android:name=".activity.InAppBillingActivity"
+			android:name=".activity.PurchaseActivity"
 			android:theme="@style/TranslucentActivityTheme">
 		</activity>
 	</application>

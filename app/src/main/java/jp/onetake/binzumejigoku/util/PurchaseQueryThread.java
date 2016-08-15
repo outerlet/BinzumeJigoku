@@ -124,10 +124,22 @@ public class PurchaseQueryThread extends Thread {
 
 			// 購入履歴の有無を確認
 			messageWhat = MESSAGE_WHAT_QUERY_FAILED;
-			String token = checkHasPurchased();
+			String token = checkAlreadyPurchased();
 
+			// 購入を取り消すためのトークンが得られた、つまり既に課金したことがあればこちら
 			if (!TextUtils.isEmpty(token)) {
-				mHandler.obtainMessage(MESSAGE_WHAT_ALREADY_PURCHASED, token).sendToTarget();
+				// 課金を取り消したうえで再度課金を実行する場合はforce_iab_consumeをtrueに設定してこちらの分岐に入る
+				if (mContext.getResources().getBoolean(R.bool.force_iab_consume)) {
+					consumePurchase(token);
+
+					android.util.Log.w("IN-APP-BILLING", "Succeeded consume purchase");
+
+					mHandler.obtainMessage(MESSAGE_WHAT_QUERY_SUCCEEDED, skuList).sendToTarget();
+				// 課金を取り消さない(通常の動作)の場合はこちらの分岐に入る
+				} else {
+					mHandler.obtainMessage(MESSAGE_WHAT_ALREADY_PURCHASED, token).sendToTarget();
+				}
+			// トークンが得られない、つまり課金をしたことがなければこちら
 			} else {
 				mHandler.obtainMessage(MESSAGE_WHAT_QUERY_SUCCEEDED, skuList).sendToTarget();
 			}
@@ -184,7 +196,7 @@ public class PurchaseQueryThread extends Thread {
 	 * @throws RemoteException
 	 * @throws ContentsException
 	 */
-	private String checkHasPurchased() throws RemoteException, ContentsException {
+	private String checkAlreadyPurchased() throws RemoteException, ContentsException {
 		Bundle result = mService.getPurchases(3, mContext.getPackageName(), "inapp", null);
 
 		int resCode = result.getInt("RESPONSE_CODE");
@@ -195,6 +207,7 @@ public class PurchaseQueryThread extends Thread {
 		}
 
 		ArrayList<String> itemList = result.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+
 		if (itemList != null && itemList.size() > 0) {
 			try {
 				ArrayList<String> dataList = result.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
@@ -213,5 +226,20 @@ public class PurchaseQueryThread extends Thread {
 		}
 
 		return null;
+	}
+
+	/**
+	 * 与えられたtokenに対応する購入履歴を取り消す<br />
+	 * ここで引数に与えるのはcheckAlreadyPurchasedの戻り値として得られた文字列
+	 * @param token	購入履歴を取り消すために必要なトークン
+	 * @throws RemoteException
+	 * @throws ContentsException
+	 */
+	private void consumePurchase(String token) throws RemoteException, ContentsException {
+		int response = mService.consumePurchase(3, mContext.getPackageName(), token);
+
+		if (response != 0) {
+			throw new ContentsException(mContext.getString(R.string.exception_iab_cannot_consume_purchases));
+		}
 	}
 }
