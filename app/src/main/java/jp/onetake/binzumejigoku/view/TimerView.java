@@ -11,7 +11,7 @@ import android.view.View;
 import jp.onetake.binzumejigoku.R;
 
 /**
- * 一定時間ごとに描画処理を繰り返すView
+ * 一定の時間間隔ごとに描画処理を繰り返すView
  */
 public abstract class TimerView extends View {
 	/**
@@ -241,7 +241,7 @@ public abstract class TimerView extends View {
 	protected abstract boolean drawByPeriod(Canvas canvas, int calledCount);
 
 	/**
-	 * 全ての描画処理を行う<br />
+	 * 描画処理を全て一度に行う<br />
 	 * つまりタイマーが終了した時点と同じ状態に描画する
 	 * @param canvas	キャンバス
 	 */

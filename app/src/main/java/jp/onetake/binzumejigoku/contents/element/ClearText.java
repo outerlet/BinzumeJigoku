@@ -8,7 +8,7 @@ import org.xmlpull.v1.XmlPullParser;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
 /**
- * clear-text要素を制御する要素クラス
+ * 画面上のテキストを一斉に消去する"clear-text"要素を制御するクラス
  */
 public class ClearText extends SectionElement {
 	/**

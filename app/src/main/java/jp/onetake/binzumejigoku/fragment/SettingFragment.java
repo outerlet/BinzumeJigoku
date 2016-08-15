@@ -10,6 +10,9 @@ import jp.onetake.binzumejigoku.R;
  * 設定画面の表示を担当するフラグメント
  */
 public class SettingFragment extends PreferenceFragmentCompat {
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);

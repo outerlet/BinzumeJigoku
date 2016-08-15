@@ -13,6 +13,10 @@ import java.util.List;
 
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
+/**
+ * セクション(=章)をまとめる"section"要素を制御するクラス<br />
+ * "image"、"text"、"title"などの親要素
+ */
 public class Section extends Element {
 	private List<SectionElement> mElementList;
 	private int mIndex;
@@ -25,10 +29,17 @@ public class Section extends Element {
 		super(context);
 	}
 
+	/**
+	 * 特定のセクションを示すインデックス値を返却する
+	 * @return	セクションを示すインデックス値
+	 */
 	public int getIndex() {
 		return mIndex;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
 		super.parse(parser);
@@ -73,12 +84,19 @@ public class Section extends Element {
 		}
 	}
 
+	/**
+	 * このセクションが抱える子要素をDBに保存する
+	 * @param db	保存するためのDBオブジェクト
+	 */
 	public void save(SQLiteDatabase db) {
 		for (SectionElement e : mElementList) {
 			e.save(db, new ContentValues());
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ContentsType getContentsType() {
 		return ContentsType.Section;

@@ -15,7 +15,7 @@ import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 import jp.onetake.binzumejigoku.util.Utility;
 
 /**
- * title要素を制御する要素クラス
+ * タイトルを表示させるための"title"要素を制御するクラス
  */
 public class Title extends SectionElement {
 	private String mTitle;
@@ -30,6 +30,9 @@ public class Title extends SectionElement {
 		super(context, sectionIndex, sequence);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
 		super.parse(parser);
@@ -45,29 +48,45 @@ public class Title extends SectionElement {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void save(SQLiteDatabase db, ContentValues values) {
-		values.put(ContentsTable.CONTENTS_TEXT.getColumnName(), mTitle);
+		values.put(ContentsTable.CONTENTS_TEXT.toColumnName(), mTitle);
 
 		super.save(db, values);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void load(Cursor cursor) {
 		super.load(cursor);
 
-		mTitle = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
+		mTitle = cursor.getString(ContentsTable.CONTENTS_TEXT.toColumnIndex());
 	}
 
+	/**
+	 * タイトルとして表示する文字列を返却する
+	 * @return	タイトル文字列
+	 */
 	public String getTitle() {
 		return mTitle;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ContentsType getContentsType() {
 		return ContentsType.Title;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return super.toString() + " : title = " + mTitle;

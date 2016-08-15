@@ -55,7 +55,7 @@ public class SettingActivity extends BasicActivity
 					TAG_DIALOG_CONFIRM_DONATION);
 
 			return true;
-			// 「瓶詰地獄」について
+		// 「瓶詰地獄」について
 		} else if (preference.getKey().equals(getString(R.string.prefkey_about_work_nosave))) {
 			return true;
 		}

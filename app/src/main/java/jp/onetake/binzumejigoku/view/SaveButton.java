@@ -10,6 +10,9 @@ import android.widget.TextView;
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.SaveData;
 
+/**
+ * 1つのセーブボタンを表示・制御するためのクラス
+ */
 public class SaveButton extends LinearLayout {
 	private TextView mNameView;
 	private LinearLayout mDetailView;
@@ -19,10 +22,19 @@ public class SaveButton extends LinearLayout {
 
 	private SaveData mSaveData;
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 */
 	public SaveButton(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 * @param attrs		アトリビュートセット
+	 */
 	public SaveButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -34,6 +46,10 @@ public class SaveButton extends LinearLayout {
 		mNoDataView = (TextView)view.findViewById(R.id.textview_no_save_data);
 	}
 
+	/**
+	 * ボタンと関連づけるSaveDataオブジェクトをセットする
+	 * @param saveData	このボタンと関連づけるSaveDataオブジェクト
+	 */
 	public void setSaveData(SaveData saveData) {
 		mSaveData = saveData;
 
@@ -54,6 +70,10 @@ public class SaveButton extends LinearLayout {
 		}
 	}
 
+	/**
+	 * ボタンと関連づけられているSaveDataオブジェクトを返却する
+	 * @return	ボタンと関連付けられているSaveDataオブジェクト
+	 */
 	public SaveData getSaveData() {
 		return mSaveData;
 	}

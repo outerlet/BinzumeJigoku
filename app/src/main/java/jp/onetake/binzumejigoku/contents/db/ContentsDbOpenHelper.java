@@ -11,15 +11,20 @@ import jp.onetake.binzumejigoku.R;
  * コンテンツの内容をデータベースに保存したりデータベースから読み出したりするためのヘルパクラス
  */
 public class ContentsDbOpenHelper extends SQLiteOpenHelper {
+	// DBの更新処理が走った場合、それがどういった内容かを判別するための列挙値
 	private enum UpdateType {
-		None,
-		Create,
-		Upgrade,
+		None,		// なし(便宜上の値)
+		Create,		// 作成(=onCreate)
+		Upgrade,	// 更新(=onUpgrade)
 	}
 
 	private Context mContext;
 	private UpdateType mUpdateType;
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 */
 	public ContentsDbOpenHelper(Context context) {
 		super(context, context.getString(R.string.db_name), null, context.getResources().getInteger(R.integer.db_version));
 
@@ -27,6 +32,9 @@ public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 		mUpdateType = UpdateType.None;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(mContext.getString(R.string.db_create_contents_table_sql));
@@ -34,6 +42,9 @@ public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 		mUpdateType = UpdateType.Create;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(mContext.getString(R.string.db_drop_contents_table_sql));
@@ -67,7 +78,7 @@ public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 		return result;
 	}
 
-	// デバッグ用のクエリを実行して、得られた結果をデバッグログに出力する
+	// デバッグ用のクエリを実行して、得られた結果をデバッグログに出力する.デバッグ用のメソッド
 	public void debugPrint() {
 		SQLiteDatabase db = getReadableDatabase();
 		Cursor c = db.rawQuery(mContext.getString(R.string.db_query_contents_table_sql_debug), null);

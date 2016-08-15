@@ -6,17 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import jp.onetake.binzumejigoku.R;
-import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 
 /**
  * 各セクションを構成する要素を表現するオブジェクト
  */
 public abstract class SectionElement extends Element {
+	/**
+	 * 後続のコンテンツを続けて実行させるための"chain"属性に対応する列挙値
+	 */
 	public enum ChainType {
-		None,
-		Wait,
-		Immediate;
+		None,		// なし
+		Wait,		// 現在のコンテンツが終了するのを待って後続を実行
+		Immediate;	// 現在のコンテンツの終了を待たずに後続を実行
 
 		public static ChainType getValue(String chainText) {
 			for (ChainType c : ChainType.values()) {
@@ -79,12 +81,12 @@ public abstract class SectionElement extends Element {
 	 * @param values	insertに利用する値オブジェクト
 	 */
 	public void save(SQLiteDatabase db, ContentValues values) {
-		values.put(ContentsTable.SECTION.getColumnName(), getSectionIndex());
-		values.put(ContentsTable.SEQUENCE.getColumnName(), getSequence());
-		values.put(ContentsTable.TYPE.getColumnName(), getContentsType().toString());
+		values.put(ContentsTable.SECTION.toColumnName(), getSectionIndex());
+		values.put(ContentsTable.SEQUENCE.toColumnName(), getSequence());
+		values.put(ContentsTable.TYPE.toColumnName(), getContentsType().toString());
 
 		String chain = getAttribute("chain");
-		values.put(ContentsTable.COMMON0.getColumnName(), (chain != null) ? chain : ChainType.None.toString());
+		values.put(ContentsTable.COMMON0.toColumnName(), (chain != null) ? chain : ChainType.None.toString());
 
 		db.insert(getContext().getString(R.string.db_contents_table_name), null, values);
 	}
@@ -95,7 +97,7 @@ public abstract class SectionElement extends Element {
 	 */
 	public void load(Cursor cursor) {
 		mChainType = ChainType.getValue(
-				cursor.getString(ContentsTable.getColumnIndex(ContentsTable.COMMON0)));
+				cursor.getString(ContentsTable.COMMON0.toColumnIndex()));
 	}
 
 	/**

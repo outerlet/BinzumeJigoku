@@ -45,6 +45,9 @@ public class TutorialActivity extends BasicActivity {
 		}
 	};
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

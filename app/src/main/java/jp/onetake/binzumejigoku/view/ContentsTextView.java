@@ -74,13 +74,17 @@ public class ContentsTextView extends TimerView {
 		}
 
 		/**
-		 * テキストの文字数を取得する
+		 * テキストの文字数を返却する
 		 * @return	テキストの文字数
 		 */
 		public int getTextCount() {
 			return mmTextList.size();
 		}
 
+		/**
+		 * テキストの文字色をint値で返却する
+		 * @return	テキストの文字色を示すint値
+		 */
 		public int getColor() {
 			return mmText.getColor();
 		}

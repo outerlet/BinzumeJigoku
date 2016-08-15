@@ -11,15 +11,27 @@ import java.util.List;
 
 import jp.onetake.binzumejigoku.R;
 
+/**
+ * バックログを表示するためのアダプタクラス
+ */
 public class BacklogListAdapter extends ArrayAdapter<String> {
+	// ViewHolder
 	private class ViewHolder {
 		TextView logTextView;
 	}
 
+	/**
+	 * コンストラクタ
+	 * @param context		コンテキスト
+	 * @param backlogList	バックログとして表示する文字列が格納されたリスト
+	 */
 	public BacklogListAdapter(Context context, List<String> backlogList) {
 		super(context, -1, backlogList);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;

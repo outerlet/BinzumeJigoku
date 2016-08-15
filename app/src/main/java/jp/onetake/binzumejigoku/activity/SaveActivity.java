@@ -21,10 +21,16 @@ import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 import jp.onetake.binzumejigoku.view.SaveButton;
 
 /**
- * セーブ・ロードを行うことのできるアクティビティ
+ * セーブおよびロードを行うことのできるアクティビティ。セーブモード・ロードモードのどちらかで起動することができる<br />
+ * セーブモードで開いた場合は初期表示がセーブ画面となっており、画面下のアイコンを押せばロードに切り替えることができる<br />
+ * ロードモードで開いた場合はロード画面が初期表示となり、セーブに切り替えるためのアイコンは表示されない
  */
 public class SaveActivity extends BasicActivity implements View.OnClickListener, ConfirmDialogFragment.OnConfirmListener {
-	/** セーブモードかどうかをIntentのExtraにセットするためのキー */
+	/**
+	 * このアクティビティをセーブモードで開くかどうかをIntentのExtraにセットするためのキー<br />
+	 * trueをセットすればセーブモードで開き、falseならロードモードで開く<br />
+	 * このExtra自体をセットしない場合はセーブモード(true)となる
+	 */
 	public final static String EXTRA_SAVE_MODE	= "SaveActivity.EXTRA_SAVE_MODE";
 
 	/** ロードしたとき呼び出し元のActivityにそのスロット番号を通知するためのキー */

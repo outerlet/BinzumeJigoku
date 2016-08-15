@@ -124,8 +124,9 @@ public class ContentsHolder {
 			for (int i = 0 ; i < cursor.getCount() ; i++) {
 				SectionElement elm;
 
-				ContentsType type = ContentsType.getValue(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.TYPE)));
-				int sequence = Integer.parseInt(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.SEQUENCE)));
+				int sequence = Integer.parseInt(cursor.getString(ContentsTable.SEQUENCE.toColumnIndex()));
+
+				ContentsType type = ContentsType.getValue(cursor.getString(ContentsTable.TYPE.toColumnIndex()));
 
 				switch (type) {
 					case Image:

@@ -41,6 +41,8 @@ public class BasicActivity extends AppCompatActivity {
 		}
 	}
 
+	// IllegalStateExceptionでFragmentが表示できなかった場合、一旦インスタンスをここに確保しておいて
+	// onPostResumeで再配置する
 	private PendingFragment mPending = null;
 
 	/**
@@ -92,7 +94,7 @@ public class BasicActivity extends AppCompatActivity {
 	/**
 	 * Fragmentを置き換える<br />
 	 * FragmentTransaction#replaceでは、メソッドを実行するタイミングによってIllegalStateExceptionが発生してしまう<br />
-	 * Illegal...が発生したときはそのFragmentをペンディング状態で保持しておきonPostResumeで改めて表示させる
+	 * Illegal...が発生したときはそのFragmentをペンディング状態にあるとして保持しておきonPostResumeで改めて表示させる
 	 * @param containerViewId	Fragmentを配置するViewのID
 	 * @param method			Fragmentを配置するのに使うメソッド
 	 * @param fragment			配置するFragment
@@ -120,7 +122,7 @@ public class BasicActivity extends AppCompatActivity {
 	/**
 	 * DialogFragmentを使ってダイアログを表示する<br />
 	 * postFragmentと同様、DialogFragment#showでは、メソッドを実行するタイミングによってIllegalStateExceptionが発生してしまう<br />
-	 * Illegal...が発生したときはそのFragmentをペンディング状態で保持しておきonPostResumeで改めて表示させる
+	 * Illegal...が発生したときはそのFragmentをペンディング状態にあるとして保持しておきonPostResumeで改めて表示させる
 	 * @param dialog	表示するダイアログに対応したダイアログフラグメント
 	 * @param tag		ダイアログに関連づけるタグ文字列
 	 */

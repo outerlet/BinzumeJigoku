@@ -4,7 +4,8 @@ import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 
 /**
- * 全Fragmentが継承すべき基底Fragment
+ * このアプリで用いられるFragmentが基本的に継承する基底Fragment<br />
+ * PreferenceFragmentなどがあるので「全てのFragment」が継承する訳ではない
  */
 public class BasicFragment extends Fragment {
 	/**

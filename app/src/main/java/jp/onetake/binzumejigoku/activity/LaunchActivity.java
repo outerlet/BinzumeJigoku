@@ -61,6 +61,9 @@ public class LaunchActivity extends BasicActivity implements ContentsXmlParserTa
 		startAnimation(true);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == getResources().getInteger(R.integer.request_code_tutorial_activity)) {
@@ -70,10 +73,10 @@ public class LaunchActivity extends BasicActivity implements ContentsXmlParserTa
 	}
 
 	/**
+	 * {@inheritDoc}
 	 * <p>
 	 * このActivityでバックキーは無効にしておく
 	 * </p>
-	 * {@inheritDoc}
 	 */
 	@Override
 	public void onBackPressed() {
@@ -96,6 +99,9 @@ public class LaunchActivity extends BasicActivity implements ContentsXmlParserTa
 		anim.start();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onParseFinished(boolean executed) {
 		mProgressBar.setVisibility(View.INVISIBLE);
@@ -109,6 +115,9 @@ public class LaunchActivity extends BasicActivity implements ContentsXmlParserTa
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onExceptionOccurred(Exception e) {
 		e.printStackTrace();

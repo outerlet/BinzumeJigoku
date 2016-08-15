@@ -18,7 +18,7 @@ import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 import jp.onetake.binzumejigoku.util.Utility;
 
 /**
- * テキストの表示を制御する要素クラス
+ * テキストを表示させるための"text"要素を制御するクラス
  */
 public class Text extends SectionElement {
 	/**
@@ -56,6 +56,9 @@ public class Text extends SectionElement {
 		super(context, sectionIndex, sequence);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
 		super.parse(parser);
@@ -93,54 +96,82 @@ public class Text extends SectionElement {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void save(SQLiteDatabase db, ContentValues values) {
 		String textAlign = getAttribute("align");
-		values.put(ContentsTable.VALUE0.getColumnName(), TextUtils.isEmpty(textAlign) ? "" : textAlign);
+		values.put(ContentsTable.VALUE0.toColumnName(), TextUtils.isEmpty(textAlign) ? "" : textAlign);
 
 		String indent = getAttribute("indent");
-		values.put(ContentsTable.VALUE1.getColumnName(), TextUtils.isEmpty(indent) ? "0" : indent);
+		values.put(ContentsTable.VALUE1.toColumnName(), TextUtils.isEmpty(indent) ? "0" : indent);
 
 		String textSize = getAttribute("text_size");
-		values.put(ContentsTable.VALUE2.getColumnName(), TextUtils.isEmpty(textSize) ? "" : textSize);
+		values.put(ContentsTable.VALUE2.toColumnName(), TextUtils.isEmpty(textSize) ? "" : textSize);
 
 		String colorString = getAttribute("color");
-		values.put(ContentsTable.VALUE3.getColumnName(), TextUtils.isEmpty(colorString) ? "" : colorString);
+		values.put(ContentsTable.VALUE3.toColumnName(), TextUtils.isEmpty(colorString) ? "" : colorString);
 
-		values.put(ContentsTable.CONTENTS_TEXT.getColumnName(), mText);
+		values.put(ContentsTable.CONTENTS_TEXT.toColumnName(), mText);
 
 		super.save(db, values);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void load(Cursor cursor) {
 		super.load(cursor);
 
-		mAlign = Align.getValue(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE0)));
-		mIndent = Integer.parseInt(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE1)));
+		mAlign = Align.getValue(cursor.getString(ContentsTable.VALUE0.toColumnIndex()));
+		mIndent = Integer.parseInt(cursor.getString(ContentsTable.VALUE1.toColumnIndex()));
 
-		String colorString = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE3));
+		String colorString = cursor.getString(ContentsTable.VALUE3.toColumnIndex());
 		mColor = (TextUtils.isEmpty(colorString)) ? Color.BLACK : Color.parseColor(colorString);
 
-		mText = cursor.getString(ContentsTable.getColumnIndex(ContentsTable.CONTENTS_TEXT));
+		mText = cursor.getString(ContentsTable.CONTENTS_TEXT.toColumnIndex());
 	}
 
+	/**
+	 * テキストを寄せる側を示すAlign列挙値を返却する
+	 * @return	テキストを寄せる側
+	 */
 	public Align getAlign() {
 		return mAlign;
 	}
 
-	public int getIndent() {
+	/**
+	 * インデントを返却する
+	 * @return	インデント
+	 */
+	public int getIndent () {
 		return mIndent;
 	}
 
+	/**
+	 *  テキスト色に対応するint値を返却する
+	 * @return	テキスト色に対応するint値
+	 */
 	public int getColor() {
 		return mColor;
 	}
 
+	/**
+	 * この要素が表示すべきテキストを返却する<br />
+	 * ここで返されるのはパースする前、ルビの情報を含んだ(可読性の低い)文字列
+	 * @return	テキスト(ルビ情報入り)
+	 */
 	public String getText() {
 		return mText;
 	}
 
+	/**
+	 * この要素が表示すべきテキストを返却する<br />
+	 * ここで返されるのはルビの情報を含まない文字列
+	 * @return	テキスト(ルビ情報なし)
+	 */
 	public String getPlainText() {
 		ContentsInterface cif = ContentsInterface.getInstance();
 		StringBuilder buffer = new StringBuilder();
@@ -158,11 +189,17 @@ public class Text extends SectionElement {
 		return buffer.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ContentsType getContentsType() {
 		return ContentsType.Text;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return super.toString() + " : text = " + mText;

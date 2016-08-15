@@ -9,7 +9,8 @@ import jp.onetake.binzumejigoku.contents.common.ContentsType;
 import jp.onetake.binzumejigoku.contents.db.ContentsTable;
 
 /**
- * 待機時間を発生させるための要素クラス
+ * 指定した時間だけコンテンツの進行を待機させる"wait"要素を制御するクラス
+ *
  */
 public class Wait extends SectionElement {
 	private long mDuration;
@@ -24,18 +25,24 @@ public class Wait extends SectionElement {
 		super(context, sectionIndex, sequence);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void save(SQLiteDatabase db, ContentValues values) {
-		values.put(ContentsTable.VALUE0.getColumnName(), getAttribute("duration"));
+		values.put(ContentsTable.VALUE0.toColumnName(), getAttribute("duration"));
 
 		super.save(db, values);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void load(Cursor cursor) {
 		super.load(cursor);
 
-		mDuration = (long)(Float.parseFloat(cursor.getString(ContentsTable.getColumnIndex(ContentsTable.VALUE0))) * 1000);
+		mDuration = (long)(Float.parseFloat(cursor.getString(ContentsTable.VALUE0.toColumnIndex())) * 1000);
 	}
 
 	/**
@@ -46,6 +53,9 @@ public class Wait extends SectionElement {
 		return mDuration;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ContentsType getContentsType() {
 		return ContentsType.Wait;

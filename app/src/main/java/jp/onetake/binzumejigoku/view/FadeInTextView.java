@@ -17,7 +17,8 @@ import java.util.List;
 import jp.onetake.binzumejigoku.R;
 
 /**
- * テキストがフェードインアニメーションで表示される、LinearLayoutを拡張したView
+ * 複数のテキストをフェードインアニメーションで表示させるView<br />
+ * 一斉にフェード表示させるか、1つずつ順番にフェードさせるかを選択できる
  */
 public class FadeInTextView extends LinearLayout {
 	private List<TextView> mTextViewList;
@@ -25,18 +26,27 @@ public class FadeInTextView extends LinearLayout {
 	private int mTextColor;
 	private int mSpace;
 	private int mDuration;
-	private boolean mHasFaded;
+	private boolean mIsFadeFinished;
 
 	private AnimatorSet mAnimatorSet;
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 */
 	public FadeInTextView(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 * @param attrs		アトリビュートセット
+	 */
 	public FadeInTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		mHasFaded = false;
+		mIsFadeFinished = false;
 		mTextViewList = new ArrayList<>();
 
 		setOrientation(LinearLayout.VERTICAL);
@@ -61,6 +71,10 @@ public class FadeInTextView extends LinearLayout {
 		}
 	}
 
+	/**
+	 * フェードさせるテキストを1つ追加する
+	 * @param text
+	 */
 	public void addText(String text) {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -81,17 +95,27 @@ public class FadeInTextView extends LinearLayout {
 		mTextViewList.add(textView);
 	}
 
-	public boolean hasFaded() {
-		return mHasFaded;
+	/**
+	 * フェードによるテキスト表示が終了しているかを返却する
+	 * @return	テキスト表示が終了していればtrue
+	 */
+	public boolean isFadeFinished() {
+		return mIsFadeFinished;
 	}
 
+	/**
+	 * フェードアニメーションを開始する<br />
+	 * sequentialの値によって一斉にフェードするか、順番にフェードするかが変わる
+	 * @param sequential	どのようにフェードさせるか.trueなら順番に、falseなら一斉に
+	 * @param delay			フェードが開始するまでの遅延時間(ms)
+	 */
 	public void start(boolean sequential, long delay) {
 		List<Animator> list = new ArrayList<>();
 		for (TextView tv : mTextViewList) {
 			list.add(ObjectAnimator.ofFloat(tv, "alpha", 0.0f, 1.0f));
 		}
 
-		mHasFaded = true;
+		mIsFadeFinished = true;
 
 		mAnimatorSet = new AnimatorSet();
 

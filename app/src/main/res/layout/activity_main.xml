@@ -44,7 +44,7 @@
 
 		<ImageView
 			android:id="@+id/imageview_indicator_right"
-			android:layout_gravity="center_horizontal|end"
+			android:layout_gravity="center_vertical|end"
 			android:visibility="visible"
 			android:src="@drawable/page_indicator_right"
 			style="@style/PageIndicator"

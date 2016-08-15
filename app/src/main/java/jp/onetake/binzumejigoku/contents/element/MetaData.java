@@ -10,6 +10,9 @@ import java.io.IOException;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
 
+/**
+ * コンテンツ全体に関わるメタ情報を制御する要素クラス
+ */
 public class MetaData extends Element {
 	/**
 	 * コンストラクタ
@@ -19,6 +22,9 @@ public class MetaData extends Element {
 		super(context);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void parse(XmlPullParser parser) throws IOException, XmlPullParserException {
 		super.parse(parser);
@@ -28,6 +34,9 @@ public class MetaData extends Element {
 		cif.setRubyClosure(getAttribute("ruby_closure"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ContentsType getContentsType() {
 		return ContentsType.MetaData;

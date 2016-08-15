@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import jp.onetake.binzumejigoku.view.TimerView;
 /**
  * 物語を進めるフラグメント
  */
-public class ContentsFragment extends Fragment implements TimerView.TimerListener, ContentsImageView.EffectListener {
+public class ContentsFragment extends BasicFragment implements TimerView.TimerListener, ContentsImageView.EffectListener {
 	/**
 	 * コンテンツを進行させるうえで発生しうるイベントを捕捉するためのリスナ
 	 */
@@ -112,6 +111,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		return fragment;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_contents, container, false);
@@ -133,6 +135,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		return view;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -180,6 +185,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		mAdvancedCount = 0;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -191,6 +199,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -347,6 +358,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onTimerStarted(TimerView view) {
 		if (!(view instanceof ContentsTitleView) && mTitleView.getVisibility() == View.VISIBLE) {
@@ -354,11 +368,18 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param view	TimerView
+	 */
 	@Override
 	public void onTimerPeriod(TimerView view) {
 		// Do nothing.
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onTimerStopped(TimerView view) {
 		if (view instanceof ContentsTitleView) {
@@ -375,6 +396,9 @@ public class ContentsFragment extends Fragment implements TimerView.TimerListene
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onEffectFinished(ContentsImageView view) {
 		// 自動的に物語が進まないならページを進められることを示すアニメーション

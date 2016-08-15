@@ -9,6 +9,10 @@ import android.view.View;
 
 import jp.onetake.binzumejigoku.R;
 
+/**
+ * ViewPagerなどで利用するためのインジケータ。総ページ数と現在のページを視覚的に表示するためのもの<br />
+ * iOSのUIPageIndicatorのマネっこクラス
+ */
 public class PagerIndicatorView extends View {
 	private int mPageCount;
 	private int mActiveIndex;
@@ -17,10 +21,19 @@ public class PagerIndicatorView extends View {
 	private int mActiveColor;
 	private int mInactiveColor;
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 */
 	public PagerIndicatorView(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * コンストラクタ
+	 * @param context	コンテキスト
+	 * @param attrs		アトリビュートセット
+	 */
 	public PagerIndicatorView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -50,28 +63,51 @@ public class PagerIndicatorView extends View {
 		}
 	}
 
+	/**
+	 * アクティブなページであることを示すインジケータの色
+	 * @param activeColor	インジケータの色を示すint値
+	 */
 	public void setActiveColor(int activeColor) {
 		mActiveColor = activeColor;
 	}
 
+	/**
+	 * インジケータの大きさ(=半径)を設定する
+	 * @param radius	インジケータの半径
+	 */
 	public void setRadius(float radius) {
 		mRadius = radius;
 	}
 
+	/**
+	 * インジケータ同士の間隔を設定する
+	 * @param distance	インジケータ同士の間隔
+	 */
 	public void setDistance(float distance) {
 		mSpace = distance;
 	}
 
+	/**
+	 * ページの総数を設定する
+	 * @param pageCount	ページの総数
+	 */
 	public void setPageCount(int pageCount) {
 		mPageCount = pageCount;
 	}
 
+	/**
+	 * アクティブなページがどこかをセットする
+	 * @param activeIndex	アクティブなページを示すインデックス値
+	 */
 	public void setActiveIndex(int activeIndex) {
 		mActiveIndex = activeIndex;
 
 		invalidate();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -81,6 +117,9 @@ public class PagerIndicatorView extends View {
 				MeasureSpec.makeMeasureSpec((int)mRadius * 4, MeasureSpec.EXACTLY));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
