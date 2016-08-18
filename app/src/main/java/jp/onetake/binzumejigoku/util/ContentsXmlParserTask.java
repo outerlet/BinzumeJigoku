@@ -1,4 +1,4 @@
-package jp.onetake.binzumejigoku.contents.xml;
+package jp.onetake.binzumejigoku.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -82,20 +82,15 @@ public class ContentsXmlParserTask extends AsyncTask<String, Void, Object> {
 	@Override
 	protected Object doInBackground(String... fileNames) {
 		ContentsInterface cif = ContentsInterface.getInstance();
-		ContentsDbOpenHelper helper = cif.getDatabaseHelper();
 
-		// データベースにデータが入っていれば何もしない
-		// (以下、Android4.4＋Nexus5で確認した不具合への対処)
+		// (MEMO:Android4.4＋Nexus5)
 		// アプリを初めて起動したあとバックキー2回押しで終了させて、プロセスが死なないうちにフォアグラウンドに回すと
 		// DbOpenHelperのonCreateが実行されるのにテーブルにはデータが入ったままというおかしな状況になる
-		// その状況で後続のパース処理＆DBへのINSERTを行うとSQLiteConstraintException(恐らくPrimary Keyの問題)が
-		// 発生するので、データが入ってれば後続のパース処理は行わないようにする
-		if (helper.isContentsExists()) {
-			return new ResultHolder(false, null);
-		}
+		// その状況で後続のパース処理＆DBへのINSERTを行うとSQLiteConstraintException(PrimaryKeyの問題)が発生する
+		// また、このSQLiteConstraintExceptionはなぜかtry-catchで捕捉できない
 
 		// XMLを解析した結果を保存するためのデータベースオブジェクト
-		SQLiteDatabase db = helper.getWritableDatabase();
+		SQLiteDatabase db = cif.getDatabaseHelper().getWritableDatabase();
 
 		try {
 			// XML解析のためのパーサを取得

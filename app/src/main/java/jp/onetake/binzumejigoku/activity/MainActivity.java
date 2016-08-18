@@ -231,6 +231,8 @@ public class MainActivity extends BasicActivity
 		} else if (item.getItemId() == R.id.menu_setting) {
 			startActivity(new Intent(this, SettingActivity.class));
 		} else if (item.getItemId() == R.id.menu_tutorial) {
+			ContentsInterface.getInstance().getDatabaseHelper().debugPrint();
+
 			startActivity(new Intent(this, TutorialActivity.class));
 		}
 

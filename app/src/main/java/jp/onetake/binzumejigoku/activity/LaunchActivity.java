@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
-import jp.onetake.binzumejigoku.contents.xml.ContentsXmlParserTask;
+import jp.onetake.binzumejigoku.util.ContentsXmlParserTask;
 
 /**
  * 起動ポイントとなるアクティビティ

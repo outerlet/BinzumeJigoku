@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import java.util.Locale;
 
@@ -48,6 +49,8 @@ public class Image extends SectionElement {
 	 */
 	public Image(Context context, int sectionIndex, int sequence) {
 		super(context, sectionIndex, sequence);
+
+		mDuration = 0;
 	}
 
 	/**
@@ -122,6 +125,9 @@ public class Image extends SectionElement {
 		return String.format(
 				Locale.US,
 				"%1$s : src = %2$s, duration = %3$d, effect = %4$s",
-				super.toString(), mSrc, mDuration, mEffectType.toString());
+				super.toString(),
+				TextUtils.isEmpty(mSrc) ? "NULL" : mSrc,
+				mDuration,
+				(mEffectType != null)? mEffectType.toString() : "NULL");
 	}
 }

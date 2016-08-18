@@ -45,28 +45,29 @@ public class Section extends Element {
 		super.parse(parser);
 
 		mIndex = Integer.parseInt(getAttribute("index"));
-		int sequence = 0;
 		mElementList = new ArrayList<>();
 
 		while (true) {
 			if (parser.getEventType() == XmlPullParser.START_TAG) {
+				int sequence = mElementList.size();
+
 				SectionElement source = null;
 
 				switch (ContentsType.getValue(parser.getName())) {
 					case Title:
-						source = new Title(getContext(), mIndex, sequence++);
+						source = new Title(getContext(), mIndex, sequence);
 						break;
 					case Image:
-						source = new Image(getContext(), mIndex, sequence++);
+						source = new Image(getContext(), mIndex, sequence);
 						break;
 					case Text:
-						source = new Text(getContext(), mIndex, sequence++);
+						source = new Text(getContext(), mIndex, sequence);
 						break;
 					case Wait:
-						source = new Wait(getContext(), mIndex, sequence++);
+						source = new Wait(getContext(), mIndex, sequence);
 						break;
 					case ClearText:
-						source = new ClearText(getContext(), mIndex, sequence++);
+						source = new ClearText(getContext(), mIndex, sequence);
 						break;
 					default:
 						break;
@@ -89,8 +90,9 @@ public class Section extends Element {
 	 * @param db	保存するためのDBオブジェクト
 	 */
 	public void save(SQLiteDatabase db) {
-		for (SectionElement e : mElementList) {
-			e.save(db, new ContentValues());
+		// デバッグのために敢えてIteratorは使わない
+		for (int i = 0 ; i < mElementList.size() ; i++) {
+			mElementList.get(i).save(db, new ContentValues());
 		}
 	}
 

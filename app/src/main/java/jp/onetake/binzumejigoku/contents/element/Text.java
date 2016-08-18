@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.common.ContentsType;
@@ -101,18 +102,10 @@ public class Text extends SectionElement {
 	 */
 	@Override
 	public void save(SQLiteDatabase db, ContentValues values) {
-		String textAlign = getAttribute("align");
-		values.put(ContentsTable.VALUE0.toColumnName(), TextUtils.isEmpty(textAlign) ? "" : textAlign);
-
-		String indent = getAttribute("indent");
-		values.put(ContentsTable.VALUE1.toColumnName(), TextUtils.isEmpty(indent) ? "0" : indent);
-
-		String textSize = getAttribute("text_size");
-		values.put(ContentsTable.VALUE2.toColumnName(), TextUtils.isEmpty(textSize) ? "" : textSize);
-
-		String colorString = getAttribute("color");
-		values.put(ContentsTable.VALUE3.toColumnName(), TextUtils.isEmpty(colorString) ? "" : colorString);
-
+		values.put(ContentsTable.VALUE0.toColumnName(), getAttribute("align"));
+		values.put(ContentsTable.VALUE1.toColumnName(), getAttribute("indent"));
+		values.put(ContentsTable.VALUE2.toColumnName(), getAttribute("text_size"));
+		values.put(ContentsTable.VALUE3.toColumnName(), getAttribute("color"));
 		values.put(ContentsTable.CONTENTS_TEXT.toColumnName(), mText);
 
 		super.save(db, values);
@@ -126,10 +119,16 @@ public class Text extends SectionElement {
 		super.load(cursor);
 
 		mAlign = Align.getValue(cursor.getString(ContentsTable.VALUE0.toColumnIndex()));
-		mIndent = Integer.parseInt(cursor.getString(ContentsTable.VALUE1.toColumnIndex()));
 
-		String colorString = cursor.getString(ContentsTable.VALUE3.toColumnIndex());
-		mColor = (TextUtils.isEmpty(colorString)) ? Color.BLACK : Color.parseColor(colorString);
+		String indent = cursor.getString(ContentsTable.VALUE1.toColumnIndex());
+		try {
+			mIndent = TextUtils.isEmpty(indent) ? 0 : Integer.parseInt(indent);
+		} catch (NumberFormatException nfe) {
+			mIndent = 0;
+		}
+
+		String color = cursor.getString(ContentsTable.VALUE3.toColumnIndex());
+		mColor = (TextUtils.isEmpty(color)) ? Color.BLACK : Color.parseColor(color);
 
 		mText = cursor.getString(ContentsTable.CONTENTS_TEXT.toColumnIndex());
 	}

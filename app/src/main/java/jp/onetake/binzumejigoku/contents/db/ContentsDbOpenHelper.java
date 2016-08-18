@@ -11,15 +11,7 @@ import jp.onetake.binzumejigoku.R;
  * コンテンツの内容をデータベースに保存したりデータベースから読み出したりするためのヘルパクラス
  */
 public class ContentsDbOpenHelper extends SQLiteOpenHelper {
-	// DBの更新処理が走った場合、それがどういった内容かを判別するための列挙値
-	private enum UpdateType {
-		None,		// なし(便宜上の値)
-		Create,		// 作成(=onCreate)
-		Upgrade,	// 更新(=onUpgrade)
-	}
-
 	private Context mContext;
-	private UpdateType mUpdateType;
 
 	/**
 	 * コンストラクタ
@@ -29,7 +21,6 @@ public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 		super(context, context.getString(R.string.db_name), null, context.getResources().getInteger(R.integer.db_version));
 
 		mContext = context;
-		mUpdateType = UpdateType.None;
 	}
 
 	/**
@@ -38,8 +29,6 @@ public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(mContext.getString(R.string.db_create_contents_table_sql));
-
-		mUpdateType = UpdateType.Create;
 	}
 
 	/**
@@ -48,34 +37,7 @@ public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(mContext.getString(R.string.db_drop_contents_table_sql));
-		onCreate(db);
-
-		mUpdateType = UpdateType.Upgrade;
-	}
-
-	/**
-	 * 物語のデータを保存するテーブルにクエリをかけてデータの有無を確認する
-	 * @return	データが保存されているならtrue、テーブルが空ならfalse
-	 */
-	public boolean isContentsExists() {
-		boolean result = true;
-
-		SQLiteDatabase db = getReadableDatabase();
-
-		// DBに更新処理がかかっている場合はテーブルのデータを確認する
-		if (mUpdateType != UpdateType.None) {
-			Cursor cursor = db.rawQuery(mContext.getString(R.string.db_query_count_table_sql), null);
-			cursor.moveToFirst();
-
-			int resultCount = cursor.getCount();
-			int rowCount = cursor.getInt(0);
-			result = (resultCount > 0 && rowCount > 0);
-
-			cursor.close();
-			db.close();
-		}
-
-		return result;
+		db.execSQL(mContext.getString(R.string.db_create_contents_table_sql));
 	}
 
 	// デバッグ用のクエリを実行して、得られた結果をデバッグログに出力する.デバッグ用のメソッド

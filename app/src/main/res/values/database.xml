@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!-- データベース名 -->
 	<string name="db_name">db_binzume_jigoku</string>
-	<integer name="db_version">1</integer>
+
+	<!-- データベースのバージョン。諸々の面倒を避けるためアプリのversionCodeと同じ値にしておくこと -->
+	<integer name="db_version">2</integer>
+
+	<!-- コンテンツデータを入れる先のテーブル名 -->
 	<string name="db_contents_table_name">TBL_CONTENTS</string>
+
+	<!-- テーブル作成クエリ -->
 	<string name="db_create_contents_table_sql">
 		create table TBL_CONTENTS (
-				ID integer primary key,
+				id integer primary key autoincrement,
 				SECTION integer not null,
 				SEQUENCE integer not null,
 				TYPE text not null,
@@ -25,9 +32,8 @@
 				CONTENTS_TEXT text,
 				unique(SECTION, SEQUENCE))
 	</string>
-	<string name="db_query_count_table_sql">
-		select count(*) from TBL_CONTENTS
-	</string>
+
+	<!-- セクション番号から、特定のセクションの内容を読み出すクエリ -->
 	<string name="db_query_contents_table_sql">
 		select	SECTION,
 				SEQUENCE,
@@ -50,6 +56,8 @@
 		where	SECTION = ?
 		order by SECTION, SEQUENCE
 	</string>
+
+	<!-- テーブルの中身を全て読み出すクエリ。デバッグ用 -->
 	<string name="db_query_contents_table_sql_debug">
 		select	SECTION,
 				SEQUENCE,
@@ -71,6 +79,8 @@
 		from	TBL_CONTENTS
 		order by SECTION, SEQUENCE
 	</string>
+
+	<!-- テーブルを破棄するクエリ。バージョン番号更新時に実行 -->
 	<string name="db_drop_contents_table_sql">
 		drop table TBL_CONTENTS
 	</string>

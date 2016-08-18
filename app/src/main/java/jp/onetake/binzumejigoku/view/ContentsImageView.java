@@ -87,8 +87,9 @@ public class ContentsImageView extends FrameLayout {
 	 * @param delay	表示シーケンス開始までの遅延時間(ms)
 	 */
 	public void start(long delay) {
-		final ImageView usedView = getUsedImageView();
-		ImageView unusedView = getUnusedImageView();
+		ImageView usedView = getImageViewByVisibility(View.VISIBLE);
+		ImageView unusedView = getImageViewByVisibility(View.INVISIBLE);
+
 		Bitmap bitmap = mImage.getBitmap();
 
 		// 次に表示すべき画像がある
@@ -117,6 +118,8 @@ public class ContentsImageView extends FrameLayout {
 			// どっちかが使われている
 			} else {
 				if (mImage.getEffectType() == Image.EffectType.Fade) {
+					final ImageView animView = usedView;
+
 					AnimatorSet animSet = new AnimatorSet();
 					animSet.playTogether(
 							ObjectAnimator.ofFloat(unusedView, "alpha", 0.0f, 1.0f),
@@ -125,7 +128,7 @@ public class ContentsImageView extends FrameLayout {
 					animSet.addListener(new AnimatorListenerAdapter() {
 						@Override
 						public void onAnimationEnd(Animator animation) {
-							usedView.setVisibility(View.INVISIBLE);
+							animView.setVisibility(View.INVISIBLE);
 
 							if (mListener != null) {
 								mListener.onEffectFinished(ContentsImageView.this);
@@ -143,12 +146,14 @@ public class ContentsImageView extends FrameLayout {
 		// 次に表示すべき画像がない(非表示にする)
 		} else {
 			if (mImage.getEffectType() == Image.EffectType.Fade) {
+				final ImageView animView = usedView;
+
 				ObjectAnimator anim = ObjectAnimator.ofFloat(usedView, "alpha", 1.0f, 0.0f);
 				anim.setDuration(mImage.getDuration());
 				anim.addListener(new AnimatorListenerAdapter() {
 					@Override
 					public void onAnimationEnd(Animator animation) {
-						usedView.setVisibility(View.INVISIBLE);
+						animView.setVisibility(View.INVISIBLE);
 
 						if (mListener != null) {
 							mListener.onEffectFinished(ContentsImageView.this);
@@ -167,8 +172,9 @@ public class ContentsImageView extends FrameLayout {
 	 * エフェクト等は一切無視して画像を即時に表示・非表示にする
 	 */
 	public void immediate() {
-		final ImageView usedView = getUsedImageView();
-		ImageView unusedView = getUnusedImageView();
+		ImageView usedView = getImageViewByVisibility(View.VISIBLE);
+		ImageView unusedView = getImageViewByVisibility(View.INVISIBLE);
+
 		Bitmap bitmap = mImage.getBitmap();
 
 		// 次に表示すべき画像がある
@@ -188,44 +194,13 @@ public class ContentsImageView extends FrameLayout {
 		}
 	}
 
-	/**
-	 * このViewが内部に持つImageViewのうち、現在表示に使われて<strong>いない</strong>方のImageViewを返却する
-	 * @return	現在画像の表示に使われていない方のImageView
-	 */
-	private ImageView getUnusedImageView() {
-		ImageView imageView = null;
-
-		for (ImageView iv : mImageViews) {
-			if (iv.getVisibility() == View.INVISIBLE) {
-				imageView = iv;
-				break;
+	private ImageView getImageViewByVisibility(int visibility) {
+		for (ImageView imageView : mImageViews) {
+			if (imageView.getVisibility() == visibility) {
+				return imageView;
 			}
 		}
 
-		if (imageView == null) {
-			throw new IllegalStateException(getResources().getString(R.string.exception_message_imageview_visibility));
-		}
-
-		return imageView;
-	}
-
-	/**
-	 * このViewが内部に持つImageViewのうち、現在表示に使われて<strong>いる</strong>方のImageViewを返却する
-	 * @return	現在画像の表示に使われている方のImageView
-	 */
-	private ImageView getUsedImageView() {
-		ImageView imageView = null;
-
-		for (ImageView iv : mImageViews) {
-			if (iv.getVisibility() == View.VISIBLE) {
-				if (imageView == null) {
-					imageView = iv;
-				} else {
-					throw new IllegalStateException(getResources().getString(R.string.exception_message_imageview_visibility));
-				}
-			}
-		}
-
-		return imageView;
+		return null;
 	}
 }
