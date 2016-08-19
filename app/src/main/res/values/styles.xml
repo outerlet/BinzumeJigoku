@@ -9,8 +9,11 @@
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
+	<!-- Status bar is translucent -->
+	<style name="TranslucentStatusBarTheme" parent="StandardTheme" />
+
 	<!-- Translucent Activity theme -->
-	<style name="TranslucentActivityTheme" parent="StandardTheme">
+	<style name="TranslucentActivityTheme" parent="TranslucentStatusBarTheme">
 		<item name="android:windowBackground">@android:color/transparent</item>
 		<item name="android:colorBackgroundCacheHint">@null</item>
 		<item name="android:windowIsTranslucent">true</item>

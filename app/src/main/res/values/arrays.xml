@@ -27,9 +27,9 @@
 
 	<!-- 設定タイトル：テキスト送りのスピード -->
 	<string-array name="text_speed_entries">
-		<item>早い</item>
-		<item>普通</item>
-		<item>遅い</item>
+		<item>@string/phrase_fast</item>
+		<item>@string/phrase_normal</item>
+		<item>@string/phrase_slow</item>
 	</string-array>
 
 	<!-- 設定値：テキスト送りのスピード -->
@@ -41,9 +41,9 @@
 
 	<!-- 設定タイトル：テキストサイズ -->
 	<string-array name="text_size_entries">
-		<item>大きい</item>
-		<item>普通</item>
-		<item>小さい</item>
+		<item>@string/phrase_large</item>
+		<item>@string/phrase_normal</item>
+		<item>@string/phrase_small</item>
 	</string-array>
 
 	<!-- 設定値：テキストサイズ -->
@@ -55,26 +55,26 @@
 
 	<!-- チュートリアル(1ページ目) -->
 	<string-array name="tutorial_texts_page1">
-		<item>『瓶詰地獄』あるいは『瓶詰の地獄』は、小説家・夢野久作氏（1889/1/4 - 1936/3/11）の作品です。</item>
-		<item>前置きと三通の手紙から構成された本作は掌編というべき短い作品であり、筋書きもさほど難しいものではありません。</item>
-		<item>しかし三通のどれが最初でどれが最後なのか、時系列を考慮しつつ読み進めると、この物語は様々な矛盾をはらんでいることが分かります。</item>
-		<item>矛盾点については、多くの方が考察しておられます。この物語をどの順番で読み、どのように解釈するかは、読者それぞれに委ねられていることの証かと思います。</item>
+		<item>@string/text_tutorial_1_1</item>
+		<item>@string/text_tutorial_1_2</item>
+		<item>@string/text_tutorial_1_3</item>
+		<item>@string/text_tutorial_1_4</item>
 	</string-array>
 
 	<!-- チュートリアル(2ページ目) -->
 	<string-array name="tutorial_texts_page2">
-		<item>このアプリは、『瓶詰地獄』という作品を色々な解釈で楽しんで頂ければと思い作成したものです。</item>
-		<item>前置きと三通の手紙の四つを別々に読んで頂けるようになっていますので、気になったものから読むなり、順番通りに読むなり自由に色々試してみて下さい。</item>
-		<item>なお、本作にはインモラルな内容や現代では不適切と思われる表現、難読な漢字が見られます。しかし原文を尊重し、一切手を加えていません。ご承知おき頂ければと思います。</item>
+		<item>@string/text_tutorial_2_1</item>
+		<item>@string/text_tutorial_2_2</item>
+		<item>@string/text_tutorial_2_3</item>
 	</string-array>
 
 	<!-- チュートリアル(3ページ目) -->
 	<string-array name="tutorial_texts_page3">
-		<item>読む手紙を選択する画面（以下「メインメニュー」と表記）で、前置きと三通の手紙のどれを読むか選択します。</item>
-		<item>テキストが進んでいるときに画面をタップすると、その文章だけ早送りすることができます。</item>
-		<item>テキストを表示しているときにバックキーを長押しすると、今まで読んだテキストを確認することができます。</item>
-		<item>任意の地点でセーブまたはロードができます。また、最新の地点が自動的にセーブされます。そこから引き続き読みたい場合はメインメニューから再開して下さい。</item>
-		<item>メインメニューから設定画面を開くことができます。ここでは、文字の大きさや文字送りのスピードを選択することができます。</item>
+		<item>@string/text_tutorial_3_1</item>
+		<item>@string/text_tutorial_3_2</item>
+		<item>@string/text_tutorial_3_3</item>
+		<item>@string/text_tutorial_3_4</item>
+		<item>@string/text_tutorial_3_5</item>
 	</string-array>
 
 </resources>

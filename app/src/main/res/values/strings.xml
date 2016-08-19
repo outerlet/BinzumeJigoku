@@ -37,6 +37,11 @@
 	<string name="phrase_tutorial">チュートリアル</string>
 	<string name="phrase_execute_donation">寄付する</string>
 	<string name="phrase_cancel_donation">やめておく</string>
+	<string name="phrase_normal">普通</string>
+	<string name="phrase_large">大きい</string>
+	<string name="phrase_small">小さい</string>
+	<string name="phrase_fast">早い</string>
+	<string name="phrase_slow">遅い</string>
 
 	<!-- メニュー項目 -->
 	<string name="menu_title_continue">前回の続き</string>
@@ -83,7 +88,7 @@
 	<string name="summary_setting_text_size">文字の大きさを設定します</string>
 	<string name="summary_setting_text_speed">文字送りの速さを設定します</string>
 	<string name="summary_setting_donation">このアプリを気に入って頂けたらご寄付頂けると幸いです</string>
-	<string name="summary_setting_about_this_work">「瓶詰地獄」についての情報です</string>
+	<string name="summary_setting_about_this_work">青空文庫の「瓶詰地獄」に関する情報です</string>
 
 	<!-- メッセージ -->
 	<string name="message_confirm_finish_application">もう一度押して終了</string>
@@ -103,6 +108,23 @@
 	</string>
 	<string name="message_thanks_for_purchase">ご寄付頂きありがとうございます！\n引き続き本アプリをお楽しみ下さい。</string>
 	<string name="message_already_purchased">既にご寄付頂いています。重ねてのお心遣いありがとうございます。</string>
+
+	<!-- 長文テキスト -->
+	<string name="text_about_this_work">
+		底本：\n\t\t「夢野久作怪奇幻想傑作選　あやかしの鼓」角川ホラー文庫、角川書店\n\t\t1998（平成10）年4月10日初版発行\n\n初出：\n\t\t「猟奇」\n\t\t1928（昭和3）年10月\n\n入力：\n\t\t林裕司\n\n校正：\n\t\t浜野　智\n\t\t1998年11月10日公開\n\t\t2012年12月19日修正\n\n青空文庫作成ファイル：\n\t\tこのファイルは、インターネットの図書館、青空文庫 ( http://www.aozora.gr.jp/ ) で作られました。入力、校正、制作にあたったのは、ボランティアの皆さんです。
+	</string>
+	<string name="text_tutorial_1_1">『瓶詰地獄』あるいは『瓶詰の地獄』は、小説家・夢野久作氏 (1889/01/04 〜 1936/03/11) の作品です。</string>
+	<string name="text_tutorial_1_2">前置きと三通の手紙から構成された本作は掌編というべき短い作品であり、筋書きもさほど難しいものではありません。</string>
+	<string name="text_tutorial_1_3">しかし三通のどれが最初でどれが最後なのか、時系列を考慮しつつ読み進めると、この物語は様々な矛盾をはらんでいることが分かります。</string>
+	<string name="text_tutorial_1_4">矛盾点については、多くの方が考察しておられます。この物語をどの順番で読み、どのように解釈するかは、読者それぞれに委ねられていることの証かと思います。</string>
+	<string name="text_tutorial_2_1">このアプリは、『瓶詰地獄』という作品を色々な解釈で楽しんで頂ければと思い作成したものです。</string>
+	<string name="text_tutorial_2_2">前置きと三通の手紙の四つを別々に読んで頂けるようになっていますので、気になったものから読むなり、順番通りに読むなり自由に色々試してみて下さい。</string>
+	<string name="text_tutorial_2_3">なお、本作にはインモラルな内容や現代では不適切と思われる表現、難読な漢字が見られます。しかし原文を尊重し、一切手を加えていません。ご承知おき頂ければと思います。</string>
+	<string name="text_tutorial_3_1">読む手紙を選択する画面（以下「メインメニュー」と表記）で、前置きと三通の手紙のどれを読むか選択します。</string>
+	<string name="text_tutorial_3_2">テキストが進んでいるときに画面をタップすると、その文章だけ早送りすることができます。</string>
+	<string name="text_tutorial_3_3">テキストを表示しているときにバックキーを長押しすると、今まで読んだテキストを確認することができます。</string>
+	<string name="text_tutorial_3_4">任意の地点でセーブまたはロードができます。また、最新の地点が自動的にセーブされます。そこから引き続き読みたい場合はメインメニューから再開して下さい。</string>
+	<string name="text_tutorial_3_5">メインメニューから設定画面を開くことができます。ここでは、文字の大きさや文字送りのスピードを選択することができます。</string>
 
 	<!-- エラー(ユーザーが確認できるもの) -->
 	<string name="error_app_initialize">アプリの初期化に失敗しました。</string>

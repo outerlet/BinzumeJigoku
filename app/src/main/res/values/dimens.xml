@@ -28,6 +28,11 @@
 	<!-- Save Buttons -->
 	<dimen name="save_button_move_y">10dp</dimen>
 
+	<!-- Popup (About this work) -->
+	<dimen name="popup_margin_width_about_work">12dp</dimen>
+	<dimen name="popup_margin_height_about_work">60dp</dimen>
+	<dimen name="popup_textview_margin_side">12dp</dimen>
+
 	<!-- Detect Fling Action -->
 	<dimen name="fling_detect_action_y">120dp</dimen>
 

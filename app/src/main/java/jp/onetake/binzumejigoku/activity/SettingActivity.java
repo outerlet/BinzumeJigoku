@@ -1,11 +1,20 @@
 package jp.onetake.binzumejigoku.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.fragment.SettingFragment;
@@ -62,6 +71,24 @@ public class SettingActivity extends BasicActivity
 
 		// 「瓶詰地獄」について
 		if (prefKey.equals(getString(R.string.prefkey_about_work_nosave))) {
+			Point point = new Point(0, 0);
+			Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+			display.getSize(point);
+			int marginWidth = getResources().getDimensionPixelSize(R.dimen.popup_margin_width_about_work);
+			int marginHeight = getResources().getDimensionPixelSize(R.dimen.popup_margin_height_about_work);
+
+			PopupWindow popup = new PopupWindow(this);
+			popup.setWidth(point.x - marginWidth * 2);
+			popup.setHeight(point.y - marginHeight * 2);
+			popup.setOutsideTouchable(false);
+			popup.setFocusable(true);
+
+			View view = LayoutInflater.from(this).inflate(R.layout.popup_about_work, null);
+			((TextView)view.findViewById(R.id.textview_about_work)).setText(getString(R.string.text_about_this_work));
+			popup.setContentView(view);
+
+			popup.showAtLocation(getCurrentFocus(), Gravity.CENTER, 0, 0);
+
 			return true;
 		}
 
