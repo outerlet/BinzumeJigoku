@@ -3,7 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="jp.onetake.binzumejigoku">
 
-	<uses-permission android:name="com.android.vending.BILLING" />
+	<!-- Google Playで住所を公開する予定はないので実装済みのIABは無効にしておく -->
+	<!-- uses-permission android:name="com.android.vending.BILLING" / -->
 
 	<application
 		android:allowBackup="true"

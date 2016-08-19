@@ -2,7 +2,10 @@
 <resources>
 
 	<!-- セーブスロットの数 -->
-	<integer name="number_save_slot">3</integer>
+	<integer name="number_of_save_slots">3</integer>
+
+	<!-- チュートリアルのページ数 -->
+	<integer name="number_of_tutorial_pages">4</integer>
 
 	<!-- 起動アニメーション -->
 	<integer name="launch_animation_duration">1000</integer>

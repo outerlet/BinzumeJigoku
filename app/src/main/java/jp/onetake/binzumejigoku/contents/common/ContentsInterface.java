@@ -49,7 +49,7 @@ public class ContentsInterface {
 		mContext = context;
 		mDbHelper = new ContentsDbOpenHelper(context);
 
-		int number = context.getResources().getInteger(R.integer.number_save_slot) + 1;
+		int number = context.getResources().getInteger(R.integer.number_of_save_slots) + 1;
 		mSaveDatas = new SaveData[number];
 		for (int i = 0 ; i < number ; i++) {
 			SaveData saveData = new SaveData(i);

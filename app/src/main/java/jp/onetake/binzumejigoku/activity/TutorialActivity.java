@@ -53,9 +53,11 @@ public class TutorialActivity extends BasicActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tutorial);
 
+		int pageNumber = getResources().getInteger(R.integer.number_of_tutorial_pages);
+
 		TutorialPagerAdapter adapter = new TutorialPagerAdapter(getSupportFragmentManager());
 
-		for (int i = 1 ; i <= 3 ; i++) {
+		for (int i = 1 ; i <= pageNumber ; i++) {
 			int titleId = getResources().getIdentifier(String.format("title_tutorial_page%d", i), "string", getPackageName());
 			String title = getResources().getString(titleId);
 
@@ -71,7 +73,7 @@ public class TutorialActivity extends BasicActivity {
 		mViewPager.addOnPageChangeListener(mPageChangeListener);
 
 		mPagerIndicator = (PagerIndicatorView)findViewById(R.id.pager_indicator_tutorial);
-		mPagerIndicator.setPageCount(3);
+		mPagerIndicator.setPageCount(pageNumber);
 		mPagerIndicator.setActiveIndex(0);
 	}
 }

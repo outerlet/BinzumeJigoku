@@ -66,6 +66,7 @@
 		<item>@string/text_tutorial_2_1</item>
 		<item>@string/text_tutorial_2_2</item>
 		<item>@string/text_tutorial_2_3</item>
+		<item>@string/text_tutorial_2_4</item>
 	</string-array>
 
 	<!-- チュートリアル(3ページ目) -->
@@ -74,7 +75,12 @@
 		<item>@string/text_tutorial_3_2</item>
 		<item>@string/text_tutorial_3_3</item>
 		<item>@string/text_tutorial_3_4</item>
-		<item>@string/text_tutorial_3_5</item>
+	</string-array>
+
+	<!-- チュートリアル(4ページ目) -->
+	<string-array name="tutorial_texts_page4">
+		<item>@string/text_tutorial_4_1</item>
+		<item>@string/text_tutorial_4_2</item>
 	</string-array>
 
 </resources>
