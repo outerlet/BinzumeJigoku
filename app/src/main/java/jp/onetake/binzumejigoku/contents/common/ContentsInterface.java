@@ -18,7 +18,8 @@ public class ContentsInterface {
 	private ContentsDbOpenHelper mDbHelper;
 	private String mRubyDelimiter;
 	private String mRubyClosure;
-	private int mMaxSectionIndex = -1;
+	private int mCurrentDbVersion;
+	private int mMaxSectionIndex;
 	private SaveData[] mSaveDatas;
 
 	/**
@@ -30,6 +31,14 @@ public class ContentsInterface {
 			mInstance = new ContentsInterface();
 		}
 		return mInstance;
+	}
+
+	/**
+	 * コンストラクタ
+	 */
+	private ContentsInterface() {
+		mCurrentDbVersion = 0;
+		mMaxSectionIndex = -1;
 	}
 
 	/**
@@ -68,7 +77,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * アプリで利用するSharedPreferencesはここから取得する
+	 * アプリで利用するSharedPreferencesはここから返却する
 	 * @return	SharedPreferences
 	 */
 	private SharedPreferences getPreferences() {
@@ -76,7 +85,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * データベースにアクセスするためのヘルパオブジェクトを取得する
+	 * データベースにアクセスするためのヘルパオブジェクトを返却する
 	 * @return	データベースにアクセスするためのヘルパオブジェクト
 	 */
 	public ContentsDbOpenHelper getDatabaseHelper() {
@@ -97,7 +106,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * text要素において、表示テキストとそれにふるルビを区別するための区切り文字を取得する
+	 * text要素において、表示テキストとそれにふるルビを区別するための区切り文字を返却する
 	 * @return	表示テキストとそれにふるルビを区別するための区切り文字
 	 */
 	public String getRubyDelimiter() {
@@ -123,7 +132,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * text要素において、表示テキストのうちルビをふるべき文字列かそうでないかを区別するための囲み文字を取得する
+	 * text要素において、表示テキストのうちルビをふるべき文字列かそうでないかを区別するための囲み文字を返却する
 	 * @return	text要素において、表示テキストのうちルビをふるべき文字列かそうでないかを区別するための囲み文字
 	 */
 	public String getRubyClosure() {
@@ -133,6 +142,28 @@ public class ContentsInterface {
 		}
 
 		return mRubyClosure;
+	}
+
+	/**
+	 * 最新のデータベースバージョンを保存する<br />
+	 * getCurrentDbVersionと併せて使い、起動時に不要なINSERTを発生させないようにする
+	 * @param dbVersion	現在のデータベースバージョン
+	 */
+	public void setCurrentDbVersion(int dbVersion) {
+		mCurrentDbVersion = dbVersion;
+
+		getPreferences().edit()
+				.putInt(mContext.getString(R.string.prefkey_current_db_version), mCurrentDbVersion)
+				.apply();
+	}
+
+	/**
+	 * アプリが最新のデータベースバージョンとして保持している値を返却する
+	 * setCurrentDbVersionと併せて使い、起動時に不要なINSERTを発生させないようにする
+	 * @return	現在のデータベースバージョン
+	 */
+	public int getCurrentDbVersion() {
+		return getPreferences().getInt(mContext.getString(R.string.prefkey_current_db_version), 0);
 	}
 
 	/**
@@ -148,7 +179,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * 章番号の最大値を取得する
+	 * 章番号の最大値を返却する
 	 * @return	章番号の最大値
 	 */
 	public int getMaxSectionIndex() {
@@ -161,7 +192,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * slotIndexに指定したインデックスに保存されているSaveDataを取得する
+	 * slotIndexに指定したインデックスに保存されているSaveDataを返却する
 	 * @param slotIndex	セーブスロットを示すインデックス値
 	 * @return	SaveDataオブジェクト
 	 */
@@ -188,7 +219,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * チュートリアルが終了しているかを取得する
+	 * チュートリアルが終了しているかを返却する
 	 * @return  チュートリアルが済んでいればtrue
 	 */
 	public boolean isTutorialFinished() {
@@ -196,7 +227,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * テキストの描画サイズを取得する
+	 * テキストの描画サイズを返却する
 	 * @return  テキストの描画サイズ(px)
 	 */
 	public float getTextSize() {
@@ -215,7 +246,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * ルビの描画サイズを取得する
+	 * ルビの描画サイズを返却する
 	 * @return  ルビの描画サイズ(px)
 	 */
 	public float getRubySize() {
@@ -234,7 +265,7 @@ public class ContentsInterface {
 	}
 
 	/**
-	 * テキストの描画間隔を取得する
+	 * テキストの描画間隔を返却する
 	 * @return  テキストの描画間隔(ms)
 	 */
 	public int getTextPeriod() {

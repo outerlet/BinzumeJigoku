@@ -28,7 +28,11 @@
 
 	</android.support.v7.preference.PreferenceCategory>
 
-	<!-- ご寄付 (プリファレンスに保存すべきものはない) -->
+	<!--
+		ご寄付 (プリファレンスに保存すべきものはない)
+		InAppBillingを使って課金するロジックは組み込み済みだが、Playに住所を出さないといけないとか色々あるので当面はコメントアウト
+	-->
+	<!--
 	<android.support.v7.preference.PreferenceCategory
 		android:title="@string/title_setting_group_donation">
 
@@ -39,6 +43,7 @@
 			/>
 
 	</android.support.v7.preference.PreferenceCategory>
+	-->
 
 	<!-- その他 (プリファレンスに保存すべきものはない) -->
 	<android.support.v7.preference.PreferenceCategory

@@ -83,17 +83,17 @@ public class ContentsXmlParserTask extends AsyncTask<String, Void, Object> {
 	protected Object doInBackground(String... fileNames) {
 		ContentsInterface cif = ContentsInterface.getInstance();
 
-		// (MEMO:Android4.4＋Nexus5)
-		// アプリを初めて起動したあとバックキー2回押しで終了させて、プロセスが死なないうちにフォアグラウンドに回すと
-		// DbOpenHelperのonCreateが実行されるのにテーブルにはデータが入ったままというおかしな状況になる
-		// その状況で後続のパース処理＆DBへのINSERTを行うとSQLiteConstraintException(PrimaryKeyの問題)が発生する
-		// また、このSQLiteConstraintExceptionはなぜかtry-catchで捕捉できない
-
 		// XMLを解析した結果を保存するためのデータベースオブジェクト
 		SQLiteDatabase db = cif.getDatabaseHelper().getWritableDatabase();
 
+		// 以前DB操作が終わった時に記録したDBのバージョンと現在のバージョンを比較
+		// 現在のバージョンの方が大きいならXMLパース処理とDBへのINSERTを行う
+		if (db.getVersion() <= cif.getCurrentDbVersion()) {
+			db.close();
+			return new ResultHolder(false, null);
+		}
+
 		try {
-			// XML解析のためのパーサを取得
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(new InputStreamReader(mContext.getAssets().open(fileNames[0])));
 
@@ -128,7 +128,11 @@ public class ContentsXmlParserTask extends AsyncTask<String, Void, Object> {
 			// パースが正常に完了した
 			cif.setMaxSectionIndex(sectionIndex);
 
+			// トランザクションを終了
 			db.setTransactionSuccessful();
+
+			// 最新のデータベースバージョンを記録
+			cif.setCurrentDbVersion(db.getVersion());
 		} catch (IOException | XmlPullParserException | SQLiteException e) {
 			return new ResultHolder(false, e);
 		} finally {

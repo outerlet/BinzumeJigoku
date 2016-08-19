@@ -48,6 +48,8 @@ public class SettingActivity extends BasicActivity
 		String prefKey = preference.getKey();
 
 		// ご寄付
+		// InAppBillingを使って課金するロジックは組み込み済みだが、Playに住所を出さないといけないとか色々あるので当面はコメントアウト
+		/*
 		if (prefKey.equals(getString(R.string.prefkey_donation_nosave))) {
 			showDialogFragment(
 					ConfirmDialogFragment.newInstance(
@@ -55,8 +57,11 @@ public class SettingActivity extends BasicActivity
 					TAG_DIALOG_CONFIRM_DONATION);
 
 			return true;
+		}
+		*/
+
 		// 「瓶詰地獄」について
-		} else if (preference.getKey().equals(getString(R.string.prefkey_about_work_nosave))) {
+		if (prefKey.equals(getString(R.string.prefkey_about_work_nosave))) {
 			return true;
 		}
 

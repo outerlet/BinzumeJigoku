@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import jp.onetake.binzumejigoku.R;
+import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 
 /**
  * コンテンツの内容をデータベースに保存したりデータベースから読み出したりするためのヘルパクラス
