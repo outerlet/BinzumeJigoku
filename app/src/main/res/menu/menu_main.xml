@@ -24,10 +24,4 @@
 		app:showAsAction="always"
 		/>
 
-	<item
-		android:id="@+id/menu_tutorial"
-		android:title="@string/phrase_tutorial"
-		app:showAsAction="never"
-		/>
-
 </menu>

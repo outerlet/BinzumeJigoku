@@ -50,6 +50,12 @@
 		android:title="@string/title_setting_group_other">
 
 		<android.support.v7.preference.Preference
+			android:key="@string/prefkey_tutorial_nosave"
+			android:title="@string/title_setting_tutorial"
+			android:summary="@string/summary_setting_tutorial"
+			/>
+
+		<android.support.v7.preference.Preference
 			android:key="@string/prefkey_about_work_nosave"
 			android:title="@string/title_setting_about_this_work"
 			android:summary="@string/summary_setting_about_this_work"

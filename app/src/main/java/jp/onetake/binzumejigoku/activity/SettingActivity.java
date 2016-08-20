@@ -69,6 +69,12 @@ public class SettingActivity extends BasicActivity
 		}
 		*/
 
+		// チュートリアル
+		if (prefKey.equals(getString(R.string.prefkey_tutorial_nosave))) {
+			startActivity(new Intent(this, TutorialActivity.class));
+			return true;
+		}
+
 		// 「瓶詰地獄」について
 		if (prefKey.equals(getString(R.string.prefkey_about_work_nosave))) {
 			Point point = new Point(0, 0);

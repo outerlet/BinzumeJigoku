@@ -16,7 +16,8 @@
 	<string name="prefkey_text_size">PREFKEY_TEXT_SIZE</string>
 	<string name="prefkey_tutorial_finished">PREFKEY_TUTORIAL_FINISHED</string>
 	<string name="prefkey_donation_nosave">PREFKEY_DONATION_NOSAVE</string>
-	<string name="prefkey_about_work_nosave">PREFKEY_ABOUT_WORK</string>
+	<string name="prefkey_tutorial_nosave">PREFKEY_TUTORIAL_NOSAVE</string>
+	<string name="prefkey_about_work_nosave">PREFKEY_ABOUT_WORK_NOSAVE</string>
 
 	<!-- In App Billingで購入できるアイテムのID -->
 	<string name="iab_item_id">consume_0001</string>
@@ -34,7 +35,6 @@
 	<string name="phrase_load">ロード</string>
 	<string name="phrase_no_save">保存されていない</string>
 	<string name="phrase_text_history">テキスト履歴</string>
-	<string name="phrase_tutorial">チュートリアル</string>
 	<string name="phrase_execute_donation">寄付する</string>
 	<string name="phrase_cancel_donation">やめておく</string>
 	<string name="phrase_normal">普通</string>
@@ -85,10 +85,12 @@
 	<string name="title_setting_text_size">文字の大きさ</string>
 	<string name="title_setting_text_speed">文字表示速度</string>
 	<string name="title_setting_donation">投げ銭</string>
+	<string name="title_setting_tutorial">チュートリアル</string>
 	<string name="title_setting_about_this_work">「瓶詰地獄」について</string>
 	<string name="summary_setting_text_size">文字の大きさを設定します</string>
 	<string name="summary_setting_text_speed">文字送りの速さを設定します</string>
 	<string name="summary_setting_donation">このアプリを気に入って頂けたらご寄付頂けると幸いです</string>
+	<string name="summary_setting_tutorial">チュートリアルを開きます</string>
 	<string name="summary_setting_about_this_work">青空文庫の「瓶詰地獄」に関する情報です</string>
 
 	<!-- メッセージ -->

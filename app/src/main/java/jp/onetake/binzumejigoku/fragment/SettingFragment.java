@@ -21,6 +21,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
 			Preference.OnPreferenceClickListener listener = (Preference.OnPreferenceClickListener)getActivity();
 
 			// findPreference(getString(R.string.prefkey_donation_nosave)).setOnPreferenceClickListener(listener);
+			findPreference(getString(R.string.prefkey_tutorial_nosave)).setOnPreferenceClickListener(listener);
 			findPreference(getString(R.string.prefkey_about_work_nosave)).setOnPreferenceClickListener(listener);
 		}
 	}

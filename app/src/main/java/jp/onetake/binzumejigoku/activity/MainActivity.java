@@ -217,21 +217,22 @@ public class MainActivity extends BasicActivity
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// 前回の続きから
+		// 前回のセーブデータが使える(章の終わりまで行ってない)場合のみロードを確認する
 		if (item.getItemId() == R.id.menu_continue) {
-			// 前回のセーブデータが使える(章の終わりまで行ってない)場合のみロードを確認する
 			if (ContentsInterface.getInstance().getSaveData(0).isUsable()) {
 				ConfirmDialogFragment
 						.newInstance(R.string.phrase_confirm, R.string.message_load_confirmation_latest)
 						.show(getSupportFragmentManager(), TAG_DIALOG_LOAD_LATEST);
 			}
+		// セーブデータからロード
 		} else if (item.getItemId() == R.id.menu_load) {
 			Intent intent = new Intent(this, SaveActivity.class);
 			intent.putExtra(SaveActivity.EXTRA_SAVE_MODE, false);
 			startActivityForResult(intent, getResources().getInteger(R.integer.request_code_save_activity));
+		// 設定
 		} else if (item.getItemId() == R.id.menu_setting) {
 			startActivity(new Intent(this, SettingActivity.class));
-		} else if (item.getItemId() == R.id.menu_tutorial) {
-			startActivity(new Intent(this, TutorialActivity.class));
 		}
 
 		return true;
