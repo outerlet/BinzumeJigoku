@@ -46,7 +46,7 @@ public class ContentsActivity extends BasicActivity
 		}
 
 		/**
-		 * ロングタップ。セーブ画面を開く
+		 * ロングタップでセーブ画面を開く
 		 * {@inheritDoc}
 		 */
 		@Override
@@ -55,13 +55,14 @@ public class ContentsActivity extends BasicActivity
 		}
 
 		/**
-		 * フリックで早送り
+		 * 上向きのフリックでテキスト履歴を表示<br />
+		 * 当初はバックキー長押しで実装していたがAndroid7.0(Nougat)でonKeyLongPressが検知されないのでこちらに変更
 		 * {@inheritDoc}
 		 */
 		@Override
 		public boolean onFling(MotionEvent upEvent, MotionEvent moveEvent, float velocityX, float velocityY) {
-			if (moveEvent.getY() - upEvent.getY() > mFlingDistance) {
-				// 将来的に、ここに早送り処理を入れる予定
+			if (upEvent.getY() - moveEvent.getY() > mFlingDistance) {
+				getFragment().requestBacklogActivity();
 			}
 			return true;
 		}
@@ -91,19 +92,6 @@ public class ContentsActivity extends BasicActivity
 
 			replaceFragmentByIndex(mSectionIndex);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			getFragment().requestBacklogActivity();
-			return true;
-		}
-
-		return super.onKeyLongPress(keyCode, event);
 	}
 
 	/**

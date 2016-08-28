@@ -2,17 +2,21 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.1'
 
     defaultConfig {
         applicationId "jp.onetake.binzumejigoku"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 5
+        versionCode 6
         versionName '1.0.0'
     }
 
-    productFlavors {
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 

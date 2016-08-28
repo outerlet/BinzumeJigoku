@@ -3,8 +3,11 @@
 	<!-- データベース名 -->
 	<string name="db_name">db_binzume_jigoku</string>
 
-	<!-- データベースのバージョン。諸々の面倒を避けるためアプリのversionCodeと同じ値にしておくこと -->
-	<integer name="db_version">5</integer>
+	<!--
+		データベースのバージョン
+		特段の事情が無い限り、諸々の面倒を避けるためにアプリのversionCodeと同じ値にしておくようにする
+	-->
+	<integer name="db_version">6</integer>
 
 	<!-- コンテンツデータを入れる先のテーブル名 -->
 	<string name="db_contents_table_name">TBL_CONTENTS</string>
