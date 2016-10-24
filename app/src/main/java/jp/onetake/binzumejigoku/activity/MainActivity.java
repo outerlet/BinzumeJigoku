@@ -26,7 +26,7 @@ import jp.onetake.binzumejigoku.view.TutorialPagerAdapter;
  * 以下のアクションを行うことができる
  * <ol>
  *     <li>進行させる章を選択</li>
- *     <li>続きから始める（オートセーブから始める）</li>
+ *     <li>続きから始める（オートセーブがある場合、その続きから始める）</li>
  *     <li>ロード画面を開く</li>
  *     <li>設定を開く</li>
  * </ol>

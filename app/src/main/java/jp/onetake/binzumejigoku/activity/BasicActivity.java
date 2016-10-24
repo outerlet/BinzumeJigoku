@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 
 /**
- * 全てのアクティビティが継承すべき基底クラス
+ * 全てのアクティビティが継承すべき基底クラス<br />
  * 全画面に適用すべき共通設定などを定義する
  */
 public class BasicActivity extends AppCompatActivity {

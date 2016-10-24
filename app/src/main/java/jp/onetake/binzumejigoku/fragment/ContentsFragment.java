@@ -31,7 +31,8 @@ import jp.onetake.binzumejigoku.view.ContentsTitleView;
 import jp.onetake.binzumejigoku.view.TimerView;
 
 /**
- * 物語を進めるフラグメント
+ * ContentsActivity上に配置され、ユーザーからのインタラクションに応じて
+ * 物語の進行を制御するフラグメント
  */
 public class ContentsFragment extends BasicFragment implements TimerView.TimerListener, ContentsImageView.EffectListener {
 	/**

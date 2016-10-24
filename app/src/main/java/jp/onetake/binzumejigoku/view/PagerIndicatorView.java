@@ -10,8 +10,8 @@ import android.view.View;
 import jp.onetake.binzumejigoku.R;
 
 /**
- * ViewPagerなどで利用するためのインジケータ。総ページ数と現在のページを視覚的に表示するためのもの<br />
- * iOSのUIPageIndicatorのマネっこクラス
+ * ViewPagerなどで、総ページ数と現在のページを視覚的に表示するためのカスタムビュー<br />
+ * iOSのUIPageControlのマネっこクラス
  */
 public class PagerIndicatorView extends View {
 	private int mPageCount;

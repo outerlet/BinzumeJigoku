@@ -12,7 +12,7 @@ import java.util.List;
 import jp.onetake.binzumejigoku.R;
 
 /**
- * バックログを表示するためのアダプタクラス
+ * テキスト履歴を表示するためのアダプタクラス
  */
 public class BacklogListAdapter extends ArrayAdapter<String> {
 	// ViewHolder

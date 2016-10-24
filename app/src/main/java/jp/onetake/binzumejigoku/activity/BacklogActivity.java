@@ -9,7 +9,7 @@ import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.view.BacklogListAdapter;
 
 /**
- * バックログを表示するアクティビティ
+ * テキスト履歴を表示するアクティビティ
  */
 public class BacklogActivity extends AppCompatActivity {
 	/**

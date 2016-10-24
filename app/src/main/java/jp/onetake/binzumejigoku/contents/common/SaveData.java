@@ -19,7 +19,8 @@ import jp.onetake.binzumejigoku.contents.element.SectionElement;
 import jp.onetake.binzumejigoku.contents.element.Text;
 
 /**
- * 1つのセーブデータを表現するクラス
+ * セーブデータひとつを表現するクラス<br />
+ * シリアライズされたファイルとして端末に保存される
  */
 public class SaveData implements Serializable {
 	private static final long serialVersionUID = -3692542681255401454L;

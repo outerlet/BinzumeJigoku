@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 /**
- * 「OK」と「キャンセル」のボタンがある、確認用のダイアログを表示するためのDialogFragment
+ * ボタンが1つある確認用のダイアログを表示するためのDialogFragment
  */
 public class AlertDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
 	/**
-	 * ConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
+	 * AlertDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを
+	 * 捕捉するためのリスナインターフェイス
 	 */
 	public interface OnAlertListener {
 		/**

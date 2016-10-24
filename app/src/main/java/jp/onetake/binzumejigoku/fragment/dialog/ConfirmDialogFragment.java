@@ -13,7 +13,8 @@ import jp.onetake.binzumejigoku.R;
  */
 public class ConfirmDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
 	/**
-	 * ConfirmDialogFragmentを使って表示したダイアログのボタンが押下されたイベントを補足するためのリスナインターフェイス
+	 * ConfirmDialogFragment、もしくはMultipleConfirmDialogFragmentを使って表示した
+	 * ダイアログのボタンが押下されたイベントを捕捉するためのリスナインターフェイス
 	 */
 	public interface OnConfirmListener {
 		/**

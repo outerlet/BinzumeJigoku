@@ -17,7 +17,7 @@ import java.util.List;
 import jp.onetake.binzumejigoku.R;
 
 /**
- * 複数のテキストをフェードインアニメーションで表示させるView<br />
+ * 複数の文字列をフェードインアニメーションで表示させるカスタムビュー<br />
  * 一斉にフェード表示させるか、1つずつ順番にフェードさせるかを選択できる
  */
 public class FadeInTextView extends LinearLayout {

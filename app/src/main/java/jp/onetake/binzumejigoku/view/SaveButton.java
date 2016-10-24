@@ -11,7 +11,7 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.SaveData;
 
 /**
- * 1つのセーブボタンを表示・制御するためのクラス
+ * セーブまたはロード画面で、ひとつのセーブボタンを表示・制御するためのクラス
  */
 public class SaveButton extends LinearLayout {
 	private TextView mNameView;

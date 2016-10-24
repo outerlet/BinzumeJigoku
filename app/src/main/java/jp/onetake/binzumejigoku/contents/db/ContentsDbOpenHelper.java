@@ -9,7 +9,7 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 
 /**
- * コンテンツの内容をデータベースに保存したりデータベースから読み出したりするためのヘルパクラス
+ * コンテンツの内容をデータベースに保存したりデータベースから読み出すためのヘルパクラス
  */
 public class ContentsDbOpenHelper extends SQLiteOpenHelper {
 	private Context mContext;

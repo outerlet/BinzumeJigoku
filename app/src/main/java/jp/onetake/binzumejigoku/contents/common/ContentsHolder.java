@@ -19,7 +19,8 @@ import jp.onetake.binzumejigoku.contents.element.Title;
 import jp.onetake.binzumejigoku.contents.element.Wait;
 
 /**
- * SectionのIndex値に応じたセクションのコンテンツをDBから読み取り、それぞれに応じた要素オブジェクトを生成・保持するクラス
+ * SectionのIndex値に応じたセクションのコンテンツをDBから読み取り、
+ * それぞれに応じた要素オブジェクトを生成・保持するクラス
  */
 public class ContentsHolder {
 	private Context mContext;
@@ -110,7 +111,8 @@ public class ContentsHolder {
 	}
 
 	/**
-	 * sectionIndexに指定したセクションインデックスに該当するセクション要素をDBから読み出して適切な要素オブジェクトを生成する
+	 * sectionIndexに指定したセクションインデックスに該当するセクション要素をDBから読み出して、
+	 * 適切な要素オブジェクトを生成する
 	 * @param sectionIndex	セクションに割り当てられたインデックス値
 	 */
 	private List<SectionElement> parse(int sectionIndex) throws SQLiteException {

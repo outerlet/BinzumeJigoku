@@ -11,9 +11,14 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.element.Title;
 
 /**
- * セクション(章)表示用のView<br />
- * (1)「透明->不透明」(2)「不透明のまま待機」(3)「不透明->透明」という遷移で表示状態が変わる<br />
- * XMLに指定できる属性値についてはそれぞれ以下の通り<br />
+ * セクション(章)のタイトルを表示するためのカスタムビュー<br />
+ * 以下のような遷移で表示が変わる
+ * <ol>
+ *     <li>透明->不透明</li>
+ *     <li>不透明のまま待機</li>
+ *     <li>不透明->透明</li>
+ * </ol>
+ * なお、XMLに指定できる属性値についてはそれぞれ以下の通り
  * <dl>
  *     <dt>duration</dt>
  *     <dd>各状態のためのかける時間をミリ秒で指定</dd>

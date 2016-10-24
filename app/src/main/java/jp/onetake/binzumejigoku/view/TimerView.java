@@ -11,7 +11,7 @@ import android.view.View;
 import jp.onetake.binzumejigoku.R;
 
 /**
- * 一定の時間間隔ごとに描画処理を繰り返すView
+ * 一定の時間間隔ごとに描画処理を繰り返すカスタムビューを作るための抽象クラス
  */
 public abstract class TimerView extends View {
 	/**

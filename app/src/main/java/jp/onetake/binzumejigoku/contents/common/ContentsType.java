@@ -4,14 +4,22 @@ package jp.onetake.binzumejigoku.contents.common;
  * コンテンツを構成する要素オブジェクトを示す列挙値
  */
 public enum ContentsType {
-	Unknown,	// 不明(便宜的な値)
-	MetaData,	// メタデータ
-	Section,	// セクション
-	Title,		// 章タイトル
-	Image,		// 背景画像
-	Text,		// テキスト
-	Wait,		// 指定時間待機する
-	ClearText;	// 表示されているテキストをクリアする
+	/** 不明(便宜的な値) */
+	Unknown,
+	/** メタデータ */
+	MetaData,
+	/** セクション */
+	Section,
+	/** 章タイトル */
+	Title,
+	/** 背景画像 */
+	Image,
+	/** テキスト */
+	Text,
+	/** 指定された時間だけユーザーの操作を待機する */
+	Wait,
+	/** 表示されているテキストを全てクリアする */
+	ClearText;
 
 	/**
 	 * textと等価のContentsType列挙値を取得する

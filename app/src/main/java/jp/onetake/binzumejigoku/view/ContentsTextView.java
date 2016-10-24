@@ -17,7 +17,7 @@ import jp.onetake.binzumejigoku.contents.common.ContentsInterface;
 import jp.onetake.binzumejigoku.contents.element.Text;
 
 /**
- * ルビつきのテキストを一定時間ごとにストリーム表示するView<br />
+ * ルビつきのテキストを一定時間ごとに特定の文字数だけ増やして表示し、ストリームのように表示するカスタムビュー<br />
  * XMLに指定できる属性値についてはそれぞれ以下の通り
  * <dl>
  *     <dt>textSize</dt>

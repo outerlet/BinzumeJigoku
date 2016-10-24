@@ -16,7 +16,7 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.element.Image;
 
 /**
- * 画像を表示する<br />
+ * 画像を表示するためのカスタムビュー<br />
  * 1つの画像を表示するためのViewだがクロスフェードがかけられるように、内部で2つのImageViewを保持している
  */
 public class ContentsImageView extends FrameLayout {

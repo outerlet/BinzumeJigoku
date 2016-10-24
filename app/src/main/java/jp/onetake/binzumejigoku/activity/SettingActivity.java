@@ -21,11 +21,12 @@ import jp.onetake.binzumejigoku.fragment.SettingFragment;
 import jp.onetake.binzumejigoku.fragment.dialog.ConfirmDialogFragment;
 
 /**
- * 設定画面を開く<br />
- * この画面でできることは以下
+ * アプリの設定画面。この画面でできることは以下の通り
  * <ul>
  *     <li>テキストサイズの変更</li>
  *     <li>文字送り速度の変更</li>
+ *     <li>チュートリアルを読む</li>
+ *     <li>「瓶詰地獄」という作品についての説明</li>
  * </ul>
  */
 public class SettingActivity extends BasicActivity
