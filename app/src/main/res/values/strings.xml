@@ -1,7 +1,7 @@
 <resources>
 
 	<!-- アプリ名 -->
-	<string name="app_name">瓶詰地獄</string>
+	<string name="app_name">読む瓶詰</string>
 
 	<!-- コンテンツファイル名 -->
 	<string name="filename_contents">contents_binzume_jigoku.xml</string>

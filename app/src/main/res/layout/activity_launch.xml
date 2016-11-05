@@ -5,11 +5,23 @@
 	android:layout_height="match_parent">
 
 	<ImageView
-		android:id="@+id/imageview_launch_background"
+		android:id="@+id/imageview_launch_background_2"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:src="@drawable/def_launch_background"
+		android:src="@drawable/launch_01"
 		android:scaleType="centerCrop"
+		android:alpha="0"
+		android:visibility="invisible"
+		/>
+
+	<ImageView
+		android:id="@+id/imageview_launch_background_1"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:src="@drawable/launch_00"
+		android:scaleType="centerCrop"
+		android:alpha="0"
+		android:visibility="invisible"
 		/>
 
 	<LinearLayout
@@ -18,40 +30,68 @@
 		android:orientation="vertical">
 
 		<RelativeLayout
+			android:id="@+id/viewgroup_launch_titles"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="1">
+			android:layout_weight="4"
+			android:alpha="0"
+			android:visibility="invisible">
 
 			<ImageView
 				android:id="@+id/imageview_launch_title"
-				android:layout_width="wrap_content"
+				android:layout_width="180dp"
 				android:layout_height="wrap_content"
-				android:layout_alignParentBottom="true"
-				android:layout_centerHorizontal="true"
-				android:layout_marginBottom="24dp"
+				android:layout_alignParentStart="true"
+				android:layout_centerVertical="true"
+				android:layout_marginStart="24dp"
 				android:src="@drawable/launch_title"
+				android:scaleType="centerInside"
 				android:adjustViewBounds="true"
-				android:alpha="0.0"
+				/>
+
+			<ImageView
+				android:id="@+id/imageview_launch_subtitle"
+				android:layout_width="360dp"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_marginEnd="24dp"
+				android:layout_marginStart="36dp"
+				android:layout_marginTop="24dp"
+				android:layout_below="@+id/imageview_launch_title"
+				android:scaleType="centerInside"
+				android:src="@drawable/launch_subtitle"
+				android:adjustViewBounds="true"
 				/>
 
 		</RelativeLayout>
 
-		<RelativeLayout
+		<FrameLayout
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="1">
+			android:layout_weight="3">
 
 			<ProgressBar
 				android:id="@+id/progressbar_loading_contents"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_alignParentTop="true"
-				android:layout_centerHorizontal="true"
-				android:layout_marginTop="24dp"
+				android:layout_gravity="center"
 				android:visibility="invisible"
 				/>
 
-		</RelativeLayout>
+			<ImageView
+				android:id="@+id/imageview_user_interaction"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="40dp"
+				android:layout_marginEnd="40dp"
+				android:layout_gravity="center"
+				android:src="@drawable/launch_interaction"
+				android:adjustViewBounds="true"
+				android:alpha="0"
+				android:visibility="invisible"
+				/>
+
+		</FrameLayout>
 
 	</LinearLayout>
 

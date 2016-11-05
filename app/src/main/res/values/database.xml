@@ -7,7 +7,7 @@
 		データベースのバージョン
 		特段の事情が無い限り、諸々の面倒を避けるためにアプリのversionCodeと同じ値にしておくようにする
 	-->
-	<integer name="db_version">6</integer>
+	<integer name="db_version">7</integer>
 
 	<!-- コンテンツデータを入れる先のテーブル名 -->
 	<string name="db_contents_table_name">TBL_CONTENTS</string>

@@ -140,6 +140,12 @@ public class MainActivity extends BasicActivity
 		if (mContinueMenuItem != null) {
 			mContinueMenuItem.setVisible(ContentsInterface.getInstance().getSaveData(0).isUsable());
 		}
+
+		if (!ContentsInterface.getInstance().isTutorialFinished()) {
+			startActivityForResult(
+					new Intent(this, TutorialActivity.class),
+					getResources().getInteger(R.integer.request_code_tutorial_activity));
+		}
 	}
 
 	/**
@@ -157,7 +163,11 @@ public class MainActivity extends BasicActivity
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == getResources().getInteger(R.integer.request_code_save_activity)) {
+		// チュートリアル表示から帰ってきた
+		if (requestCode == getResources().getInteger(R.integer.request_code_tutorial_activity)) {
+			ContentsInterface.getInstance().markAsTutorialFinished();
+		// セーブ選択画面から帰ってきた
+		} else if (requestCode == getResources().getInteger(R.integer.request_code_save_activity)) {
 			if (resultCode == RESULT_OK && data != null && !data.getBooleanExtra(SaveActivity.EXTRA_SAVE_MODE, true)) {
 				int slotIndex = data.getIntExtra(SaveActivity.EXTRA_SLOT_INDEX, -1);
 

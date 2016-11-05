@@ -7,11 +7,6 @@
 	<!-- チュートリアルのページ数 -->
 	<integer name="number_of_tutorial_pages">4</integer>
 
-	<!-- 起動アニメーション -->
-	<integer name="launch_animation_duration">1000</integer>
-	<integer name="launch_animation_delay_forward">500</integer>
-	<integer name="launch_animation_delay_backward">1000</integer>
-
 	<!-- セーブ・ロード画面のアニメーション -->
 	<integer name="save_animation_duration_bgcolor">300</integer>
 	<integer name="save_animation_duration_move_y">300</integer>
