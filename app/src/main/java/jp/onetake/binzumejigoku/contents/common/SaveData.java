@@ -66,10 +66,17 @@ public class SaveData implements Serializable {
 		mSectionIndex = sectionIndex;
 	}
 
+	/**
+	 * このデータがセーブデータ選択画面で使用できるものであるとマークする
+	 */
 	public void markAsUnusable() {
 		mIsUsable = false;
 	}
 
+	/**
+	 * このデータがセーブデータ選択画面で使用できるかどうかを返却する
+	 * @return	trueなら使用可能、falseなら不可能
+	 */
 	public boolean isUsable() {
 		return mIsUsable;
 	}

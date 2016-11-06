@@ -34,9 +34,10 @@ public class ContentsTitleView extends TimerView {
 	 * 自身の表示にかける時間や表示までの遅延時間、描画に使用するPaintオブジェクトなどを保持する
 	 */
 	private class Letter {
-		public String letter;
-		public float duration;
-		public float delay;
+		String letter;
+		float duration;
+		float delay;
+
 		private Paint mPaint;
 
 		/**
@@ -45,7 +46,7 @@ public class ContentsTitleView extends TimerView {
 		 * @param duration	この文字の描画にかける所要時間
 		 * @param delay		最初の文字が描画されてからこの文字が描画されるまでの遅延時間
 		 */
-		public Letter(String letter, float duration, float delay) {
+		Letter(String letter, float duration, float delay) {
 			this.letter = letter;
 			this.duration = duration;
 			this.delay = delay;
@@ -60,7 +61,7 @@ public class ContentsTitleView extends TimerView {
 		 * @param alpha	アルファ値(0-255)
 		 * @return	文字の描画に使用するPaintオブジェクト
 		 */
-		public Paint getPaintByAlpha(int alpha) {
+		Paint getPaintByAlpha(int alpha) {
 			mPaint.setAlpha(alpha);
 			return mPaint;
 		}

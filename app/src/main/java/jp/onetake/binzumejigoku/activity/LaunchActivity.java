@@ -21,14 +21,22 @@ import jp.onetake.binzumejigoku.util.ContentsXmlParserTask;
  * 起動ポイントとなるアクティビティ
  */
 public class LaunchActivity extends BasicActivity implements ContentsXmlParserTask.XmlParseListener {
-	// このアクティビティが、起動シーケンスのうちどの状態にあるかを示す列挙値
+	/**
+	 * このアクティビティが、起動シーケンスのうちどの状態にあるかを示す列挙値
+	 */
 	private enum LaunchStatus {
-		BackgroundAnimation1,	// 背景1表示中
-		BackgroundAnimation2,	// 背景1非表示、背景2表示中
-		TitleAnimation,			// タイトル表示中
-		WaitingUserInteraction,	// ユーザー操作(=画面タッチ)待ち
-		XmlParsing,				// XML解析中
-		FinishAnimation,		// アクティビティ終了中
+		/** 背景1表示中 */
+		BackgroundAnimation1,
+		/** 背景1非表示、背景2表示中 */
+		BackgroundAnimation2,
+		/** タイトル表示中 */
+		TitleAnimation,
+		/** ユーザー操作(=画面タッチ)待ち */
+		WaitingUserInteraction,
+		/** XML解析中 */
+		XmlParsing,
+		/** アクティビティ終了中 */
+		FinishAnimation,
 	}
 
 	private ImageView mLaunchImage1;
@@ -39,7 +47,10 @@ public class LaunchActivity extends BasicActivity implements ContentsXmlParserTa
 
 	private LaunchStatus mStatus;
 
-	// AnimatorListenerをActivityに実装するとコードが冗長になるのでこのかたち
+	/**
+	 * このアクティビティで発生するアニメーション関連のイベントを捕捉するリスナ<br />
+	 * AnimatorListenerをActivityに実装するとコードが冗長になるのでフィールド
+	 */
 	private AnimatorListenerAdapter mAnimatorListener = new AnimatorListenerAdapter() {
 		@Override
 		public void onAnimationEnd(Animator animation) {

@@ -16,10 +16,18 @@ public abstract class SectionElement extends Element {
 	 * 後続のコンテンツを続けて実行させるための"chain"属性に対応する列挙値
 	 */
 	public enum ChainType {
-		None,		// なし
-		Wait,		// 現在のコンテンツが終了するのを待って後続を実行
-		Immediate;	// 現在のコンテンツの終了を待たずに後続を実行
+		/** なし */
+		None,
+		/** 現在のコンテンツが終了するのを待って後続を実行 */
+		Wait,
+		/** 現在のコンテンツの終了を待たずに後続を実行 */
+		Immediate;
 
+		/**
+		 * 文字列からそれに相当するChainType列挙値を返す
+		 * @param chainText	ChainType列挙値を得るための文字列
+		 * @return	chainTextに対応するChainType列挙値
+		 */
 		public static ChainType getValue(String chainText) {
 			for (ChainType c : ChainType.values()) {
 				if (chainText.equalsIgnoreCase(c.toString())) {

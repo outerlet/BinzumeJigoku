@@ -15,7 +15,9 @@ import jp.onetake.binzumejigoku.R;
  * テキスト履歴を表示するためのアダプタクラス
  */
 public class BacklogListAdapter extends ArrayAdapter<String> {
-	// ViewHolder
+	/**
+	 * ViewHolder
+	 */
 	private class ViewHolder {
 		TextView logTextView;
 	}

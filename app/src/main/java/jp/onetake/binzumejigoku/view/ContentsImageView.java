@@ -194,6 +194,11 @@ public class ContentsImageView extends FrameLayout {
 		}
 	}
 
+	/**
+	 * このViewが抱えているImageViewのうち、パラメータで指定したVisibilityの状態にあるものを返却する
+	 * @param visibility	Viewの表示状態(VISIBLE or INVISIBLE or GONE)
+	 * @return	visibilityの状態にあるImageView
+	 */
 	private ImageView getImageViewByVisibility(int visibility) {
 		for (ImageView imageView : mImageViews) {
 			if (imageView.getVisibility() == visibility) {

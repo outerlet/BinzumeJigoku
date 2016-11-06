@@ -19,9 +19,12 @@ public class BasicActivity extends AppCompatActivity {
 	 * Fragmentを配置するためのメソッドに何を使うか指定するための列挙値
 	 */
 	protected enum FragmentMethod {
-		Dialog,		// ダイアログ(DialogFragment#show)
-		Add,		// FragmentTransaction#add
-		Replace,	// FragmentTransaction#replace
+		/** ダイアログ(DialogFragment#show) */
+		Dialog,
+		/** FragmentTransaction#add */
+		Add,
+		/** FragmentTransaction#replace */
+		Replace,
 	}
 
 	/**

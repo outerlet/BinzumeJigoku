@@ -26,9 +26,16 @@ public class Text extends SectionElement {
 	 * テキストの寄せ方を指定する"align"属性値に対応する列挙値
 	 */
 	public enum Align {
-		Left,	// 左寄せ(デフォルト)
-		Right;	// 右寄せ
+		/** 左寄せ(デフォルト) */
+		Left,
+		/** 右寄せ */
+		Right;
 
+		/**
+		 * 文字列alignからそれに対応するAlign列挙値を返却する
+		 * @param align	Align列挙値を得るための文字列
+		 * @return	文字列alignに対応するAlign列挙値
+		 */
 		public static Align getValue(String align) {
 			if (!TextUtils.isEmpty(align)) {
 				for (Align a : values()) {

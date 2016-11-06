@@ -40,11 +40,11 @@ public class ContentsTextView extends TimerView {
 	 * ContentsTextViewでしか使わないのでインナークラス
 	 */
 	private class Letter {
-		public float x;
-		public float y;
-		public String letter;
+		float x;
+		float y;
+		String letter;
 
-		public Letter(String letter, float x, float y) {
+		Letter(String letter, float x, float y) {
 			this.letter = letter;
 			this.x = x;
 			this.y = y;
@@ -66,7 +66,7 @@ public class ContentsTextView extends TimerView {
 		 * コンストラクタ
 		 * @param text	テキストとルビを含んだ文字列
 		 */
-		public DrawDetail(Text text) {
+		DrawDetail(Text text) {
 			mmText = text;
 			mmTextList = new ArrayList<>();
 			mmRubyArray = new SparseArray<>();
@@ -77,7 +77,7 @@ public class ContentsTextView extends TimerView {
 		 * テキストの文字数を返却する
 		 * @return	テキストの文字数
 		 */
-		public int getTextCount() {
+		int getTextCount() {
 			return mmTextList.size();
 		}
 
@@ -94,7 +94,7 @@ public class ContentsTextView extends TimerView {
 		 * @param index	取得したいテキストのインデックス
 		 * @return	テキスト
 		 */
-		public Letter getTextAt(int index) {
+		Letter getTextAt(int index) {
 			return mmTextList.get(index);
 		}
 
@@ -103,7 +103,7 @@ public class ContentsTextView extends TimerView {
 		 * @param index	取得したいルビのインデックス
 		 * @return	ルビ
 		 */
-		public Letter[] getRubyAt(int index) {
+		Letter[] getRubyAt(int index) {
 			return mmRubyArray.get(index);
 		}
 
@@ -119,7 +119,7 @@ public class ContentsTextView extends TimerView {
 		 * finalizeメソッドが実行され、既に描画位置が決定されているかどうかを知る
 		 * @return	finalizeメソッド実行済みかどうか。済みならtrue
 		 */
-		public boolean isFinalized() {
+		boolean isFinalized() {
 			return mmIsFinalized;
 		}
 
@@ -127,7 +127,7 @@ public class ContentsTextView extends TimerView {
 		 * widthに基づいて、このクラスに与えられた文字の描画位置を決定する
 		 * @param width	描画範囲の幅
 		 */
-		public void finalize(int width) {
+		void finalize(int width) {
 			Paint.FontMetrics textMetrics = mTextPaint.getFontMetrics();
 			Paint.FontMetrics rubyMetrics = mRubyPaint.getFontMetrics();
 

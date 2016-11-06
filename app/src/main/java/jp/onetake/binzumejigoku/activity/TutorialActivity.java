@@ -17,9 +17,14 @@ public class TutorialActivity extends BasicActivity {
 	private ViewPager mViewPager;
 	private PagerIndicatorView mPagerIndicator;
 
-	// ページ切り替えをしたときのイベントを捕捉するリスナ
-	// ・初めて表示したページでアニメーションを発生させる
-	// ・ページのインジケータを切り替える
+	/**
+	 * ページ切り替えをしたときのイベントを捕捉するリスナ<br />
+	 * このリスナで行われるのは以下のとおり
+	 * <ul>
+	 *     <li>初めて表示したページでアニメーションを発生させる</li>
+	 *     <li>ページ選択時にインジケータの表示or非表示を切り替える</li>
+	 * </ul>
+	 */
 	private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
 		private boolean mmFirstAnimation = false;
 

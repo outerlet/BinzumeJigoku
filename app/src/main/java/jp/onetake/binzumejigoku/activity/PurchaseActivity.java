@@ -21,7 +21,8 @@ import jp.onetake.binzumejigoku.fragment.dialog.AlertDialogFragment;
 import jp.onetake.binzumejigoku.util.PurchaseQueryThread;
 
 /**
- * In App Billingを使ってアプリ内アイテム（投げ銭＝寄付）の購入を担当するアクティビティ
+ * In App Billingを使ってアプリ内アイテム（投げ銭＝寄付）の購入を担当するアクティビティ<br />
+ * 今回の公開版では使用していない
  */
 public class PurchaseActivity extends BasicActivity
 		implements PurchaseQueryThread.PurchaseQueryListener, AlertDialogFragment.OnAlertListener {

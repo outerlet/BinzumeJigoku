@@ -18,10 +18,14 @@ public abstract class TimerView extends View {
 	 * タイマーの実行状態
 	 */
 	public enum TimerStatus {
-		Stopped,		// 停止
-		WaitForStart,	// 実行待ち
-		Execute,		// 実行中
-		WaitForStop,	// 停止待ち
+		/** 停止 */
+		Stopped,
+		/** 実行待ち */
+		WaitForStart,
+		/** 実行中 */
+		Execute,
+		/** 停止待ち */
+		WaitForStop,
 	}
 
 	/**
@@ -186,7 +190,7 @@ public abstract class TimerView extends View {
 	private class TimerViewThread extends Thread {
 		private long mmDelay;
 
-		public TimerViewThread(long delay) {
+		TimerViewThread(long delay) {
 			mmDelay = delay;
 		}
 

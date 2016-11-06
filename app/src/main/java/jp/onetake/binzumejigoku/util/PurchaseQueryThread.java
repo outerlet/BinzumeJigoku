@@ -77,7 +77,9 @@ public class PurchaseQueryThread extends Thread {
 		}
 	}
 
-	/* アイテム問い合わせにおいて、どういう結果が返されたかをHandler側で判別するためにwhatに与えるint値 */
+	/*
+	 * アイテム問い合わせにおいて、どういう結果が返されたかをHandler側で判別するためにwhatに与えるint値
+	 */
 	private final int MESSAGE_WHAT_IAB_NOT_SUPPORTED	= 10001;	// 端末がIABをサポートしていない
 	private final int MESSAGE_WHAT_QUERY_SUCCEEDED		= 10002;	// 問い合わせが正常に完了した
 	private final int MESSAGE_WHAT_QUERY_FAILED 		= 10003;	// 問い合わせにおいて何かしらの問題が発生した

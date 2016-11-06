@@ -8,8 +8,7 @@ import jp.onetake.binzumejigoku.R;
 import jp.onetake.binzumejigoku.contents.db.ContentsDbOpenHelper;
 
 /**
- * コンテンツにアクセスするために横断的に必要となるデータの管理や処理を担当する<br />
- * シングルトンなクラス
+ * コンテンツにアクセスするために横断的に必要となるデータの管理や処理を担当するシングルトンなクラス
  */
 public class ContentsInterface {
 	private static ContentsInterface mInstance;

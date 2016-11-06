@@ -22,9 +22,12 @@ public class Image extends SectionElement {
 	 * 画像を表示する際のエフェクトに対応する列挙値
 	 */
 	public enum EffectType {
-		Unknown,	// 不明(便宜上の値)
-		Fade,		// フェードイン・アウト
-		Cut;		// カットイン・アウト
+		/** 不明(便宜上の値) */
+		Unknown,
+		/** フェードインおよびフェードアウト */
+		Fade,
+		/** カットインおよびカットアウト */
+		Cut;
 
 		public static EffectType getValue(String effectText) {
 			for (EffectType e : EffectType.values()) {
